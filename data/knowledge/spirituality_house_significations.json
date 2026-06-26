@@ -1,0 +1,50 @@
+[
+  {
+    "chunk_id": "twelfth_house_spiritual_significations",
+    "chunk_type": "house_signification",
+    "content": "The 12th house (Vyaya Bhava, the Moksha Bhava) is the primary house of liberation, the final goal of spiritual life and the dissolution of the individual self into the absolute. It governs moksha, seclusion, meditation, the surrender of the ego, and withdrawal from worldly activity into the inner sanctuary. Parashara associates it with loss and expenditure, foreign lands and distant residence, the bed and the pleasures of rest, and confinement in monasteries, ashrams, or places of retreat. In spiritual analysis, a strong and well-disposed 12th house indicates capacity for deep meditation (samadhi), genuine detachment, and progress toward final liberation. Benefics such as Jupiter or Ketu here, or a strong 12th lord, support sustained sadhana, charitable renunciation, and the dissolution of attachment. The 12th from the Moon and the condition of the 12th in the Vimsamsa (D20) chart further refine the assessment of the native's spiritual destiny.",
+    "source": "Brihat Parashara Hora Shastra Ch.11 (Bhava Significations); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Ketu", "Jupiter"],
+    "houses_primary": [12],
+    "topics": ["spirituality", "moksha", "meditation", "seclusion", "detachment", "liberation"],
+    "yoga_name": null
+  },
+  {
+    "chunk_id": "ninth_house_spiritual_significations",
+    "chunk_type": "house_signification",
+    "content": "The 9th house (Dharma Bhava) is the primary house of dharma, higher wisdom, and the grace that supports the spiritual journey. It governs the guru or spiritual preceptor, devotion to God and teacher, religious and philosophical learning, pilgrimage to sacred places, and the accumulated fortune of righteous living. Parashara lists fortune, father, preceptor, religious inclination, and meritorious deeds among its significations. In spiritual analysis, a strong 9th house grants faith, the blessing of a realized guru, and natural inclination toward dharma and the study of sacred scripture. Jupiter, the natural karaka of the 9th and of wisdom, is especially significant; its strength and relationship to the 9th house and lord indicate the depth of the native's dharmic life. A well-disposed 9th house supports pilgrimage, the reception of higher teachings, and steady progress along the path of righteousness toward eventual liberation.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [9],
+    "topics": ["spirituality", "dharma", "guru", "higher wisdom", "pilgrimage", "devotion"],
+    "yoga_name": null
+  },
+  {
+    "chunk_id": "eighth_house_spiritual_significations",
+    "chunk_type": "house_signification",
+    "content": "The 8th house (Ayur / Randhra Bhava) governs the occult, the hidden, and the transformative dimensions of spiritual life. It rules kundalini and the awakening of subtle energy, esoteric and tantric knowledge, the mysteries of death and rebirth, and the profound transformations that strip away the ego. Parashara associates it with longevity, hidden matters, sudden events, and that which lies beneath the surface of ordinary life. In spiritual analysis, a strong 8th house grants access to deep occult knowledge, capacity for intense transformative practice, and the ability to confront mortality and impermanence directly. Saturn and Ketu placed here can deepen the renunciatory and investigative spiritual orientation. The 8th house path is one of breaking down rather than building up — through crisis, transformation, and the dissolution of the known, the seeker is propelled toward the hidden truth that underlies existence.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Saturn", "Ketu"],
+    "houses_primary": [8],
+    "topics": ["spirituality", "occult", "kundalini", "transformation", "hidden knowledge", "moksha"],
+    "yoga_name": null
+  },
+  {
+    "chunk_id": "fifth_house_spiritual_significations",
+    "chunk_type": "house_signification",
+    "content": "The 5th house (Putra / Mantra Bhava) is the house of poorva punya — the merit accumulated through righteous deeds in past lives — and of the devotional and mantric dimensions of spiritual practice. It governs mantra-japa, deity worship (upasana), the intelligence and discrimination needed to pursue the inner path, and the natural devotion (bhakti) that draws the soul toward the divine. Parashara connects it with children, intelligence, and the fruits of prior merit, all of which underlie spiritual capacity in this life. In spiritual analysis, a strong 5th house indicates an inheritance of past-life sadhana, aptitude for mantra and contemplative practice, and a heart inclined toward devotion. Jupiter as karaka of wisdom and the placement of benefics here support the ripening of mantra into realization. The 5th house, together with the 9th, forms the trine of dharma and grace that sustains the spiritual journey across lifetimes toward liberation.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [5],
+    "topics": ["spirituality", "mantra", "poorva punya", "devotion", "upasana", "dharma"],
+    "yoga_name": null
+  }
+]

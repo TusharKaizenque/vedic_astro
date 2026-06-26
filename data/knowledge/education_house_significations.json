@@ -1,0 +1,54 @@
+[
+  {
+    "chunk_id": "fourth_house_education_significations",
+    "chunk_type": "house_signification",
+    "content": "The 4th house (Sukha Bhava / Vidya Bhava) is the primary house of formal and basic education in Parashari astrology, governing schooling, degrees, and the foundational learning a native acquires. It rules the mother, the home, emotional security, and the comforts that support a child's intellectual development, since a nurturing environment is essential to early study. Parashara associates the 4th house with vidya (education), conveyances, lands, and happiness, making it the seat of academic qualifications and certificates. The condition of the 4th house and its lord, together with the karaka Mercury, indicates the smoothness, extent, and success of the native's formal education. Benefics aspecting or occupying the 4th support strong schooling and the completion of degrees, while affliction can interrupt or delay academic attainment. In divisional analysis, the D-24 (Chaturvimsamsa / Siddhamsa) chart is examined alongside the 4th house to assess detailed educational outcomes.",
+    "source": "Brihat Parashara Hora Shastra Ch.11 (Bhava Significations); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Mercury"],
+    "houses_primary": [4],
+    "topics": ["education", "learning", "knowledge", "formal education", "degrees", "schooling"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "fifth_house_education_significations",
+    "chunk_type": "house_signification",
+    "content": "The 5th house (Putra Bhava / Vidya-Buddhi Bhava) governs intelligence, the capacity to learn, discrimination (buddhi), and the fruits of past-life merit (poorva punya) that shape a native's aptitude. While the 4th house gives formal schooling, the 5th gives the raw intellectual ability, memory, and grasping power that determine how well a native actually learns. Parashara connects the 5th house with intelligence, mantras, wisdom, children, and the merit of previous births, indicating that strong 5th-house influences confer natural brilliance. The condition of the 5th lord, planets within the 5th, and the karaka Jupiter together reveal the depth of the native's intellect and creative reasoning. A well-disposed 5th house grants sharp comprehension, success in examinations, and the ability to apply knowledge originally and creatively. Because it reflects accumulated merit, a powerful 5th house often signals scholastic success that comes with relative ease and inner enjoyment of learning.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [5],
+    "topics": ["education", "learning", "knowledge", "intelligence", "intellect", "poorva punya"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "ninth_house_education_significations",
+    "chunk_type": "house_signification",
+    "content": "The 9th house (Dharma Bhava / Bhagya Bhava) is the house of higher education, wisdom, philosophy, and the pursuit of truth beyond ordinary schooling. It governs advanced and specialized study, research, doctoral attainment, religious and philosophical learning, the guru or teacher, and the father. Parashara associates the 9th house with dharma, fortune, devotion, higher learning, and meritorious knowledge, making it the seat of profound understanding rather than mere information. The strength of the 9th house and its lord, together with the karaka Jupiter, indicates the heights of education a native may reach, including postgraduate degrees, PhD-level research, and recognition as a scholar. A strong 9th house grants wisdom, ethical insight, and the blessing of learned mentors who guide the native's intellectual development. When the 5th and 9th houses or their lords connect, the native is supported in attaining the highest and most fortunate forms of education.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [9],
+    "topics": ["education", "learning", "knowledge", "higher education", "wisdom", "research"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "second_house_education_significations",
+    "chunk_type": "house_signification",
+    "content": "The 2nd house (Dhana Bhava / Vidya-Vak Bhava) in the context of education governs accumulated knowledge, memory, retention, and the power of speech through which learning is expressed. While the 5th gives raw intelligence, the 2nd house preserves what is learned, acting as the storehouse of knowledge that the native draws upon over a lifetime. Parashara associates the 2nd house with speech, wealth, family, and learning, and classical tradition links it to the goddess of speech and the recitation of knowledge. The condition of the 2nd house and its lord, along with Mercury and Jupiter, indicates the strength of memory, command of language, and the ability to articulate what has been studied. A strong 2nd house supports linguistic ability, eloquence, scriptural and scholarly retention, and success in fields where stored knowledge and speech are central. Affliction here may weaken memory or fluency, while benefic influence grants a rich, well-spoken, knowledgeable native.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Mercury", "Jupiter"],
+    "houses_primary": [2],
+    "topics": ["education", "learning", "knowledge", "memory", "speech", "language"],
+    "yoga_name": null,
+    "dasha_pair": null
+  }
+]

@@ -1,0 +1,54 @@
+[
+  {
+    "chunk_id": "viparita_raja_yoga_harsha_health",
+    "chunk_type": "yoga",
+    "content": "Viparita Raja Yoga in its Harsha variety forms when the 6th lord (ruler of disease, enemies, and obstacles) is well placed in another dusthana, classically the 8th or 12th house, or is otherwise strong and well-disposed. In a health context, this combination is regarded as one of the most encouraging classical indications for victory over ailments: because the energy of the house of disease turns inward upon itself, the native often shows a strong capacity to overcome health obstacles and recover from challenges that would overwhelm others. The name Harsha itself denotes joy or relief, reflecting the classical sense of the native rising above adversity. Such natives are often described as resilient, with strong recuperative power and an ability to outlast difficulty. The supportive results are most evident when the yoga-forming planet is dignified and free from heavy affliction, and tend to be activated during its dasha. This is framed as a classically auspicious tendency toward resilience and recovery, not as a guarantee against any specific illness.",
+    "source": "Phaladeepika Ch.6; Brihat Parashara Hora Shastra",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [6, 8, 12],
+    "topics": ["health", "recovery", "resilience", "disease", "immunity"],
+    "yoga_name": "Viparita Raja (Harsha)",
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "strong_lagna_lord_good_health_yoga",
+    "chunk_type": "yoga",
+    "content": "A strong, well-dignified, and unafflicted lagna lord is classically among the clearest indications of good vitality and a robust constitution. When the 1st lord is placed in a kendra or trikona, in its own sign or exaltation, free from combustion and from the aspect of malefics, the texts associate it with strong life-force, good physique, and ready recuperative power. Parashara repeatedly ties the strength of the body (deha bala) and the resilience of the native to the condition of the lagna and its lord. Supporting factors include benefic aspects upon the lagna and a strong, unafflicted Sun and Moon as karakas of vitality and the mind. Such a configuration is read as a favorable tendency toward enduring health and quick recovery from minor disturbances. It is interpreted as a classical indicator of constitutional strength rather than any guarantee, and is best combined with sensible self-care.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [1],
+    "topics": ["health", "vitality", "constitution", "strength", "wellbeing"],
+    "yoga_name": "Balishtha Lagnesha (Strong Lagna Lord)",
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "lagna_sixth_eighth_lord_affliction_health",
+    "chunk_type": "yoga",
+    "content": "Classical texts treat affliction of the lagna lord, the 6th lord, or the 8th lord as indicators of a more sensitive constitution that benefits from attentive, preventive self-care. When the 1st lord is combust, debilitated, placed in a dusthana, or closely afflicted by malefics, the texts suggest a tendency toward a delicate constitution and the value of conserving and protecting vitality. Affliction involving the 6th lord (house of disease) may classically incline toward periodic ailments, while affliction connecting the 8th lord (house of chronic and deep matters) suggests mindful attention to longer-standing patterns. These are read together as health-vulnerability tendencies, always balanced against supportive factors such as a strong lagna, benefic aspects, the upachaya capacity for recovery, and any Viparita yogas present. Crucially, such configurations are interpreted only as a call for prudent care, prevention, and timely attention, and never as a prediction of serious disease, terminal illness, or death.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [1, 6, 8],
+    "topics": ["health", "vulnerability", "disease", "prevention", "care"],
+    "yoga_name": "Lagnesha-Shashthesha-Ashtamesha Affliction (Health Vulnerability)",
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "sun_moon_strength_vitality_yoga",
+    "chunk_type": "yoga",
+    "content": "The combined strength of the Sun and Moon is classically central to vitality, since the Sun is karaka of the life-force, soul, and overall vigor, while the Moon is karaka of the mind, emotional balance, and the bodily fluids. When both luminaries are strong, well-placed, and unafflicted, the texts associate this with abundant vitality, emotional steadiness, and a resilient constitution. A strong Sun supports physical vigor, the heart region, and the immune vigor of the body, while a strong, waxing Moon supports mental ease, fluid balance, and the recuperative calm of the mind. Affliction to either luminary suggests mindful care: a sensitive Sun invites attention to energy and stamina, and a sensitive Moon invites attention to emotional balance and rest. This combination is read as a favorable tendency toward vitality and well-being when the luminaries are strong, and as a gentle prompt toward self-care when they are afflicted, always as tendency rather than diagnosis.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Sun", "Moon"],
+    "houses_primary": [1],
+    "topics": ["health", "vitality", "mind", "emotional balance", "constitution"],
+    "yoga_name": "Surya-Chandra Bala (Luminary Vitality)",
+    "dasha_pair": null
+  }
+]

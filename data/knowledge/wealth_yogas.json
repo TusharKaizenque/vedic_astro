@@ -1,0 +1,62 @@
+[
+  {
+    "chunk_id": "dhana_yoga_second_eleventh_lords",
+    "chunk_type": "yoga",
+    "content": "Dhana Yoga is the principal wealth-producing combination in Parashara astrology, formed when the lords of wealth-related houses — chiefly the 2nd (accumulated wealth) and the 11th (gains) — combine by conjunction, mutual aspect, or sign exchange. Connections involving the lords of the 5th and 9th (the trikonas of fortune) and the lagna lord further strengthen the yoga. Parashara teaches that when the lord of wealth and the lord of gains unite, the native earns abundantly and accumulates lasting riches. The yoga is strongest when the participating lords are well-dignified, occupy benefic houses, and are free from affliction by malefics. Its results manifest most fully during the dasha and antardasha periods of the planets forming the yoga. A chart may contain several Dhana Yogas, each adding to the native's overall capacity for wealth.",
+    "source": "Brihat Parashara Hora Shastra (Dhana Yoga chapter); Phaladeepika Ch.6",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [2, 11, 5, 9],
+    "topics": ["wealth", "money", "gains", "finance", "prosperity", "dhana yoga"],
+    "yoga_name": "Dhana Yoga"
+  },
+  {
+    "chunk_id": "lakshmi_yoga",
+    "chunk_type": "yoga",
+    "content": "Lakshmi Yoga is a celebrated yoga of wealth and prosperity, named for the goddess of fortune. It forms when the 9th lord (Bhagya, fortune) is powerfully placed — in its own sign, exaltation, or a kendra or trikona — while the lagna lord is also strong, the two often connected by relationship or placement. Some classical descriptions add that the lord of the 9th occupies its own or exaltation sign in an angle from the lagna. Parashari tradition holds that this yoga confers wealth, beauty, virtue, lasting reputation, and the favor of fortune throughout life. The native enjoys abundant resources, noble character, and prosperity that appears divinely supported. The yoga requires genuine strength of both the lagna lord and the 9th lord; if either is weak or afflicted, the promised affluence is diminished. Its results flower during the dashas of the planets forming the yoga.",
+    "source": "Phaladeepika; Brihat Parashara Hora Shastra",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [1, 9],
+    "topics": ["wealth", "money", "fortune", "prosperity", "luck", "abundance"],
+    "yoga_name": "Lakshmi"
+  },
+  {
+    "chunk_id": "gajakesari_yoga",
+    "chunk_type": "yoga",
+    "content": "Gajakesari Yoga forms when Jupiter occupies a kendra (1st, 4th, 7th, or 10th) from the Moon, uniting the natural karaka of wealth and wisdom with the significator of the mind. Parashari and classical authorities describe the native of this yoga as intelligent, virtuous, respected by rulers, and blessed with lasting wealth and fame. Because Jupiter is the dhana karaka, its strong angular relationship to the Moon supports steady prosperity, sound judgment in financial matters, and an enduring good reputation that itself attracts wealth. The yoga is most powerful when Jupiter is dignified — in its own sign, exaltation, or otherwise unafflicted — and when the Moon is bright and strong. A debilitated or combust Jupiter weakens the promised affluence. The wealth and recognition of this yoga tend to be durable, often growing across the lifetime and especially during Jupiter's dasha.",
+    "source": "Brihat Parashara Hora Shastra; Saravali; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Moon"],
+    "houses_primary": [1, 4, 7, 10],
+    "topics": ["wealth", "money", "wisdom", "prosperity", "reputation", "fortune"],
+    "yoga_name": "Gajakesari"
+  },
+  {
+    "chunk_id": "wealth_lords_with_benefics",
+    "chunk_type": "yoga",
+    "content": "A reliable wealth-producing combination arises when the lords of the 2nd and 11th houses are associated with natural benefics — Jupiter, Venus, or an unafflicted Mercury or Moon — by conjunction, aspect, or placement in their houses. Parashari tradition holds that benefic influence upon the houses and lords of wealth protects accumulation, smooths the flow of income, and shields the native from poverty and financial ruin. Jupiter, the dhana karaka, is especially auspicious when it aspects or joins the 2nd or 11th lord, expanding and stabilizing wealth. Venus adds gains through comfort, luxury, and pleasing dealings, while a strong Mercury supports earnings through commerce and intellect. When benefics occupy the 2nd or 11th house itself, savings and income are well-guarded. Such benefic linkages are among the clearest classical indicators of a prosperous and financially secure life.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Venus", "Mercury"],
+    "houses_primary": [2, 11],
+    "topics": ["wealth", "money", "benefics", "income", "savings", "prosperity"],
+    "yoga_name": "Benefic Dhana Yoga"
+  },
+  {
+    "chunk_id": "daridra_yoga",
+    "chunk_type": "yoga",
+    "content": "Daridra Yoga is the classical combination of poverty, the negative counterpart of the wealth yogas, formed when the houses and lords of wealth are weakened or afflicted. It typically arises when the 2nd lord or the 11th lord falls into a dusthana (6th, 8th, or 12th), is conjunct or aspected by malefics, or is debilitated and without cancellation. Parashari tradition holds that when the significators of wealth are so afflicted, income is obstructed, savings drain away, and the native struggles with debt, expenditure, and want despite effort. The placement of the lord of gains in a house of loss, or the affliction of the dhana karaka Jupiter, are especially indicative. The severity depends on the degree of affliction and is mitigated if benefics aspect the weakened lords or if a cancellation such as Neecha Bhanga applies. The hardships of this yoga are most pronounced during the dashas of the afflicted wealth lords.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika Ch.6; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [2, 11, 6, 8, 12],
+    "topics": ["wealth", "money", "poverty", "debt", "loss", "affliction"],
+    "yoga_name": "Daridra"
+  }
+]

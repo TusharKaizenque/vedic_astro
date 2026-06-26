@@ -1,0 +1,50 @@
+[
+  {
+    "chunk_id": "tenth_house_significations",
+    "chunk_type": "house_signification",
+    "content": "The 10th house (Karma Bhava) is the most powerful house for career, social standing, and public life. It governs: profession, occupation, livelihood, trade, and the work the native performs in the world. Authority, command, and the ability to lead are 10th house matters. The government, rulers, and those in power are signified here. Honor, public recognition, and the social status the native achieves through their actions fall under this house. Parashara includes: 'one's occupation, rank, trade, honour, father, living in a foreign land, and the performance of meritorious acts.' In career analysis, the 10th house sets the primary domain — its lord, occupants, and planets aspecting it all modify how career manifests. Planets in the 10th gain directional strength (Dig Bala) for the Sun and Mars, amplifying their career effect. The nakshatra of the 10th house cusp further specifies the career's nature. The 10th from the Moon is equally important, as it shows the emotional orientation toward work.",
+    "source": "Brihat Parashara Hora Shastra Ch.11 (Bhava Significations); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Sun", "Mars"],
+    "houses_primary": [10],
+    "topics": ["career", "authority", "status", "government", "recognition", "trade"],
+    "yoga_name": null
+  },
+  {
+    "chunk_id": "sixth_house_career_significations",
+    "chunk_type": "house_signification",
+    "content": "The 6th house (Ripu Bhava / Ari Bhava) in the context of career governs: service, employment, routine work, subordinates, coworkers, and daily duties. It also rules over obstacles to career advancement: enemies, competitors, debts, legal disputes, and conflicts in the workplace. Because the 6th is an upachaya (house of growth), planets here strengthen over time, and a strong 6th house can indicate mastery over competition and ability to overcome professional obstacles. Career fields directly ruled by the 6th house: healthcare, medicine, military service, legal practice (especially defense and litigation), accounting, and any service-oriented profession. The 6th lord's placement modifies how the native deals with competitors and service-oriented career aspects. Afflictions to the 6th house or its lord can create difficulty in employment, workplace conflict, or career health challenges. A strong 6th house in career context indicates the ability to overcome all opposition.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [6],
+    "topics": ["career", "service", "obstacles", "competition", "healthcare", "law", "employment"],
+    "yoga_name": null
+  },
+  {
+    "chunk_id": "second_house_career_significations",
+    "chunk_type": "house_signification",
+    "content": "The 2nd house (Dhana Bhava) in career analysis represents the financial output of professional activity — accumulated wealth, savings, and earnings from one's occupation. It also governs speech, face, and the vocal/communicative dimension of career work. Family tradition and inherited skills relevant to career are 2nd house matters. The 2nd is a primary house of income alongside the 11th, and any analysis of career financial outcomes requires examining both. Parashara lists: 'wealth, grain, family, speech, firmness, commerce, and loss.' The 2nd lord's placement and condition indicates how easily career translates into financial security. Benefics in the 2nd support consistent income accumulation. Malefics in the 2nd may indicate irregular or challenging income patterns, though upachaya malefics (6th, 3rd, 10th, 11th) can still generate income when well-dignified.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [2],
+    "topics": ["career", "income", "wealth", "speech", "finance", "earnings"],
+    "yoga_name": null
+  },
+  {
+    "chunk_id": "eleventh_house_career_significations",
+    "chunk_type": "house_signification",
+    "content": "The 11th house (Labha Bhava — house of gains) governs the realization of desires, financial gains from professional activity, income from career, large networks, organizations, and elder siblings. In career analysis, the 11th represents the payoff of professional effort — whether aspirations are fulfilled and whether financial gains flow consistently. The 11th is an upachaya house where malefics actually thrive: Saturn in the 11th, for instance, is a strong indicator of consistent long-term income. Parashara lists: 'gains, elder siblings, paternal uncle, and the right ear.' The 11th lord's placement shows where gains materialize from. Planets in the 11th connected to career planets form career-income linkages. The 11th house in the D-10 (Dasamsa) divisional chart is equally important for assessing professional financial fulfillment. When the 10th and 11th lords are connected (mutual aspect, conjunction, exchange), career activity reliably produces financial gains.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Saturn"],
+    "houses_primary": [11],
+    "topics": ["career", "gains", "income", "network", "aspirations", "fulfillment"],
+    "yoga_name": null
+  }
+]

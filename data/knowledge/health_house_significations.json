@@ -1,0 +1,54 @@
+[
+  {
+    "chunk_id": "first_house_health_significations",
+    "chunk_type": "house_signification",
+    "content": "The 1st house (Lagna / Tanu Bhava) is the foundational house for health, representing the physical body, overall vitality, constitution, and the life-force (prana). It governs general well-being, physical strength, complexion, stature, and the head region of the body. In health analysis, the lagna and its lord set the baseline for the native's constitution and resilience: a strong, dignified, unafflicted lagna lord classically indicates good vitality and recuperative power, while affliction suggests a more sensitive constitution requiring attentive self-care. Parashara treats the lagna as the seat of the body and self, and many classical assessments of strength of body (deha) and longevity begin here. The strength of the Sun as karaka of vitality, and the condition of the Moon as karaka of the mind and bodily fluids, further modify the reading. Crucially, the 1st house is read as a tendency toward strength or sensitivity of constitution, never as a diagnosis or prediction of specific disease.",
+    "source": "Brihat Parashara Hora Shastra Ch.11 (Bhava Significations); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Sun", "Moon"],
+    "houses_primary": [1],
+    "topics": ["health", "vitality", "body", "constitution", "life-force"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "sixth_house_health_significations",
+    "chunk_type": "house_signification",
+    "content": "The 6th house (Roga Bhava / Ari Bhava) is the primary house of disease, ailments, recovery, immunity, and the daily routines that maintain or undermine health. It governs the body's capacity to resist and overcome illness, as well as the obstacles, debts, and adversities that can stress well-being. Because the 6th is an upachaya (house of growth), a strong and well-supported 6th house classically indicates strong recuperative power, good immunity, and the ability to overcome ailments over time. Parashara lists disease, enemies, and obstacles among its significations, while also recognizing it as the house where afflictions can be conquered. In health analysis, the condition of the 6th house and its lord indicates the native's classical tendency toward susceptibility to passing ailments versus robust recovery, and a paradoxically strong 6th lord can confer mastery over disease. The 6th house is read for tendencies of immunity and recovery, framed as care-and-prevention guidance rather than any prediction of specific or serious illness.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [6],
+    "topics": ["health", "disease", "recovery", "immunity", "routine"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "eighth_house_health_significations",
+    "chunk_type": "house_signification",
+    "content": "The 8th house (Ayur Bhava / Randhra Bhava) governs longevity, chronic and deep-seated conditions, transformation of the body, surgery, and recuperation from serious challenges. It is one of the principal houses examined in classical longevity (ayurdaya) assessment, alongside the lagna and its lord. A strong and well-supported 8th house classically indicates good endurance and deep recuperative reserves, while affliction suggests attention to chronic patterns and the value of preventive care. Parashara associates this house with hidden matters, sudden events, and the deeper transformations of life, including processes of healing that work beneath the surface. In health analysis, the 8th house is read for tendencies toward chronic sensitivity, the nature of recovery from significant difficulty, and matters such as surgery or convalescence. All such reading must remain cautious and tendency-based: the 8th house is never to be used to predict death, terminal illness, or any specific grave outcome, but rather to inform mindful, preventive care.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Saturn"],
+    "houses_primary": [8],
+    "topics": ["health", "longevity", "chronic", "surgery", "recovery"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "third_house_health_significations",
+    "chunk_type": "house_signification",
+    "content": "The 3rd house (Parakrama Bhava / Sahaja Bhava) contributes to health through its rule over vitality of effort, courage, physical stamina, the arms, shoulders, and the nervous and respiratory channels. As an upachaya house, it relates to the building of strength and the capacity for sustained physical activity. Parashara associates the 3rd with courage, energy, and self-effort, and in health terms it reflects the native's drive, stamina, and the integrity of the limbs and breath. A strong, well-supported 3rd house classically indicates good energy, steady nerves, and physical capability, while affliction may suggest mindful care of the nervous system, breath, and the upper limbs. The 3rd is also examined as a marana-related house in some classical longevity schemes, so it is read with the same caution as other sensitive houses. It is interpreted strictly as a tendency toward energy and nervous resilience, framed as supportive self-care guidance rather than any prediction of specific ailment.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Mars"],
+    "houses_primary": [3],
+    "topics": ["health", "vitality", "nervous system", "limbs", "stamina"],
+    "yoga_name": null,
+    "dasha_pair": null
+  }
+]

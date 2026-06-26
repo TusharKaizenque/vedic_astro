@@ -1,0 +1,50 @@
+[
+  {
+    "chunk_id": "hamsa_yoga_spiritual",
+    "chunk_type": "yoga",
+    "content": "Hamsa Yoga is one of the five Panch Mahapurusha Yogas, formed when Jupiter occupies its own sign (Sagittarius or Pisces) or its exaltation sign (Cancer) while placed in a kendra house (1st, 4th, 7th, or 10th from lagna). As Jupiter is the natural karaka of wisdom, dharma, and devotion, this yoga grants a deeply righteous, virtuous, and spiritually inclined nature. Parashara describes the native as pure in conduct, learned in scripture, revered by the wise, and devoted to God and dharma. The native is drawn to philosophy, sacred learning, teaching, and the guidance of others along the path of righteousness. Hamsa Yoga purifies the mind and confers the faith, discrimination, and ethical foundation that support genuine spiritual progress. When Jupiter also influences the 9th or 12th houses, the native's life is strongly oriented toward dharma and ultimately toward liberation.",
+    "source": "Brihat Parashara Hora Shastra Ch.85 (Panch Mahapurusha Yogas); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [1, 4, 7, 10, 9],
+    "topics": ["spirituality", "dharma", "wisdom", "devotion", "guru", "moksha"],
+    "yoga_name": "Hamsa"
+  },
+  {
+    "chunk_id": "ketu_moksha_karaka_yoga",
+    "chunk_type": "yoga",
+    "content": "Ketu is the foremost planetary significator (karaka) of moksha and detachment, embodying the principle of renunciation, dispassion, and the dissolution of worldly desire. Classical tradition holds that Ketu, being a headless and shadowy graha, severs the native from attachment and turns the awareness inward toward the formless and the absolute. When Ketu is well-placed — especially in the 12th house of liberation, the 9th house of dharma, or in association with Jupiter or the 12th lord — it grants powerful detachment, intuitive spiritual insight, and inclination toward meditation, sannyasa, or the occult path. Ketu in the 12th is regarded as especially favorable for moksha, drawing the soul toward its final liberation. The effect is one of disillusionment with worldly fruits, which redirects the native toward sadhana and surrender. A strong, well-disposed Ketu indicates a soul carrying spiritual momentum from past lives and ripe for inner awakening.",
+    "source": "Brihat Parashara Hora Shastra; Jaimini Sutras; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Ketu"],
+    "houses_primary": [12, 9],
+    "topics": ["spirituality", "moksha", "detachment", "renunciation", "meditation", "occult"],
+    "yoga_name": "Ketu Moksha Karaka"
+  },
+  {
+    "chunk_id": "pravrajya_sannyasa_yoga",
+    "chunk_type": "yoga",
+    "content": "Pravrajya Yoga (also called Sannyasa Yoga) denotes combinations indicating renunciation and the formal embrace of the ascetic or monastic life. Parashara and the classical texts describe its principal form as four or more planets gathered together in a single house (or sign), which produces a powerful inward concentration of energy and detachment from worldly life; the planet of greatest strength among them determines the order or nature of the renunciation undertaken. Other recognized combinations involve the strong influence of Saturn (the karaka of renunciation and discipline) upon the Moon or the lagna, or the conjoint influence of Saturn and Ketu, which together sever attachment and impose the dispassion needed for the renunciate path. The aspect of a single strong planet upon such a stellium, or the involvement of the 9th and 12th lords, intensifies the result. When these combinations are present and the 12th house is strong, the native may relinquish family, wealth, and worldly status to pursue liberation as a sadhu, monk, or wandering ascetic.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Saturn", "Ketu"],
+    "houses_primary": [12, 9],
+    "topics": ["spirituality", "moksha", "renunciation", "sannyasa", "detachment", "asceticism"],
+    "yoga_name": "Pravrajya Sannyasa"
+  },
+  {
+    "chunk_id": "strong_ninth_lord_jupiter_dharma_yoga",
+    "chunk_type": "yoga",
+    "content": "A powerful combination for a dharmic and spiritually elevated life forms when a strong 9th lord (the lord of dharma, fortune, and the guru) associates with Jupiter, the natural karaka of wisdom and righteousness, by conjunction, mutual aspect, or sign exchange. This unites the house and significator of dharma, producing a native firmly established in faith, devoted to the guru, and naturally inclined toward sacred learning and righteous conduct. Parashara and Phaladeepika regard the strength of the 9th lord and the dignity of Jupiter as primary indicators of religious merit and the blessing of higher grace. The native is drawn to philosophy, scripture, pilgrimage, and the teaching or transmission of spiritual knowledge. When this combination further connects to the 5th house (poorva punya and mantra) or the 12th house (moksha), the dharmic life matures into devotion and progress toward liberation. The strength of the result depends on the placement of both the 9th lord and Jupiter, being greatest when both are in dignity and free from affliction.",
+    "source": "Phaladeepika; Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [9, 5, 12],
+    "topics": ["spirituality", "dharma", "wisdom", "guru", "devotion", "higher wisdom"],
+    "yoga_name": "Dharma Adhipati Guru"
+  }
+]

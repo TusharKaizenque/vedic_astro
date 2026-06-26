@@ -1,0 +1,122 @@
+[
+  {
+    "chunk_id": "jupiter_mahadasha_wealth",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Jupiter Mahadasha spans 16 years and, because Jupiter is the dhana karaka (natural significator of wealth), is among the most important periods for financial expansion. When Jupiter is well-placed — in its own sign, exalted, or strongly related to the 2nd, 5th, 9th, or 11th houses — this dasha brings growth of income, accumulation of savings, and the arrival of fortunate wealth. Gains often come through teaching, law, finance, advisory work, religion, or expansion into new ventures, and existing resources tend to multiply. Parashari tradition associates Jupiter dasha with prosperity supported by good fortune and ethical conduct, frequently resolving prior financial difficulties favorably. If Jupiter is afflicted, debilitated, or lord of a dusthana, the expansion may instead inflate expenses or debts. Overall this is a period in which wealth grows in proportion to Jupiter's strength and its connection to the houses of money.",
+    "source": "Brihat Parashara Hora Shastra (Vimshottari Dasha chapter); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [2, 11, 9, 5],
+    "topics": ["wealth", "money", "expansion", "fortune", "income", "dasha"],
+    "dasha_pair": ["Jupiter"]
+  },
+  {
+    "chunk_id": "venus_mahadasha_wealth",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Venus Mahadasha spans 20 years — the longest in Vimshottari — and, as Venus governs luxury, comfort, and material enjoyment, is frequently the most prosperous and comfortable period of the lifetime. When Venus is strong and connected to the 2nd, 9th, or 11th houses, this dasha brings abundant income, the acquisition of luxuries, vehicles, jewelry, and refined assets, and a general rise in material standard of living. Gains often come through arts, entertainment, beauty, fashion, hospitality, vehicles, or any field of comfort and pleasure, and through favorable relationships and partnerships. Parashari tradition holds that Venus, a great benefic, blesses the native with wealth, enjoyment, and ease during its period. If Venus is afflicted or weak, prosperity may be accompanied by overspending on pleasures. As yogakaraka for Capricorn and Aquarius lagnas, Venus dasha can mark the defining wealth period of life.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Venus"],
+    "houses_primary": [2, 11, 9],
+    "topics": ["wealth", "money", "luxury", "comfort", "income", "dasha"],
+    "dasha_pair": ["Venus"]
+  },
+  {
+    "chunk_id": "mercury_mahadasha_wealth",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Mercury Mahadasha spans 17 years and, since Mercury governs commerce, calculation, and trade, is a strong period for wealth earned through business and intellect. When Mercury is well-placed and connected to the 2nd or 11th houses, this dasha favors gains through trade, accounting, brokerage, writing, communication, and the diversification of income into multiple streams. The native often becomes adept at managing money, negotiating, and identifying profitable opportunities. Parashari tradition associates Mercury, the karaka of commerce and a versatile benefic, with prosperity through skill, calculation, and enterprise. Mercury dasha also supports the acquisition of financially valuable qualifications and credentials. If Mercury is afflicted or combust, financial dealings may bring miscommunication or losses through ill-judged transactions, so prudent management is advised.",
+    "source": "Brihat Parashara Hora Shastra; Saravali Ch.48",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Mercury"],
+    "houses_primary": [2, 11],
+    "topics": ["wealth", "money", "commerce", "trade", "income", "dasha"],
+    "dasha_pair": ["Mercury"]
+  },
+  {
+    "chunk_id": "second_eleventh_lord_mahadasha_wealth",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The mahadasha of the 2nd lord or the 11th lord is generically among the most decisive periods for wealth in any chart, because these are the direct rulers of accumulated wealth and gains. When a strong, well-placed 2nd lord runs its dasha, the native tends to build savings, secure financial stability, and prosper through the family or the sources signified by the lord's placement. When the 11th lord runs its dasha, income increases, financial desires are fulfilled, and gains flow from the directions shown by that lord. Parashari tradition holds that a planet gives the results of the houses it owns during its period, so the dasha of a dignified wealth lord activates the chart's full earning potential. If the wealth lord is afflicted or placed in a dusthana, the same dasha may instead bring expenditure, debt, or obstructed income. The strongest results occur when the dasha lord also participates in a Dhana Yoga.",
+    "source": "Brihat Parashara Hora Shastra (Vimshottari Dasha chapter); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [2, 11],
+    "topics": ["wealth", "money", "income", "savings", "gains", "dasha"],
+    "dasha_pair": ["2nd or 11th lord"]
+  },
+  {
+    "chunk_id": "rahu_mahadasha_wealth",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Rahu Mahadasha spans 18 years and is associated with sudden, unconventional, and amplified gains. For wealth, Rahu dasha can bring unexpected windfalls, rapid accumulation through speculation, foreign sources, technology, or large ambitious ventures — Rahu magnifies whatever houses it touches. When Rahu is well-placed or connected to the 2nd, 9th, or 11th houses, this period can produce a dramatic and sometimes spectacular rise in financial standing. Parashari tradition treats Rahu as an intense, worldly force that hungers for material acquisition, capable of conferring great wealth but also of volatility. Gains may arrive abruptly and just as abruptly fluctuate, so speculation should be tempered with caution. If Rahu is afflicted or tied to houses of loss, the same dasha can bring sudden financial reversals, deception in money matters, or unsustainable debt.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Rahu"],
+    "houses_primary": [2, 11],
+    "topics": ["wealth", "money", "sudden gains", "speculation", "foreign", "dasha"],
+    "dasha_pair": ["Rahu"]
+  },
+  {
+    "chunk_id": "jupiter_md_venus_ad_wealth",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Jupiter Mahadasha and Venus Antardasha, the two great benefics and natural significators of wealth and comfort combine, making this one of the most prosperous sub-periods for financial gain. Jupiter's expansion of fortune operates through Venus's domain of luxury, comfort, and material enjoyment, often bringing abundant income alongside acquisitions such as property, vehicles, or jewelry. The native may purchase or upgrade assets, enjoy improved comforts, and prosper through dealings that are pleasant and favorable. Parashari tradition regards the conjunction of these two benefics' periods as highly auspicious for wealth, especially when both are well-placed relative to the 2nd, 9th, and 11th houses. Gains through arts, finance, advisory work, or partnerships are particularly likely. If either planet is afflicted, prosperity may come mixed with a tendency to overspend on enjoyment.",
+    "source": "Brihat Parashara Hora Shastra (Vimshottari Antardasha); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Venus"],
+    "houses_primary": [2, 11, 9],
+    "topics": ["wealth", "money", "luxury", "prosperity", "gains", "dasha"],
+    "dasha_pair": ["Jupiter", "Venus"]
+  },
+  {
+    "chunk_id": "venus_md_mercury_ad_wealth",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Venus Mahadasha and Mercury Antardasha, the significator of comfort and the significator of commerce combine to favor wealth earned through trade, partnerships, and pleasing transactions. This sub-period is excellent for business growth, profitable negotiation, dealings in luxury goods, arts, or media, and the diversification of income. The native often finds money flowing through skillful commerce and agreeable relationships, with Mercury's calculation sharpening Venus's prosperity. Parashari tradition associates both planets with benefic, wealth-supporting qualities, so when they are well-placed relative to the 2nd and 11th houses, gains are steady and enjoyable. Commercial ventures and creative enterprises launched in this period tend to be financially rewarding. If Mercury is combust or afflicted, careful attention to contracts and accounts is advised to avoid losses through miscommunication.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Venus", "Mercury"],
+    "houses_primary": [2, 11],
+    "topics": ["wealth", "money", "commerce", "trade", "income", "dasha"],
+    "dasha_pair": ["Venus", "Mercury"]
+  },
+  {
+    "chunk_id": "mercury_md_jupiter_ad_wealth",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Mercury Mahadasha and Jupiter Antardasha, the karaka of commerce and the karaka of wealth combine, blending shrewd enterprise with expansive good fortune. This sub-period favors prosperity through business that is also wise and ethical — finance, consulting, education, publishing, law, or trade guided by sound judgment. Jupiter's fortune broadens the scope of Mercury's commercial activity, often bringing larger contracts, professional recognition that translates to income, and the growth of savings. Parashari tradition holds that the joint period of these two benefics supports both earning and accumulation, especially when they aspect or relate to the 2nd, 9th, or 11th houses. Investments and ventures undertaken with foresight tend to mature profitably. If either planet is weak or afflicted, the expansion may be slower or accompanied by inflated expectations, calling for measured financial planning.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Mercury", "Jupiter"],
+    "houses_primary": [2, 11, 9],
+    "topics": ["wealth", "money", "commerce", "fortune", "income", "dasha"],
+    "dasha_pair": ["Mercury", "Jupiter"]
+  },
+  {
+    "chunk_id": "rahu_md_venus_ad_wealth",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Rahu Mahadasha and Venus Antardasha, Rahu's amplifying ambition operates through Venus's domain of luxury and material acquisition, frequently producing strong and sometimes sudden gains in wealth and worldly comfort. This sub-period can bring the acquisition of property, vehicles, and luxuries, prosperity through unconventional or foreign sources, and a marked rise in material standing. Parashari tradition notes that Rahu intensifies Venus's pursuit of enjoyment and possessions, so income and indulgence both increase. When Venus and Rahu are well-disposed toward the 2nd, 9th, or 11th houses, gains can be substantial and the native enjoys an expansive material life. However, because Rahu adds volatility and a hunger for excess, this period also carries risk of overextension, speculative loss, or unsustainable spending if the planets are afflicted or tied to houses of loss.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Rahu", "Venus"],
+    "houses_primary": [2, 11],
+    "topics": ["wealth", "money", "sudden gains", "luxury", "speculation", "dasha"],
+    "dasha_pair": ["Rahu", "Venus"]
+  },
+  {
+    "chunk_id": "jupiter_md_mercury_ad_wealth",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Jupiter Mahadasha and Mercury Antardasha, the karaka of wealth and the karaka of commerce combine, uniting expansive fortune with sharp enterprise to favor earning through intellect and trade. This sub-period supports prosperity in finance, consulting, education, writing, publishing, and commercial ventures, with Jupiter broadening the reach of Mercury's skill. Gains tend to come through knowledge, negotiation, and well-judged transactions, and savings grow when both planets relate to the 2nd, 9th, or 11th houses. Parashari tradition regards the joint period of these two benefics as auspicious for both income and accumulation, frequently bringing financially rewarding qualifications, contracts, or business expansion. Educational or professional credentials gained now often carry lasting monetary value. If Mercury is combust or either planet afflicted, careful handling of accounts and agreements protects against avoidable losses.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Mercury"],
+    "houses_primary": [2, 11, 9],
+    "topics": ["wealth", "money", "commerce", "intellect", "income", "dasha"],
+    "dasha_pair": ["Jupiter", "Mercury"]
+  }
+]

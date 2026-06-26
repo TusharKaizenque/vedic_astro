@@ -1,0 +1,54 @@
+[
+  {
+    "chunk_id": "fifth_house_children_significations",
+    "chunk_type": "house_signification",
+    "content": "The 5th house (Putra Bhava) is the primary house for children and progeny in Parashari astrology, and is the foremost consideration in any assessment of offspring. It governs: children, the capacity for and joy of progeny, the intelligence and creative power of the native, and poorva punya — the merit accumulated through virtuous deeds in past lives, of which children are considered a fruit. Parashara lists among its significations sons, intellect, mantras and devotion, speculation, and the fruits of good karma. In progeny analysis, the strength of the 5th house, its lord, its occupants, and the planets aspecting it together indicate the tendencies regarding children. Jupiter, the putra karaka (significator of progeny), should also be assessed alongside the 5th house, and the Saptamsa (D7) divisional chart is examined as the dedicated chart for offspring. As a respectful classical observation, a strong and unafflicted 5th house tends to favor matters of progeny, while afflictions are read cautiously as potential delays rather than definitive limitations.",
+    "source": "Brihat Parashara Hora Shastra Ch.11 (Bhava Significations); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [5],
+    "topics": ["children", "progeny", "poorva punya", "intelligence", "creativity", "saptamsa"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "ninth_house_children_significations",
+    "chunk_type": "house_signification",
+    "content": "The 9th house (Bhagya/Dharma Bhava) relates to progeny matters principally as the house of grandchildren and the continuity of the lineage's dharma, since it is the 5th from the 5th house and therefore the progeny of one's progeny. It governs fortune, righteousness, higher wisdom, the father, and the merit that sustains the family line across generations. In progeny analysis the 9th indicates the dharmic and fortunate dimension of one's offspring — whether children carry forward virtue, learning, and good fortune — as well as the prospects for grandchildren. Parashara lists among its significations fortune, dharma, devotion, and noble deeds. A strong 9th house alongside a strong 5th house supports an enduring and virtuous lineage, and connections between the 5th and 9th lords are especially auspicious for the prosperity of progeny. The 9th also reflects the blessings and good karma that flow to the family through the practice of dharma.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [9],
+    "topics": ["children", "grandchildren", "progeny", "dharma", "fortune", "lineage"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "second_house_children_significations",
+    "chunk_type": "house_signification",
+    "content": "The 2nd house (Dhana/Kutumba Bhava) relates to progeny matters as the house of family and the expansion of the household, governing the immediate family unit, its accumulated wealth, and its continuity. In assessing children it represents the growth of the family in numbers and resources, the welfare of the household into which offspring are born, and the lineage as a living family body. Parashara lists among its significations wealth, family, food, and the strength of the kutumba (family circle). When the 2nd house and its lord are well supported, the family tends to expand harmoniously and to provide a stable, nourishing foundation for children. Connections between the 2nd and 5th lords indicate that progeny contributes to family prosperity and that additions to the family are accompanied by material and emotional well-being. The 2nd thus supplements the 5th house in reading how children integrate into and enrich the family as a whole.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [2],
+    "topics": ["children", "family", "progeny", "wealth", "lineage", "household"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "eleventh_house_children_significations",
+    "chunk_type": "house_signification",
+    "content": "The 11th house (Labha Bhava) relates to progeny matters as the house of fulfilment of desires and gains, and is the principal indicator of the eldest child, being the 11th from lagna and counted in some classical reckonings for the firstborn. It governs the realization of cherished wishes — including the deep desire for children — as well as gains, elder siblings, and large circles of well-wishers. In progeny analysis a strong 11th house supports the fulfilment of the longing for offspring and indicates benefit and joy received through children. Parashara lists among its significations gains, the fulfilment of all kinds of desires, and the elder sibling. The eldest child in particular is favorably signified when the 11th house and its lord are well disposed. Connections between the 5th and 11th lords indicate that the wish for progeny is realized and that children become a source of fulfilment and gains for the native.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [11],
+    "topics": ["children", "progeny", "fulfilment", "gains", "elder children", "desires"],
+    "yoga_name": null,
+    "dasha_pair": null
+  }
+]

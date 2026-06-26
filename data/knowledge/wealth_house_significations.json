@@ -1,0 +1,50 @@
+[
+  {
+    "chunk_id": "second_house_wealth_significations",
+    "chunk_type": "house_signification",
+    "content": "The 2nd house (Dhana Bhava) is the primary house of accumulated wealth, savings, and family money. It governs liquid assets, bank balances, jewelry, precious metals, and the resources a native is able to retain and store. Parashara lists among its significations wealth, grain, family, speech, nourishment, and firmness, linking material accumulation with the sustaining resources of the household. The condition of the 2nd house and its lord shows how readily the native converts income into durable savings and how secure their financial base is. Benefics in the 2nd, especially Jupiter (dhana karaka) or Venus, strengthen accumulation and protect against poverty. The 2nd house also rules speech and the face, and the family lineage from which inherited wealth may descend. In wealth analysis the 2nd is always read together with the 11th house of gains.",
+    "source": "Brihat Parashara Hora Shastra Ch.11 (Bhava Significations); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Venus"],
+    "houses_primary": [2],
+    "topics": ["wealth", "money", "savings", "finance", "family wealth", "accumulation"],
+    "yoga_name": null
+  },
+  {
+    "chunk_id": "eleventh_house_wealth_significations",
+    "chunk_type": "house_signification",
+    "content": "The 11th house (Labha Bhava — house of gains) governs income, profits, the fulfillment of desires, and all forms of financial gain. Where the 2nd house shows wealth that is stored, the 11th shows wealth that flows in — recurring earnings, bonuses, returns, and the satisfaction of one's material aspirations. Parashara lists gains, elder siblings, and the realization of wishes among its significations, marking it as the house where every form of acquisition fructifies. The 11th is an upachaya house in which even malefics such as Saturn prosper, often indicating consistent long-term income. The 11th lord's placement reveals the sources from which gains arise. When the 2nd and 11th lords connect by conjunction, aspect, or exchange, a powerful Dhana Yoga forms and income reliably converts into accumulated wealth.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Saturn", "Jupiter"],
+    "houses_primary": [11],
+    "topics": ["wealth", "money", "gains", "income", "profit", "fulfillment"],
+    "yoga_name": null
+  },
+  {
+    "chunk_id": "ninth_house_wealth_significations",
+    "chunk_type": "house_signification",
+    "content": "The 9th house (Bhagya Bhava — house of fortune) governs luck, divine grace, dharma, and the prosperity that arrives through good fortune and meritorious deeds. In wealth analysis it represents fortunate or effortless wealth — the prosperity supported by destiny, the blessings of the father and elders, and the fruits of righteous conduct. Parashara names fortune, father, higher learning, religion, and pilgrimage among its significations, all of which can channel wealth to the native. A strong 9th house and a well-placed 9th lord confer financial ease, frequently bringing money through teaching, law, religion, foreign connections, or inheritance from elders. The 9th is the strongest trikona of fortune; its connection with the 2nd or 11th lords produces highly prosperous Dhana Yogas. Jupiter as natural karaka of both wealth and fortune greatly enhances 9th house prosperity.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [9],
+    "topics": ["wealth", "money", "fortune", "luck", "dharma", "prosperity"],
+    "yoga_name": null
+  },
+  {
+    "chunk_id": "fifth_house_wealth_significations",
+    "chunk_type": "house_signification",
+    "content": "The 5th house (Putra Bhava) in wealth analysis governs speculation, investments, and the wealth arising from poorva punya — the merit accumulated in past lives. It rules the discernment and intelligence applied to financial decisions, as well as gains from the stock market, lotteries, creative ventures, and education. Parashara lists intelligence, children, and the fruits of past merit among its significations, marking the 5th as a trikona of fortune second only to the 9th. A strong 5th house and a well-placed 5th lord indicate success in speculation and sound judgment in investment. Because the 5th is a house of accumulated merit, prosperity here often arrives as if deserved, rewarding the native's wisdom and good fortune together. When the 5th lord connects with the 2nd or 11th, gains through speculation and investment become a significant source of wealth.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [5],
+    "topics": ["wealth", "money", "speculation", "investment", "poorva punya", "intelligence"],
+    "yoga_name": null
+  }
+]

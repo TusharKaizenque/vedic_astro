@@ -1,0 +1,67 @@
+[
+  {
+    "chunk_id": "seventh_house_marriage_significations",
+    "chunk_type": "house_signification",
+    "content": "The 7th house (Kalatra Bhava / Yuvati Bhava) is the primary house of marriage, spouse, and all partnerships. It governs the husband or wife, the nature and quality of married life, marital harmony, conjugal relations, and the native's capacity for committed union. Beyond marriage, it rules business partnerships, public dealings, contracts, and trade with others. Parashara lists matters such as the wife, marriage, sexual union, and travel under this bhava. In marriage analysis the 7th house sets the foundation: its sign, occupants, lord, and the planets aspecting it describe the spouse's temperament and the texture of the relationship. The 7th house and its lord must also be examined in the D9 Navamsa, the divisional chart most essential for assessing marriage and the partner. Venus as the natural significator (karaka) of the 7th, and its condition, further refine the reading.",
+    "source": "Brihat Parashara Hora Shastra Ch.11 (Bhava Significations); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Venus"],
+    "houses_primary": [7],
+    "topics": ["marriage", "spouse", "partnership", "navamsa", "relationship"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "second_house_marriage_significations",
+    "chunk_type": "house_signification",
+    "content": "The 2nd house (Dhana Bhava / Kutumba Bhava) in marriage analysis represents the family unit, its expansion through union, and the household the couple builds together. As the house of kutumba (family), it shows how marriage enlarges the family circle and supports the growth of the family line. It also governs accumulated wealth and resources shared within the household, so it indicates the financial dimension of married life. Classical texts treat the 2nd as a maraka (a house bearing on longevity) for the spouse through its bearing on the 7th, making it relevant to the durability of the marriage. The 2nd lord's condition shows how smoothly the union supports family stability, speech and conduct within the home, and the accumulation of joint resources. A strong, benefic-influenced 2nd house supports a harmonious, prosperous, and well-rooted family life after marriage.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [2],
+    "topics": ["marriage", "family", "kutumba", "wealth", "household"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "eleventh_house_marriage_significations",
+    "chunk_type": "house_signification",
+    "content": "The 11th house (Labha Bhava — house of gains) in marriage analysis represents the fulfillment of desires and the gains that arise through union, since it is the house where wishes are realized. Being the 5th house from the 7th, it also relates to the romance and affection within the marriage and to the desires the partnership satisfies. The 11th governs social networks and friends, often the very channels through which marriage is arranged or through which the spouse is met. Gains of wealth, status, and companionship flowing from the union are 11th house matters. A strong 11th house and a well-placed 11th lord indicate that marriage brings contentment, social expansion, and the gratification of the native's long-held aspirations, while a connection between the 7th and 11th lords supports a fulfilling and rewarding partnership.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [11],
+    "topics": ["marriage", "fulfillment", "gains", "desire", "relationship"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "fifth_house_marriage_significations",
+    "chunk_type": "house_signification",
+    "content": "The 5th house (Putra Bhava / Suta Bhava) in marriage analysis governs romance, love, affection, and progeny, making it central to the emotional and procreative dimensions of married life. It rules courtship, romantic attraction, and the warmth that precedes and sustains a loving union, as well as the children born from the marriage. As a trine and a house of purva punya (past merit), the 5th shows the good fortune and emotional rapport a native carries into relationships. Parashara lists offspring, intelligence, and creative joy among its significations. A strong, benefic 5th house and a well-placed 5th lord support a love-filled marriage blessed with children, while afflictions here can delay progeny or strain the romantic bond. The connection between the 5th and 7th houses is especially important for love marriages and emotional fulfillment in union.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [5],
+    "topics": ["marriage", "romance", "love", "progeny", "children"],
+    "yoga_name": null,
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "eighth_house_marriage_significations",
+    "chunk_type": "house_signification",
+    "content": "The 8th house (Ayur Bhava / Randhra Bhava) in marriage analysis is of great importance for the longevity and depth of the union, as it sits opposite the 2nd and relates directly to the durability of married life. It governs marital intimacy and sexual union, the hidden and transformative aspects of the bond, and the resources gained through the spouse and in-laws, since it is the 2nd from the 7th (the wealth of the partner). Parashara connects the 8th with longevity, inheritance, and matters hidden from view, all of which bear on how a marriage endures and transforms over time. A strong, unafflicted 8th house supports marital stability, deep intimacy, and gains through the partner's family, while heavy affliction can threaten harmony, longevity of the union, or the well-being of the spouse. The 8th must be weighed carefully alongside the 7th and 2nd when assessing the endurance of marriage.",
+    "source": "Brihat Parashara Hora Shastra Ch.11; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [8],
+    "topics": ["marriage", "longevity", "intimacy", "in-laws", "transformation"],
+    "yoga_name": null,
+    "dasha_pair": null
+  }
+]

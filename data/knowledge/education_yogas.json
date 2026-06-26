@@ -1,0 +1,54 @@
+[
+  {
+    "chunk_id": "saraswati_yoga",
+    "chunk_type": "yoga",
+    "content": "Saraswati Yoga forms when the three natural benefics Mercury, Venus, and Jupiter occupy kendra (1, 4, 7, 10), trikona (1, 5, 9), or the 2nd house from the lagna, with these planets well-dignified in their own, exaltation, or friendly signs, and Jupiter especially strong. Named after the goddess of learning, this yoga confers exceptional intelligence, eloquence, scholarship, and mastery of the arts and sciences. Classical authorities describe the native as highly learned, skilled in poetry, mathematics, scripture, music, and the fine arts, and renowned for wisdom and articulate expression. Because the three karakas of intellect (Mercury), creativity and refinement (Venus), and wisdom (Jupiter) act together from strong positions, the native achieves distinction in education and is honored for knowledge. The yoga's results flower especially during the dashas of the participating benefics, bringing scholastic fame, fluency, and creative brilliance.",
+    "source": "Phaladeepika; Brihat Parashara Hora Shastra (Nabhasa and Special Yogas)",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Mercury", "Venus", "Jupiter"],
+    "houses_primary": [1, 2, 4, 5, 7, 9, 10],
+    "topics": ["education", "learning", "knowledge", "intelligence", "scholarship", "arts"],
+    "yoga_name": "Saraswati",
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "budhaditya_yoga_education",
+    "chunk_type": "yoga",
+    "content": "Budhaditya Yoga forms when Mercury and the Sun occupy the same sign, typically the same house, uniting the soul and intellect. The Sun represents intelligence as the light of the self, while Mercury represents reasoning, analysis, and articulate expression, so their union produces a quick, bright, and discriminating mind well-suited to learning. Classical texts describe such a native as intelligent, skillful, learned, and respected for their cleverness and command of subjects. For education, this yoga supports strong analytical ability, examination success, and proficiency in fields requiring logic, communication, and study, such as mathematics, science, writing, and administration. The yoga is most potent when placed in a kendra or trikona and when Mercury is not deeply combust; severe combustion (Mercury within a few degrees of the Sun) may internalize the intellect, though the underlying mental sharpness remains. Strength varies by sign, being especially favorable in Aries, Leo, Gemini, and Virgo.",
+    "source": "Phaladeepika; Saravali; widely cited in classical texts",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Sun", "Mercury"],
+    "houses_primary": [],
+    "topics": ["education", "learning", "knowledge", "intelligence", "intellect", "examinations"],
+    "yoga_name": "Budhaditya",
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "bhadra_yoga_education",
+    "chunk_type": "yoga",
+    "content": "Bhadra Yoga is one of the five Panch Mahapurusha Yogas and is especially significant for education, forming when Mercury occupies its own sign (Gemini or Virgo) or its exaltation sign (Virgo) while placed in a kendra (1, 4, 7, or 10) from the lagna. Because Mercury is the karaka of intellect, learning, and communication, this yoga confers a powerful, precise, and versatile mind. Parashara and the classical authorities describe the native as learned, eloquent, skilled in many branches of knowledge, sharp in memory, and respected for intelligence. For education, Bhadra Yoga grants excellence in study, command of language and mathematics, success in examinations, and the ability to master technical and analytical subjects with ease. The native often shines in fields such as writing, accountancy, science, scholarship, and the communicative arts. The yoga's full intellectual brilliance manifests during Mercury's dasha and antardasha periods.",
+    "source": "Brihat Parashara Hora Shastra Ch.85 (Panch Mahapurusha Yogas); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Mercury"],
+    "houses_primary": [1, 4, 7, 10],
+    "topics": ["education", "learning", "knowledge", "intelligence", "communication", "scholarship"],
+    "yoga_name": "Bhadra",
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "jupiter_mercury_education_yoga",
+    "chunk_type": "yoga",
+    "content": "When Jupiter and Mercury jointly influence the 4th and 5th houses (the houses of education and intelligence) by occupation, aspect, lordship, or mutual association, a powerful combination for scholarship arises. Jupiter is the karaka of wisdom, higher knowledge, and dharma, while Mercury is the karaka of intellect, analysis, and learning, so their combined bearing on the educational houses unites depth of understanding with sharpness of reasoning. Classical tradition holds that the conjunction or mutual aspect of these two natural benefics upon learning-related houses produces a wise, learned, and articulate native who excels in study and is honored for knowledge. This influence supports both the breadth of higher learning (Jupiter) and the precision of technical study (Mercury), favoring scholars, teachers, advisors, and researchers. When Jupiter aspects the 5th house, intelligence is elevated and guided by wisdom, while Mercury's involvement grants quickness and articulate mastery. The native's educational success is strongest when both planets are well-dignified and free from affliction, and it ripens during their respective dasha periods.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Mercury"],
+    "houses_primary": [4, 5],
+    "topics": ["education", "learning", "knowledge", "wisdom", "scholarship", "intelligence"],
+    "yoga_name": "Guru-Budha Vidya Yoga",
+    "dasha_pair": null
+  }
+]

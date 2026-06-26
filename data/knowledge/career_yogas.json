@@ -1,0 +1,110 @@
+[
+  {
+    "chunk_id": "dharma_karmadhipati_yoga",
+    "chunk_type": "yoga",
+    "content": "Dharma Karmadhipati Yoga forms when the 9th lord (dharma, fortune, higher learning) and the 10th lord (karma, career, authority) combine by conjunction, mutual aspect, or sign exchange. This unites the house of fortune with the house of professional action, creating one of the most powerful career yogas in Parashara astrology. The native's career aligns with their dharmic purpose, bringing recognition, authority, and professional fulfillment. Parashara describes this combination as conferring 'the status of a ruler' in worldly affairs. The strength of the yoga depends on the dignity of both lords: if both are well-placed, results are outstanding; if one is debilitated or combust, the yoga operates at reduced potential. Career growth accelerates during the dasha periods of the 9th or 10th lords.",
+    "source": "Phaladeepika Ch.6; Brihat Parashara Hora Shastra Ch.37",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [9, 10],
+    "topics": ["career", "success", "authority", "fortune", "status"],
+    "yoga_name": "Dharma Karmadhipati"
+  },
+  {
+    "chunk_id": "raja_yoga_kendra_trikona",
+    "chunk_type": "yoga",
+    "content": "Raja Yoga in the Parashara system forms when the lord of a kendra house (1, 4, 7, or 10 — angular houses of worldly power) combines with the lord of a trikona house (1, 5, or 9 — trinal houses of dharma and fortune). The conjunction, mutual aspect, or sign exchange of these two lords creates a powerful combination for career success, social authority, and professional recognition. Parashara states that such combinations confer positions of kings or their equivalents in modern society. The lagna lord occupies a special position, being simultaneously a kendra and trikona lord, making it a natural participant in Raja Yoga formation. The strength of the yoga depends on the planets involved, their dignity, and whether they are free from affliction.",
+    "source": "Brihat Parashara Hora Shastra Ch.37",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [1, 4, 5, 7, 9, 10],
+    "topics": ["career", "success", "authority", "status", "power"],
+    "yoga_name": "Raja Yoga"
+  },
+  {
+    "chunk_id": "ruchaka_yoga",
+    "chunk_type": "yoga",
+    "content": "Ruchaka Yoga is one of the five Panch Mahapurusha Yogas described in Brihat Parashara Hora Shastra. It forms when Mars occupies its own sign (Aries or Scorpio) or exaltation sign (Capricorn) while placed in a kendra house (1st, 4th, 7th, or 10th from lagna). The native possesses a strong physique, commanding presence, courage, and exceptional leadership abilities. Parashara states the native is 'chief among men, conqueror of enemies, and honored by rulers.' Career success comes in Mars-ruled fields: military, police, engineering, surgery, real estate, sports, metallurgy, or any profession requiring courage, initiative, and competitive drive. The native leads rather than follows, and earns authority through decisive action and proven capability. This yoga is strongest when Mars is also the functional benefic for the lagna.",
+    "source": "Brihat Parashara Hora Shastra Ch.85 (Panch Mahapurusha Yogas)",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Mars"],
+    "houses_primary": [1, 4, 7, 10],
+    "topics": ["career", "leadership", "authority", "success", "military", "engineering"],
+    "yoga_name": "Ruchaka"
+  },
+  {
+    "chunk_id": "shasha_yoga",
+    "chunk_type": "yoga",
+    "content": "Shasha Yoga is one of the five Panch Mahapurusha Yogas. It forms when Saturn occupies its own sign (Capricorn or Aquarius) or exaltation sign (Libra) while placed in a kendra house (1st, 4th, 7th, or 10th from lagna). Parashara describes the native as possessing discipline, longevity, organizational ability, and the capacity to earn authority through sustained effort. Career success comes in Saturn-ruled fields: administration, law, politics, government service, construction, real estate, agriculture, mining, or professions requiring structural organization and patient perseverance. The native rises to positions of authority through proven reliability and diligence rather than through quick advancement. Saturn dasha or the dasha of the lagna lord typically activates this yoga's full results. The native is respected for their mastery of system and procedure.",
+    "source": "Brihat Parashara Hora Shastra Ch.85 (Panch Mahapurusha Yogas)",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Saturn"],
+    "houses_primary": [1, 4, 7, 10],
+    "topics": ["career", "authority", "leadership", "government", "law", "administration"],
+    "yoga_name": "Shasha"
+  },
+  {
+    "chunk_id": "bhadra_yoga",
+    "chunk_type": "yoga",
+    "content": "Bhadra Yoga is one of the five Panch Mahapurusha Yogas. It forms when Mercury occupies its own sign (Gemini or Virgo) or exaltation sign (Virgo) while placed in a kendra house (1st, 4th, 7th, or 10th from lagna). The native possesses exceptional intellect, communication skill, and commercial acumen. Parashara states the native is 'learned, wealthy, and respected for their skill in crafts and knowledge.' Career success comes in Mercury-ruled fields: accounting, writing, publishing, trade, communication technologies, mathematics, medicine, law, or any profession requiring precision, analysis, and articulate communication. The native is known for their intelligence and technical competence. This yoga is especially powerful when Mercury also lords important houses for the lagna.",
+    "source": "Brihat Parashara Hora Shastra Ch.85 (Panch Mahapurusha Yogas)",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Mercury"],
+    "houses_primary": [1, 4, 7, 10],
+    "topics": ["career", "intellect", "communication", "business", "writing", "education"],
+    "yoga_name": "Bhadra"
+  },
+  {
+    "chunk_id": "budhaditya_yoga",
+    "chunk_type": "yoga",
+    "content": "Budhaditya Yoga forms when Mercury and the Sun occupy the same sign (and typically the same house). The Sun represents authority, soul, and executive function; Mercury represents intellect, communication, and analytical precision. Their combination creates a mind capable of holding positions of intellectual authority — as administrators, writers, teachers, professionals in science or medicine, or executives who also think deeply. The yoga enhances analytical ability, professional communication, and the capacity to combine leadership with intelligence. Strength varies by sign: most potent in Aries (Sun exalted), Virgo (Mercury own/exalted), Gemini (Mercury own), and Leo (Sun own). When Mercury is combust (within 3° of Sun), the yoga's intellectual dimension may be internalized rather than expressed publicly, but the analytical depth remains.",
+    "source": "Phaladeepika; Saravali; widely cited in classical texts",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Sun", "Mercury"],
+    "houses_primary": [],
+    "topics": ["career", "intellect", "authority", "communication", "leadership", "education"],
+    "yoga_name": "Budhaditya"
+  },
+  {
+    "chunk_id": "neecha_bhanga_raja_yoga",
+    "chunk_type": "yoga",
+    "content": "Neecha Bhanga Raja Yoga occurs when a planet's debilitation is cancelled, often producing a stronger result than if the planet had never been debilitated. Classical cancellation conditions (any one suffices): (1) the lord of the sign of debilitation is placed in a kendra from lagna or from the Moon; (2) the planet that would be exalted in the sign of debilitation is placed in a kendra; (3) the debilitated planet itself is placed in a kendra; (4) the dispositor of the debilitated planet aspects it. The native typically experiences early struggles in areas governed by the debilitated planet, followed by significant achievement — often surpassing those who never faced that initial weakness. This yoga is especially powerful for conferring status earned through overcoming real obstacles. Career recognition arrives after visible struggle and demonstrated resilience.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika Ch.6",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [],
+    "topics": ["career", "success", "authority", "overcoming obstacles", "status"],
+    "yoga_name": "Neecha Bhanga Raja"
+  },
+  {
+    "chunk_id": "viparita_raja_yoga",
+    "chunk_type": "yoga",
+    "content": "Viparita Raja Yoga (paradoxical royal yoga) forms when the lord of a dusthana house (6, 8, or 12) occupies another dusthana house. The three varieties are: Harsha Yoga (6th lord in 8th or 12th), Sarala Yoga (8th lord in 6th or 12th), and Vimala Yoga (12th lord in 6th or 8th). Because the negative energy of these houses turns inward upon itself, the native paradoxically prospers from situations that harm others. This yoga is prominent in charts of people who succeed through setbacks, who overcome enemies, or who work in professions dealing with the difficult and the hidden: medicine, research, law enforcement, intelligence, crisis management, or occult sciences. The classic description is that the native 'destroys enemies without effort' and gains where others lose. Results fully manifest during the dasha of the yoga-forming planet.",
+    "source": "Phaladeepika Ch.6; Brihat Parashara Hora Shastra",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [6, 8, 12],
+    "topics": ["career", "success", "overcoming obstacles", "research", "medicine", "resilience"],
+    "yoga_name": "Viparita Raja"
+  },
+  {
+    "chunk_id": "amala_yoga",
+    "chunk_type": "yoga",
+    "content": "Amala Yoga (yoga of spotlessness) forms when a natural benefic planet — Jupiter, Venus, or an unafflicted Mercury or Moon — occupies the 10th house from the lagna or from the Moon. 'Amala' means pure or unblemished, and this yoga indicates a career characterized by ethical conduct and an unsullied professional reputation. The native earns recognition through virtue and competence rather than manipulation or force. Parashara states the native 'enjoys lasting fame, prosperity, and the respect of noble persons.' Jupiter in the 10th is the strongest form, associated with careers in teaching, law, philosophy, medicine, or spiritual service. Venus in the 10th brings success in arts, diplomacy, or luxury industries. The yoga's results are enduring: the native's professional legacy outlasts their active career years.",
+    "source": "Saravali; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Venus", "Mercury", "Moon"],
+    "houses_primary": [10],
+    "topics": ["career", "reputation", "success", "ethics", "recognition", "status"],
+    "yoga_name": "Amala"
+  }
+]

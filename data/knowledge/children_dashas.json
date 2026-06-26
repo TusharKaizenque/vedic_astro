@@ -1,0 +1,122 @@
+[
+  {
+    "chunk_id": "jupiter_mahadasha_children",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Jupiter Mahadasha spans 16 years, and because Jupiter is the putra karaka — the natural significator of progeny — this period is classically among the most significant for matters of children and family growth. When Jupiter is well placed and favorably related to the 5th house and its lord, this dasha is often associated with the blessing of children, the expansion of the family, and joy and good fortune through offspring. Parashara emphasizes that the dasha of the karaka of a matter tends to bring that matter to fruition, so progeny is a natural theme of a supportive Jupiter period. Children born or nurtured during this dasha are classically said to be inclined toward virtue, learning, and good conduct. As a respectful classical tendency, an afflicted Jupiter may indicate that progeny matters require patience during this period, while a strong Jupiter generally favors the fulfilment of the desire for children.",
+    "source": "Brihat Parashara Hora Shastra (Vimshottari Dasha chapter); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [5, 9],
+    "topics": ["children", "progeny", "putra karaka", "family", "dasha"],
+    "dasha_pair": ["Jupiter"]
+  },
+  {
+    "chunk_id": "moon_mahadasha_children",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Moon Mahadasha spans 10 years and governs the mind, emotions, nurturing, and the maternal dimension of life, all of which connect the Moon to the care and well-being of children. Because the Moon is a secondary significator in progeny matters and rules the emotional bond with offspring, a strong and well-placed Moon during its dasha can favor the nurturing of children and the emotional flourishing of family life. When the Moon relates to the 5th house or its lord, this period may coincide with the joys of progeny and with a deepening of domestic warmth. Parashara associates a strong Moon with contentment of mind and the comforts of home, qualities that support a happy family environment. As a respectful classical tendency, a waning or afflicted Moon is read cautiously as a possible time of emotional fluctuation in family matters, eased by benefic support and remedial measures.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Moon"],
+    "houses_primary": [5, 4],
+    "topics": ["children", "progeny", "nurturing", "family", "emotions", "dasha"],
+    "dasha_pair": ["Moon"]
+  },
+  {
+    "chunk_id": "fifth_lord_mahadasha_children",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Mahadasha of the 5th lord — the planet ruling the house of progeny — is classically one of the most likely periods for matters of children to come to fruition, regardless of which planet happens to lord the 5th in a given chart. When the 5th lord is strong, well placed, and unafflicted, its dasha tends to activate the significations of offspring, intelligence, and past merit, and is frequently associated with the timing of progeny and with joy through children. Parashara's principle is that the dasha of a house's lord brings forward the affairs of that house, so the 5th lord's period naturally emphasizes putra bhava. The supporting condition of Jupiter the putra karaka and the Saptamsa (D7) chart should be weighed alongside the 5th lord's dasha for a fuller view. As a respectful classical tendency, a 5th lord placed in a dusthana or under affliction may indicate that progeny matters during its dasha unfold gradually or require patience rather than being precluded.",
+    "source": "Brihat Parashara Hora Shastra (Vimshottari Dasha chapter); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [5],
+    "topics": ["children", "progeny", "fifth lord", "timing", "dasha"],
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "venus_mahadasha_children",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Venus Mahadasha spans 20 years and governs love, marriage, conjugal happiness, and the comforts of relationship, making it a period during which the marital bond — from which progeny commonly arises — is brought to the fore. Because Venus rules the harmony of partnership and the pleasures of family life, a strong and well-placed Venus during its dasha can support the conditions favorable to children, particularly when Venus relates to the 5th house, the 7th house, or the putra karaka Jupiter. Parashara associates a strong Venus with domestic happiness, affection, and material comfort, all of which nurture a flourishing family. This period is classically read as favorable for the deepening of the conjugal relationship and, where the chart supports it, for the welcoming of children. As a respectful classical tendency, an afflicted Venus is interpreted with care as a possible time requiring patience in relationship and family matters.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Venus"],
+    "houses_primary": [5, 7],
+    "topics": ["children", "progeny", "marriage", "conjugal happiness", "family", "dasha"],
+    "dasha_pair": ["Venus"]
+  },
+  {
+    "chunk_id": "sun_mahadasha_children",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Sun Mahadasha spans 6 years and governs the soul, vitality, authority, and the father, and it carries a classical association with progeny through its connection to lineage, continuity, and the carrying forward of the family name. A strong and well-placed Sun during its dasha can support the dignity and prosperity of the family line and, when related to the 5th house or its lord, may coincide with developments in matters of children. Parashara associates a strong Sun with vitality, status, and the honour of the lineage, qualities that uphold the standing of one's offspring. This period may bring children who are dignified, capable, and a source of pride to the family. As a respectful classical tendency, an afflicted Sun is read cautiously as a time when progeny or paternal matters call for patience, with benefic support and remedial measures offering relief.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Sun"],
+    "houses_primary": [5, 9],
+    "topics": ["children", "progeny", "lineage", "vitality", "father", "dasha"],
+    "dasha_pair": ["Sun"]
+  },
+  {
+    "chunk_id": "jupiter_md_venus_ad_children",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Jupiter Mahadasha and Venus Antardasha, the putra karaka Jupiter combines with Venus, the significator of marriage and conjugal happiness, forming one of the classically auspicious sub-period combinations for matters of progeny. The expansive, fortunate energy of Jupiter operating alongside the harmony and affection of Venus is often associated with the welcoming of children and with the deepening of family happiness, especially when both planets relate well to the 5th and 7th houses. Parashara's principle that the karaka's period brings forward its significations applies strongly here, with Venus adding the relational warmth from which progeny commonly arises. This combination is traditionally read as favorable for the fulfilment of the desire for children when supported by the 5th house and the Saptamsa. As a respectful classical tendency, the strength and dignity of both planets determine the fullness of the result.",
+    "source": "Brihat Parashara Hora Shastra (Vimshottari Antardasha); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Venus"],
+    "houses_primary": [5, 7],
+    "topics": ["children", "progeny", "marriage", "putra karaka", "dasha"],
+    "dasha_pair": ["Jupiter", "Venus"]
+  },
+  {
+    "chunk_id": "jupiter_md_moon_ad_children",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Jupiter Mahadasha and Moon Antardasha, the putra karaka Jupiter combines with the Moon, the significator of nurturing and the maternal dimension of family, forming a sub-period classically supportive of progeny and domestic joy. This pairing unites the two benefics of the Gajakesari combination, and when Jupiter and the Moon are well placed and related to the 5th house, the period is often associated with the blessing of children and with emotional warmth in the family. Parashara holds that the meeting of Jupiter and the Moon confers wisdom, contentment, and prosperity, qualities that nurture a flourishing household. This antardasha is traditionally read as favorable for the timing of progeny and for the well-being of children already present. As a respectful classical tendency, the dignity of both planets and the supporting condition of the Saptamsa refine the strength of the result.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Moon"],
+    "houses_primary": [5, 4],
+    "topics": ["children", "progeny", "nurturing", "putra karaka", "dasha"],
+    "dasha_pair": ["Jupiter", "Moon"]
+  },
+  {
+    "chunk_id": "venus_md_jupiter_ad_children",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Venus Mahadasha and Jupiter Antardasha, the relational and conjugal energy of Venus provides the framework within which the putra karaka Jupiter expresses its significations of progeny and good fortune. This combination is classically regarded as favorable for matters of children, as the harmony of partnership offered by Venus meets the blessing and expansion offered by Jupiter, especially when both relate to the 5th and 7th houses. Parashara's principle that the karaka's antardasha activates its domain applies here, with Venus supplying the domestic and marital foundation from which progeny commonly arises. The period is traditionally read as supportive of the desire for children and of the deepening of family happiness. As a respectful classical tendency, the dignity of Venus and Jupiter and the condition of the 5th house and Saptamsa determine the fullness of the outcome.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Venus", "Jupiter"],
+    "houses_primary": [5, 7],
+    "topics": ["children", "progeny", "marriage", "putra karaka", "dasha"],
+    "dasha_pair": ["Venus", "Jupiter"]
+  },
+  {
+    "chunk_id": "moon_md_jupiter_ad_children",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Moon Mahadasha and Jupiter Antardasha, the nurturing and emotional energy of the Moon provides the setting within which the putra karaka Jupiter expresses its blessing upon progeny and family. This pairing again unites the two benefics associated with the Gajakesari combination, and when the Moon and Jupiter are well placed and related to the 5th house, the period is classically supportive of children and of the emotional flourishing of the household. Parashara associates the union of Moon and Jupiter with contentment, wisdom, and prosperity, qualities that nurture a happy family. The antardasha is traditionally read as favorable for the welcoming and well-being of children, with the Moon supplying maternal care and Jupiter supplying fortune and protection. As a respectful classical tendency, the dignity of both planets and the supporting condition of the Saptamsa refine the strength of the result.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Moon", "Jupiter"],
+    "houses_primary": [5, 4],
+    "topics": ["children", "progeny", "nurturing", "putra karaka", "dasha"],
+    "dasha_pair": ["Moon", "Jupiter"]
+  },
+  {
+    "chunk_id": "jupiter_md_sun_ad_children",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Jupiter Mahadasha and Sun Antardasha, the putra karaka Jupiter combines with the Sun, the significator of soul, vitality, and the continuity of the lineage, forming a sub-period that classically connects progeny with the dignity and carrying-forward of the family name. When Jupiter and the Sun are well placed and related to the 5th and 9th houses, this period may be associated with developments in matters of children and with the honour of the family line. Parashara's principle that the karaka's antardasha activates its domain applies here, with the Sun lending vitality and prestige to progeny matters. The combination is traditionally read as supportive of capable and dignified offspring when the chart upholds it. As a respectful classical tendency, the dignity of both planets, the condition of the 5th house, and the Saptamsa together determine the fullness of the result.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Sun"],
+    "houses_primary": [5, 9],
+    "topics": ["children", "progeny", "lineage", "putra karaka", "vitality", "dasha"],
+    "dasha_pair": ["Jupiter", "Sun"]
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "chunk_id": "gajakesari_yoga_marriage",
+    "chunk_type": "yoga",
+    "content": "Gajakesari Yoga forms when Jupiter is placed in a kendra (1st, 4th, 7th, or 10th) from the Moon, uniting the wisdom and benevolence of Jupiter with the mind and emotions of the Moon. In marriage analysis this yoga confers good judgment in relationships, an honorable and respected partnership, and a spouse of noble or virtuous character, particularly meaningful in a woman's chart where Jupiter signifies the husband. Parashara associates the yoga with fame, intelligence, wealth, and lasting reputation, qualities that lend dignity and stability to married life. When Jupiter aspects or relates to the 7th house from the Moon, marital harmony and the standing of the family are enhanced. The yoga is strongest when Jupiter is well-dignified and free from affliction, and its supportive effects on marriage are felt especially during the dasha periods of Jupiter or the Moon.",
+    "source": "Phaladeepika Ch.6; Brihat Parashara Hora Shastra Ch.36",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Moon"],
+    "houses_primary": [7],
+    "topics": ["marriage", "spouse", "harmony", "wisdom", "relationship"],
+    "yoga_name": "Gajakesari"
+  },
+  {
+    "chunk_id": "malavya_yoga_marriage",
+    "chunk_type": "yoga",
+    "content": "Malavya Yoga is one of the five Panch Mahapurusha Yogas and forms when Venus occupies its own sign (Taurus or Libra) or its exaltation sign (Pisces) while placed in a kendra house (1st, 4th, 7th, or 10th) from the lagna. Since Venus is the primary karaka of marriage, love, and conjugal happiness, this yoga is exceptionally favorable for married life, conferring a beautiful, refined, and devoted spouse and a relationship rich in comfort, affection, and luxury. Parashara describes the native as fortunate, possessed of vehicles, wealth, charm, and domestic happiness. The native enjoys the pleasures of partnership and tends to attract a graceful, cultured partner. The yoga's benefits for marriage are most pronounced when Venus is unafflicted and influences the 7th house, and they ripen during Venus dasha and related sub-periods.",
+    "source": "Brihat Parashara Hora Shastra Ch.75 (Panch Mahapurusha Yogas); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Venus"],
+    "houses_primary": [1, 4, 7, 10],
+    "topics": ["marriage", "spouse", "love", "comfort", "relationship"],
+    "yoga_name": "Malavya"
+  },
+  {
+    "chunk_id": "chandra_mangala_yoga_marriage",
+    "chunk_type": "yoga",
+    "content": "Chandra-Mangala Yoga forms when the Moon and Mars are conjunct or in mutual aspect, combining the emotional sensitivity of the Moon with the drive and passion of Mars. In marriage analysis this yoga intensifies emotional and physical desire and lends strong passion to the relationship, often indicating a partnership marked by deep attraction and dynamism. Classical texts primarily emphasize wealth and resourcefulness from this combination, and within married life it can support financial gain through the union or the spouse's enterprise. However, the heat of Mars combined with the changeable Moon can also bring emotional intensity or volatility that requires conscious tempering for harmony. When well-disposed and connected to the 7th house, the yoga supports a vibrant, ardent marriage; when afflicted, it may incline toward friction or impulsiveness in conjugal matters.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Moon", "Mars"],
+    "houses_primary": [7],
+    "topics": ["marriage", "passion", "attraction", "wealth", "relationship"],
+    "yoga_name": "Chandra-Mangala"
+  },
+  {
+    "chunk_id": "mangal_dosha_manglik_marriage",
+    "chunk_type": "yoga",
+    "content": "Mangal Dosha (also called Kuja Dosha or Manglik) arises when Mars occupies the 1st, 2nd, 4th, 7th, 8th, or 12th house, reckoned from the lagna, and traditionally also from the Moon and from Venus. Because Mars is a fiery, aggressive planet, its placement in these marriage-sensitive houses is said to introduce friction, conflict, delay, or strain into married life, and in severe cases to threaten harmony or the well-being of the spouse. The dosha is mitigated or cancelled under several classical conditions: when Mars is in its own or exaltation sign; when both partners carry the dosha, neutralizing each other; when Mars is aspected by or conjunct Jupiter or a strong benefic; when the dosha-forming houses fall under benefic influence; or when the same affliction appears in both charts. Careful evaluation of Mars's dignity, the strength of the 7th house and its lord, and the matching of charts is essential before concluding that the dosha is operative.",
+    "source": "Phaladeepika; Brihat Parashara Hora Shastra; classical Kuja Dosha texts",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Mars"],
+    "houses_primary": [1, 2, 4, 7, 8, 12],
+    "topics": ["marriage", "mangal dosha", "manglik", "conflict", "cancellation"],
+    "yoga_name": "Mangal Dosha"
+  },
+  {
+    "chunk_id": "seventh_lord_venus_combination_marriage",
+    "chunk_type": "yoga",
+    "content": "A defining combination for marriage is the relationship between the 7th lord (ruler of partnership) and Venus (the natural significator of marriage and conjugal happiness), formed by conjunction, mutual aspect, or sign exchange. When both are strong, well-placed, and mutually supportive, the union is harmonious, the spouse is loving and well-matched, and married life is blessed with affection and stability. Parashara and the classics stress that both the house lord and the karaka must be assessed together: a strong 7th house but afflicted Venus, or a strong Venus but an afflicted 7th lord, indicates partial support and corresponding limitations. Affliction to this combination by malefics such as Saturn, Mars, Rahu, or Ketu can bring delay, discord, or separation, while benefic association and good dignity in the Navamsa confirm a happy and durable marriage. This pairing is one of the most reliable single indicators of marital quality in Parashari analysis.",
+    "source": "Brihat Parashara Hora Shastra Ch.24; Phaladeepika; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Venus"],
+    "houses_primary": [7],
+    "topics": ["marriage", "spouse", "karaka", "harmony", "relationship"],
+    "yoga_name": "Saptamesha-Shukra Combination"
+  }
+]

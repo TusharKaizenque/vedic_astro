@@ -1,0 +1,62 @@
+[
+  {
+    "chunk_id": "strong_jupiter_putra_karaka_yoga",
+    "chunk_type": "yoga",
+    "content": "Jupiter is the putra karaka — the natural significator of children and progeny — and its strength is among the most important factors in any classical assessment of offspring. A strong Jupiter forms when it occupies its own signs (Sagittarius or Pisces) or its exaltation sign (Cancer), or when it is placed in a kendra or trikona free from affliction and combustion. When Jupiter is so strengthened and well related to the 5th house and its lord, classical authorities regard the matter of progeny as favorably supported, with children inclined to be virtuous, intelligent, and a source of joy and good fortune. Parashara emphasizes that the karaka of a matter must be examined alongside the relevant house, so a powerful Jupiter can uphold progeny even where the 5th house faces some weakness. As a respectful classical tendency, a well-placed putra karaka eases concerns over offspring, while an afflicted Jupiter is read cautiously as a possible indication of delay rather than any fixed limitation.",
+    "source": "Brihat Parashara Hora Shastra (Karakas and Bhava results); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [5],
+    "topics": ["children", "progeny", "putra karaka", "jupiter", "fertility"],
+    "yoga_name": "Putra Karaka Bala"
+  },
+  {
+    "chunk_id": "hamsa_yoga_progeny",
+    "chunk_type": "yoga",
+    "content": "Hamsa Yoga is one of the five Panch Mahapurusha Yogas described by Parashara, and it forms when Jupiter occupies its own sign (Sagittarius or Pisces) or its exaltation sign (Cancer) while placed in a kendra house (1st, 4th, 7th, or 10th from lagna). Because Jupiter is the putra karaka, a Hamsa Yoga that powerfully strengthens Jupiter is regarded as broadly auspicious for the significations of progeny, wisdom, and dharma that Jupiter governs. The native is described as righteous, learned, respected, and blessed with good fortune, and such a fortified Jupiter tends to favor the matter of children, especially when it also relates to the 5th house or its lord. Classical authorities hold that a Jupiter strong enough to form Hamsa Yoga supports virtuous and capable offspring and the overall flourishing of family dharma. The full benefits in progeny matters are most pronounced when Jupiter is unafflicted and the 5th house is itself well disposed.",
+    "source": "Brihat Parashara Hora Shastra Ch.85 (Panch Mahapurusha Yogas); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [1, 4, 7, 10],
+    "topics": ["children", "progeny", "jupiter", "putra karaka", "dharma", "fortune"],
+    "yoga_name": "Hamsa"
+  },
+  {
+    "chunk_id": "gajakesari_yoga_progeny",
+    "chunk_type": "yoga",
+    "content": "Gajakesari Yoga forms when Jupiter is placed in a kendra (1st, 4th, 7th, or 10th) from the Moon, uniting the two natural benefics most associated with progeny — Jupiter as putra karaka and the Moon as a significator of the nurturing, maternal dimension of children. Classical authorities describe the native as wise, virtuous, respected, and possessed of lasting fame and good fortune. Because both planets in this yoga carry significations supportive of offspring and family, a well-formed Gajakesari Yoga is regarded as favorable for the broader well-being of progeny, particularly when Jupiter or the Moon also relates to the 5th house. Parashara holds that the combination of Jupiter and the Moon confers intelligence, prosperity, and the respect of others, qualities that extend to a fortunate family life. The yoga's strength depends on the dignity of Jupiter and the Moon and on their freedom from affliction.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Moon"],
+    "houses_primary": [1, 4, 7, 10],
+    "topics": ["children", "progeny", "jupiter", "moon", "fortune", "wisdom"],
+    "yoga_name": "Gajakesari"
+  },
+  {
+    "chunk_id": "fifth_house_afflictions_progeny_delay",
+    "chunk_type": "yoga",
+    "content": "Classical texts describe certain combinations affecting the 5th house, its lord, or Jupiter the putra karaka as tendencies that may delay or complicate the matter of progeny, and these are to be read with caution and compassion rather than as any definitive medical statement. Such indications can include malefic occupation of or aspect upon the 5th house, the 5th lord placed in a dusthana (6th, 8th, or 12th), an afflicted or combust Jupiter, or affliction repeated in the Saptamsa (D7) divisional chart. Where several of these appear together, classical authorities suggest that children may come after delay, after sustained effort, or through circumstances requiring patience, while strong benefic support, favorable aspects, and remedial measures considerably soften such indications. This is understood as a classical tendency rather than a fixed outcome, since a single afflicting factor is frequently outweighed by other strengths in the chart. Parashara repeatedly counsels that the karaka, the house, its lord, and the divisional chart all be weighed together before any conclusion regarding offspring is drawn.",
+    "source": "Brihat Parashara Hora Shastra Ch.25; Phaladeepika; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [5],
+    "topics": ["children", "progeny", "fertility", "delay", "affliction", "saptamsa"],
+    "yoga_name": "Putra Dosha (cautious indication)"
+  },
+  {
+    "chunk_id": "saptamsa_d7_progeny_role",
+    "chunk_type": "yoga",
+    "content": "The Saptamsa (D7) is the divisional chart specifically dedicated to children and progeny in Parashari astrology, derived by dividing each sign into seven parts, and it is examined alongside the 5th house of the birth chart for any detailed assessment of offspring. Classical authorities hold that the strength of the D7 lagna, its lord, the placement of Jupiter the putra karaka within the D7, and the condition of the D7 5th house together refine and confirm what the birth-chart 5th house indicates. A 5th house that appears strong in the birth chart but weak in the Saptamsa, or the reverse, is read with care, since the divisional chart can either uphold or qualify the broad tendency. Parashara's principle is that each varga chart magnifies the significations of its particular domain, so the D7 gives the clearest classical view of the prospects, number, and well-being of children. As a respectful tendency rather than a fixed verdict, harmony between the birth chart and the Saptamsa is taken as the most favorable sign for progeny, and remedial and devotional measures are traditionally advised where the divisional chart suggests difficulty.",
+    "source": "Brihat Parashara Hora Shastra (Saptamsa and Varga chapters); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [5],
+    "topics": ["children", "progeny", "saptamsa", "divisional chart", "fertility"],
+    "yoga_name": "Saptamsa (D7) Assessment"
+  }
+]

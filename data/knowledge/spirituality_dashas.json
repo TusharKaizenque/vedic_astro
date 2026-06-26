@@ -1,0 +1,122 @@
+[
+  {
+    "chunk_id": "jupiter_mahadasha_spirituality",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Jupiter Mahadasha spans 16 years and governs wisdom, dharma, devotion, and the expansion of higher consciousness. For spiritual life, this is among the most fertile periods — the native is drawn toward sacred study, the guidance of a guru, pilgrimage, and the deepening of faith and righteous conduct. As the natural karaka of dharma and the 9th house, Jupiter during its dasha opens the heart to devotion (bhakti) and the intellect to philosophical and scriptural understanding. If Jupiter is well-placed or connected to the 9th, 5th, or 12th houses, the period can bring initiation, the reception of higher teachings, and significant inner growth. Charitable acts, dharmic resolutions, and the maturing of spiritual discrimination are common. Even amid worldly activity, Jupiter dasha tends to orient the soul toward meaning, grace, and the longer journey toward liberation.",
+    "source": "Brihat Parashara Hora Shastra (Vimshottari Dasha chapter); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter"],
+    "houses_primary": [9, 5, 12],
+    "topics": ["spirituality", "dharma", "wisdom", "devotion", "guru", "dasha"],
+    "dasha_pair": ["Jupiter"]
+  },
+  {
+    "chunk_id": "ketu_mahadasha_spirituality",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Ketu Mahadasha spans 7 years and is the most strongly moksha-oriented of the planetary periods, governing detachment, dispassion, and the inward turning of consciousness. As the karaka of liberation, Ketu during its dasha often brings disillusionment with worldly fruits, a loosening of attachments, and a powerful pull toward meditation, solitude, and the inner path. The native may withdraw from material ambition, encounter losses that catalyze renunciation, or awaken latent spiritual capacities carried from past lives. If Ketu is well-placed — particularly in the 12th, 9th, or 8th house, or joined with Jupiter — this period can bring profound meditative experience, intuitive insight, and genuine progress toward moksha. The mind is drawn to the formless, the mysterious, and the essential. Ketu dasha frequently marks a turning point where the seeker definitively chooses the inner journey over outer attainment.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Ketu"],
+    "houses_primary": [12, 9, 8],
+    "topics": ["spirituality", "moksha", "detachment", "meditation", "renunciation", "dasha"],
+    "dasha_pair": ["Ketu"]
+  },
+  {
+    "chunk_id": "saturn_mahadasha_spirituality",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Saturn Mahadasha spans 19 years and governs discipline, renunciation, endurance, and the patient stripping away of attachment. For spiritual life, Saturn as the karaka of detachment and asceticism imposes the discipline that sadhana requires — sustained practice, simplicity, solitude, and the acceptance of hardship as a purifying teacher. The native may be drawn toward austere, methodical spiritual paths, toward service and renunciation, or toward confronting the limits and impermanence of worldly life. Losses, delays, and responsibilities during Saturn dasha often serve to loosen the grip of desire and turn the mind inward. If Saturn is well-placed or connected to the 12th, 9th, or 8th houses, this period can ground the native in disciplined practice and genuine dispassion. What is cultivated spiritually during Saturn dasha tends to be durable, hard-won, and deeply rooted, forming a stable foundation for the renunciate path.",
+    "source": "Brihat Parashara Hora Shastra; Saravali Ch.48",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Saturn"],
+    "houses_primary": [12, 9, 8],
+    "topics": ["spirituality", "renunciation", "discipline", "detachment", "asceticism", "dasha"],
+    "dasha_pair": ["Saturn"]
+  },
+  {
+    "chunk_id": "twelfth_lord_mahadasha_spirituality",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Mahadasha of the 12th lord (the lord of moksha, seclusion, and the dissolution of the self) generically activates the themes of liberation, withdrawal, and the inner life, regardless of which planet rules the 12th for a given lagna. During this period the native often experiences a pull toward seclusion, meditation, foreign lands, ashram life, or charitable expenditure that supports detachment. Matters of the 12th house come to the foreground: rest, retreat, surrender, and the longing for release from worldly bondage. If the 12th lord is well-placed — especially in a trine, in the 12th itself, or joined with Jupiter or Ketu — this dasha can bring deep meditative absorption and tangible progress toward moksha. Expenses, losses, or separations during this period frequently serve the larger purpose of weaning the soul from attachment. The native's spiritual destiny, as shown by the 12th house and the Vimsamsa (D20), tends to unfold strongly in this period.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [12],
+    "topics": ["spirituality", "moksha", "seclusion", "meditation", "detachment", "dasha"],
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "ninth_lord_mahadasha_spirituality",
+    "chunk_type": "dasha_mahadasha",
+    "content": "The Mahadasha of the 9th lord (the lord of dharma, fortune, the guru, and higher wisdom) generically activates the themes of righteousness, faith, and spiritual guidance, whichever planet rules the 9th for a given lagna. During this period the native is often drawn toward sacred learning, pilgrimage, the company and counsel of a guru, and the deepening of devotion and dharmic conduct. Fortune tends to support the spiritual journey, and grace flows more readily into the native's life. If the 9th lord is well-placed — especially in a trine, in its own or exaltation sign, or joined with Jupiter — this dasha can bring initiation, the reception of higher teachings, and a strong establishment in dharma. Religious and philosophical interests intensify, and the native may travel to holy places or undertake significant acts of merit. This period builds the dharmic foundation upon which later liberation rests.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": [],
+    "houses_primary": [9],
+    "topics": ["spirituality", "dharma", "guru", "pilgrimage", "higher wisdom", "dasha"],
+    "dasha_pair": null
+  },
+  {
+    "chunk_id": "jupiter_md_ketu_ad_spirituality",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Jupiter Mahadasha and Ketu Antardasha, the wisdom and dharma of Jupiter combine with the detachment and moksha-orientation of Ketu, creating one of the most spiritually potent sub-periods. Jupiter's framework of faith and higher knowledge gives meaning and direction to Ketu's natural dispassion, so that detachment ripens into genuine spiritual insight rather than mere disillusionment. The native may encounter a guru, receive initiation, or experience a deepening of meditation and inner surrender. Interest in philosophy, the occult, and the essential nature of the self intensifies, and worldly attachments loosen gracefully. If both planets are well-placed and connected to the 9th or 12th houses, this antardasha can mark a decisive turn toward the inner path and tangible movement toward liberation. It is a period favorable for retreat, pilgrimage, and the maturing of devotion into wisdom.",
+    "source": "Brihat Parashara Hora Shastra (Vimshottari Antardasha); Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Ketu"],
+    "houses_primary": [9, 12],
+    "topics": ["spirituality", "moksha", "wisdom", "detachment", "meditation", "dasha"],
+    "dasha_pair": ["Jupiter", "Ketu"]
+  },
+  {
+    "chunk_id": "ketu_md_jupiter_ad_spirituality",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Ketu Mahadasha and Jupiter Antardasha, the inward, renunciatory current of Ketu is given the guidance, faith, and dharmic structure of Jupiter, producing a deeply spiritual sub-period. Ketu's detachment from worldly fruits combines with Jupiter's wisdom to draw the native toward sacred study, the counsel of a guru, and the philosophical understanding of liberation. Where Ketu alone might bring confusion or loss, Jupiter's influence lends meaning, direction, and grace, so that dispassion becomes a doorway to higher knowledge. The native may pursue meditation, pilgrimage, or scriptural learning, and may receive significant spiritual guidance. If both planets are well-placed and linked to the 9th, 5th, or 12th houses, this antardasha supports profound inner growth and a maturing of detachment into devotion and discrimination. It is a favorable window for committing to a path of sadhana under a teacher's guidance.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Ketu", "Jupiter"],
+    "houses_primary": [12, 9],
+    "topics": ["spirituality", "moksha", "wisdom", "guru", "detachment", "dasha"],
+    "dasha_pair": ["Ketu", "Jupiter"]
+  },
+  {
+    "chunk_id": "saturn_md_ketu_ad_spirituality",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Saturn Mahadasha and Ketu Antardasha, the discipline and renunciation of Saturn unite with the detachment and moksha-orientation of Ketu, forming a powerful combination for ascetic and renunciatory spiritual progress. Both planets are significators of dispassion, so this sub-period strongly loosens worldly attachments and turns the mind toward solitude, austerity, and the inner path. The native may withdraw from material ambition, embrace simplicity, and undertake disciplined, methodical practice such as sustained meditation or service. Classical tradition links the conjoint influence of Saturn and Ketu with renunciation and the sannyasa path, and their dasha-antardasha sequence can manifest these tendencies in tangible ways. If both are well-placed, especially in the 12th, 9th, or 8th houses, this period supports deep dispassion and genuine spiritual maturation. Losses or separations during this time often serve to sever the final bonds of attachment.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Saturn", "Ketu"],
+    "houses_primary": [12, 8],
+    "topics": ["spirituality", "moksha", "renunciation", "detachment", "asceticism", "dasha"],
+    "dasha_pair": ["Saturn", "Ketu"]
+  },
+  {
+    "chunk_id": "ketu_md_saturn_ad_spirituality",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Ketu Mahadasha and Saturn Antardasha, the detachment of Ketu is reinforced by the discipline, endurance, and renunciatory weight of Saturn, producing a sober and deeply inward spiritual sub-period. Ketu's dispassion finds in Saturn the structure and perseverance needed to sustain serious practice, so the native is drawn toward austere, methodical sadhana, solitude, and the patient stripping away of attachment. This combination of two renunciation-significators can bring withdrawal from worldly life, simplicity, and a confrontation with impermanence that matures the soul. The period may involve hardship, delay, or isolation, but these serve to purify and turn the mind toward the essential. If both planets are well-placed, particularly in the 12th, 9th, or 8th houses, this antardasha supports grounded, durable spiritual progress and the consolidation of dispassion. It is well-suited to retreat, ascetic discipline, and contemplation of the deeper mysteries.",
+    "source": "Brihat Parashara Hora Shastra; Saravali",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Ketu", "Saturn"],
+    "houses_primary": [12, 8],
+    "topics": ["spirituality", "moksha", "renunciation", "discipline", "detachment", "dasha"],
+    "dasha_pair": ["Ketu", "Saturn"]
+  },
+  {
+    "chunk_id": "jupiter_md_saturn_ad_spirituality",
+    "chunk_type": "dasha_antardasha",
+    "content": "During Jupiter Mahadasha and Saturn Antardasha, the expansive wisdom and dharma of Jupiter are channeled through the discipline, structure, and perseverance of Saturn, creating a balanced and durable period of spiritual development. Jupiter supplies faith, devotion, and higher understanding, while Saturn supplies the steadiness, simplicity, and sustained effort that genuine sadhana requires. The native may commit to a regular, disciplined spiritual practice, take on dharmic responsibilities, or pursue serious scriptural and philosophical study under guidance. This combination favors the building of a stable spiritual foundation rather than dramatic experiences — progress is measured but lasting. If both planets are well-placed and connected to the 9th or 12th houses, the period supports the maturing of devotion into disciplined wisdom and the establishment of a sustainable renunciatory orientation. Patience, regular practice, and ethical conduct are especially rewarded during this antardasha.",
+    "source": "Brihat Parashara Hora Shastra; Phaladeepika",
+    "source_type": "paraphrase",
+    "authority": "primary",
+    "planets_primary": ["Jupiter", "Saturn"],
+    "houses_primary": [9, 12],
+    "topics": ["spirituality", "dharma", "discipline", "wisdom", "renunciation", "dasha"],
+    "dasha_pair": ["Jupiter", "Saturn"]
+  }
+]
