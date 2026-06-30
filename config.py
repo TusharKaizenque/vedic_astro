@@ -33,6 +33,10 @@ class Settings(BaseSettings):
     prokerala_base_url: str = "https://api.prokerala.com/v2/astrology"
     max_retrieval_chunks: int = 8
     max_conversation_turns: int = 4
+    # Phase 3 depth: review the draft reading against the deterministic blocks and refine out
+    # any generic/ungrounded claim before the user sees it. Costs one extra LLM call per
+    # message (more when a refine is actually needed); accuracy is the priority here.
+    enable_verification_pass: bool = True
     max_session_summaries: int = 5
     prompt_token_budget: int = 4000
     # Comma-separated allowed CORS origins. "*" is permitted only without credentials

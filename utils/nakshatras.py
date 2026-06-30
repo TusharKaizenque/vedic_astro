@@ -111,6 +111,47 @@ def normalize_nakshatra(name: str) -> str:
     return _NAK_ALIASES.get(_squash(name), "")
 
 
+# Classical significations per nakshatra: (ruling deity, symbol, vocational fields). Drawn from
+# BPHS, the Taittiriya Brahmana deity assignments, and traditional vocational karaka readings.
+# Used to give the janma-nakshatra (and a planet's nakshatra) a SPECIFIC, individual texture
+# instead of a generic temperament line.
+NAKSHATRA_PROFILE: dict[str, dict[str, str]] = {
+    "Ashwini":          {"deity": "Ashwini Kumaras (celestial healers)", "symbol": "horse's head", "careers": "medicine & healing, emergency work, athletics, transport, pioneering ventures"},
+    "Bharani":          {"deity": "Yama (lord of dharma & death)", "symbol": "yoni", "careers": "law & judgment, surgery/obstetrics, creative arts, work involving discipline and transformation"},
+    "Krittika":         {"deity": "Agni (fire)", "symbol": "razor/flame", "careers": "leadership, military/defence, cutting-edge or fire-related work, criticism, cooking, metallurgy"},
+    "Rohini":           {"deity": "Brahma (the creator)", "symbol": "ox-cart", "careers": "agriculture, luxury goods, arts & beauty, finance, real estate, anything that grows or nurtures"},
+    "Mrigashira":       {"deity": "Soma (the moon)", "symbol": "deer's head", "careers": "research & exploration, writing, travel, sales, perfumery/textiles, curious seeking work"},
+    "Ardra":            {"deity": "Rudra (storm)", "symbol": "teardrop", "careers": "research & analysis, engineering, pharmacology, work through crisis/transformation, technology"},
+    "Punarvasu":        {"deity": "Aditi (mother of the gods)", "symbol": "quiver of arrows", "careers": "teaching, spirituality, hospitality, publishing, work involving renewal and return"},
+    "Pushya":           {"deity": "Brihaspati (Jupiter, guru)", "symbol": "cow's udder", "careers": "counsel & priesthood, nourishing/caretaking work, public service, food, dependable institutions"},
+    "Ashlesha":         {"deity": "the Nagas (serpents)", "symbol": "coiled serpent", "careers": "strategy, psychology, occult/research, medicine (toxins), negotiation, anything requiring penetration"},
+    "Magha":            {"deity": "the Pitris (ancestors)", "symbol": "throne", "careers": "leadership & authority, tradition/heritage work, administration, ceremony, positions of rank"},
+    "Purva Phalguni":   {"deity": "Bhaga (delight, fortune)", "symbol": "front legs of a bed", "careers": "arts & entertainment, hospitality, luxury, relationship/creative work, leisure industries"},
+    "Uttara Phalguni":  {"deity": "Aryaman (patronage, contracts)", "symbol": "back legs of a bed", "careers": "service & contracts, philanthropy, marriage/partnership work, reliable professional roles"},
+    "Hasta":            {"deity": "Savitr (the Sun's creative power)", "symbol": "hand", "careers": "skilled crafts, healing hands, commerce, design, anything dexterous or detail-handed"},
+    "Chitra":           {"deity": "Tvashtar (cosmic architect)", "symbol": "bright jewel", "careers": "design & architecture, engineering, fashion, jewellery, visible creative brilliance"},
+    "Swati":            {"deity": "Vayu (wind)", "symbol": "young shoot in wind", "careers": "trade & business, diplomacy, independent ventures, travel, flexible self-directed work"},
+    "Vishakha":         {"deity": "Indra-Agni (power & fire)", "symbol": "triumphal archway", "careers": "goal-driven achievement, politics, research, anything demanding sustained ambition"},
+    "Anuradha":         {"deity": "Mitra (friendship, alliances)", "symbol": "lotus", "careers": "organising & alliances, foreign work, devotional/disciplined pursuits, teamwork-based success"},
+    "Jyeshtha":         {"deity": "Indra (king of the gods)", "symbol": "circular amulet", "careers": "command & protection, military/police, occult, positions of seniority earned through trial"},
+    "Mula":             {"deity": "Nirriti (dissolution)", "symbol": "tied roots", "careers": "research to the root, medicine/herbs, philosophy, investigation, work involving endings & foundations"},
+    "Purva Ashadha":    {"deity": "Apas (the waters)", "symbol": "fan/winnowing basket", "careers": "persuasion & debate, law, water/shipping trades, invigorating influential work"},
+    "Uttara Ashadha":   {"deity": "the Vishvadevas (universal gods)", "symbol": "elephant tusk", "careers": "leadership with integrity, government, pioneering lasting institutions, ethical authority"},
+    "Shravana":         {"deity": "Vishnu (the preserver)", "symbol": "ear / three footprints", "careers": "learning & teaching, media/communication, counselling, knowledge-keeping, connective work"},
+    "Dhanishta":        {"deity": "the eight Vasus", "symbol": "drum", "careers": "music & rhythm, wealth/finance, real estate, group ventures, performance and timing-based work"},
+    "Shatabhisha":      {"deity": "Varuna (cosmic waters & law)", "symbol": "empty circle", "careers": "healing & medicine, astrology/occult, technology, research into hidden things, independent work"},
+    "Purva Bhadrapada": {"deity": "Aja Ekapada (one-footed goat)", "symbol": "front of a funeral cot", "careers": "spirituality with intensity, occult, research, work involving extremes and the unseen"},
+    "Uttara Bhadrapada":{"deity": "Ahir Budhnya (serpent of the deep)", "symbol": "back of a funeral cot", "careers": "wisdom & counsel, charity, deep advisory work, patient long-term endeavours"},
+    "Revati":           {"deity": "Pushan (nourisher, guide of journeys)", "symbol": "fish", "careers": "guidance & care, travel/foreign work, spirituality, art, nurturing and protective roles"},
+}
+
+
+def profile_of(name: str) -> dict[str, str]:
+    """Classical significations (deity, symbol, careers) for a nakshatra ('' fields if unknown)."""
+    canonical = name if name in NAKSHATRA_PROFILE else normalize_nakshatra(name)
+    return NAKSHATRA_PROFILE.get(canonical, {})
+
+
 def nakshatra_index(longitude: float) -> int:
     """0-based nakshatra index (0=Ashwini … 26=Revati)."""
     return int((longitude % 360.0) // _NAK_SPAN) % 27

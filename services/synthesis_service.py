@@ -103,6 +103,25 @@ async def stream_response(messages: list[dict]) -> AsyncGenerator[str, None]:
             yield _ERR_GENERIC
 
 
+async def generate_reading(messages: list[dict], max_tokens: int = 2400) -> str:
+    """Non-streamed full reading (the DRAFT for the verification pass). Falls back to the
+    smaller model on a clean rate-limit, mirroring stream_response."""
+    primary = settings.openai_synthesis_model
+    fallback = settings.openai_reasoning_model
+    for model, mt, msgs in ((primary, max_tokens, messages),
+                            (fallback, 1500, _trim_messages(messages, 3800))):
+        try:
+            resp = await get_llm_client().chat.completions.create(
+                model=model, messages=msgs, temperature=0.35, max_tokens=mt,
+            )
+            return resp.choices[0].message.content or ""
+        except Exception as exc:
+            logger.warning("Draft synthesis on '%s' failed: %s", model, exc)
+            if not (_is_rate_limit(exc) and fallback and fallback != primary):
+                break
+    return ""
+
+
 async def generate_response(messages: list[dict]) -> str:
     response = await get_llm_client().chat.completions.create(
         model=settings.openai_classifier_model,

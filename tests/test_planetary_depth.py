@@ -95,3 +95,35 @@ def test_adverse_yoga_flagged_and_sorted_last():
     assert readings[-1].name == "Kemadruma" and readings[-1].adverse
     block = format_yoga_analysis_for_prompt(readings)
     assert "Gajakesari" in block and "Kemadruma" in block
+
+
+# ---------- bhava-lord placements ----------
+def test_bhava_lord_placements():
+    from services.rule_engine.bhava_lords import analyze_bhava_lords, _ord
+    assert (_ord(1), _ord(2), _ord(3), _ord(11)) == ("1st", "2nd", "3rd", "11th")
+    # Aries lagna: 1st lord Mars in 1st (own/strengthened). 12th lord Jupiter in a kendra.
+    planets = {
+        "Mars": _p("Mars", 5.0, "Aries", 1), "Jupiter": _p("Jupiter", 95.0, "Cancer", 4),
+        "Venus": _p("Venus", 35.0, "Taurus", 2),
+    }
+    readings = {r.house: r for r in analyze_bhava_lords(_chart(planets), compute_planet_states(_chart(planets)))}
+    assert readings[1].lord == "Mars" and readings[1].placed_house == 1
+    assert readings[1].quality == "strengthened"
+    assert "carries" in readings[1].statement and "1st" in readings[1].statement
+
+
+def test_bhava_lord_dusthana_is_challenged():
+    from services.rule_engine.bhava_lords import analyze_bhava_lords
+    # Aries lagna: make the 4th lord (Moon) sit in the 8th house → challenged.
+    planets = {"Moon": _p("Moon", 220.0, "Scorpio", 8), "Mars": _p("Mars", 5.0, "Aries", 1)}
+    readings = {r.house: r for r in analyze_bhava_lords(_chart(planets), compute_planet_states(_chart(planets)))}
+    assert readings[4].placed_house == 8 and readings[4].quality == "challenged"
+
+
+def test_nakshatra_profile_present_for_all_27():
+    from utils.nakshatras import NAKSHATRAS, profile_of
+    for n in NAKSHATRAS:
+        prof = profile_of(n)
+        assert prof.get("deity") and prof.get("careers"), f"missing profile for {n}"
+    # Tolerates spelling variants via normalization.
+    assert profile_of("Pushyami")["deity"].startswith("Brihaspati")

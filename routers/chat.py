@@ -9,8 +9,9 @@ from sse_starlette.sse import EventSourceResponse
 from models.response import ChatRequest
 from services import (
     chart_service, coverage, faithfulness, gap_logger, intent_classifier, memory_service,
-    prompt_builder, synthesis_service,
+    prompt_builder, synthesis_service, verification_service,
 )
+from config import settings
 from services.chart_signatures import select_signatures
 from services.retrieval import retrieval_service
 from services.rule_engine.engine import run_rule_engine
@@ -39,6 +40,13 @@ def _spawn(coro) -> None:
     task = asyncio.create_task(coro)
     _background_tasks.add(task)
     task.add_done_callback(_background_tasks.discard)
+
+
+def _iter_chunks(text: str, size: int = 64):
+    """Emit a pre-generated reading in small slices so it still appears progressively (the
+    verification path produces the whole text at once, but the UI should stream it)."""
+    for i in range(0, len(text), size):
+        yield text[i:i + size]
 
 
 async def _build_transit_report(chart, target, topic_bundles):
@@ -230,9 +238,28 @@ async def chat(user_id: str, request: ChatRequest):
                 life_overview_text, spouse_text, marriage_timing_text, wealth_timing_text,
                 career_timing_text, timing_lead,
             )
-            async for token in synthesis_service.stream_response(messages):
-                full_response += token
-                yield {"data": json.dumps({"type": "content", "content": token})}
+            # Phase-3 verification gate: when enabled (and we have a chart), generate a draft,
+            # review it against the deterministic blocks, and stream the refined result — so a
+            # generic/ungrounded draft is corrected BEFORE the user sees it. Without a chart
+            # (general KB answer) or when disabled, stream the synthesis directly.
+            if settings.enable_verification_pass and chart is not None:
+                draft = await synthesis_service.generate_reading(messages)
+                if not draft or synthesis_service.is_error_reply(draft):
+                    final_text = draft or (
+                        "\n\nI encountered an error generating your reading. Please try again.")
+                else:
+                    blocks = next(
+                        (m["content"] for m in messages[1:] if m["role"] == "system"), "")
+                    review = await verification_service.review_reading(
+                        draft, blocks, request.message)
+                    final_text = review.text
+                for piece in _iter_chunks(final_text):
+                    full_response += piece
+                    yield {"data": json.dumps({"type": "content", "content": piece})}
+            else:
+                async for token in synthesis_service.stream_response(messages):
+                    full_response += token
+                    yield {"data": json.dumps({"type": "content", "content": token})}
             # If synthesis failed, it streamed a user-facing error sentinel (already shown to
             # the user). Don't treat that as a reading: skip the coverage addendum and the
             # faithfulness check, and don't persist it as conversation history.

@@ -2,6 +2,9 @@ from dataclasses import dataclass, field
 
 from models.chart import NormalizedChart
 from services.rule_engine.aspect_engine import get_aspects_by_planet, planets_aspecting_house
+from services.rule_engine.bhava_lords import (
+    BhavaLordReading, analyze_bhava_lords, format_bhava_lords_for_prompt,
+)
 from services.rule_engine.dosha_detector import detect_all_doshas
 from services.rule_engine.planetary_states import (
     PlanetState, compute_planet_states, format_planet_states_for_prompt,
@@ -33,9 +36,10 @@ class RuleEngineResult:
     dig_bala_planets: list[str] = field(default_factory=list)
     aspects_by_planet: dict[str, list[int]] = field(default_factory=dict)
     planets_aspecting_house: dict[int, list[str]] = field(default_factory=dict)
-    # Depth layer: per-planet states (combust/war/avastha/dignity) + graded yogas.
+    # Depth layer: per-planet states (combust/war/avastha/dignity) + graded yogas + bhava lords.
     planet_states: dict[str, PlanetState] = field(default_factory=dict)
     yoga_readings: list[YogaReading] = field(default_factory=list)
+    bhava_lords: list[BhavaLordReading] = field(default_factory=list)
 
 
 def run_rule_engine(chart: NormalizedChart) -> RuleEngineResult:
@@ -54,6 +58,7 @@ def run_rule_engine(chart: NormalizedChart) -> RuleEngineResult:
         yogas_present=yogas,
         planet_states=states,
         yoga_readings=analyze_yogas(chart, yogas, states),
+        bhava_lords=analyze_bhava_lords(chart, states),
         doshas_present=detect_all_doshas(chart),
         planet_strengths=calculate_all_strengths(chart),
         house_lords=house_lords,
@@ -113,4 +118,8 @@ def format_rule_result_for_prompt(result: RuleEngineResult) -> str:
     states_block = format_planet_states_for_prompt(result.planet_states)
     if states_block:
         lines.append(states_block)
+    # How each life area plays out, via its house lord's placement.
+    bhava_block = format_bhava_lords_for_prompt(result.bhava_lords)
+    if bhava_block:
+        lines.append(bhava_block)
     return "\n".join(lines)
