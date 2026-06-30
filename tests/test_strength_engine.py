@@ -31,21 +31,29 @@ def _chart(planets):
     )
 
 
-def test_exalted_planet_scores_high_uchcha():
-    # Sun at exact exaltation (Aries 10°) → uchcha bala 60
+def test_exalted_planet_raises_sthana():
+    # Sun at exact exaltation (Aries 10°) → Uchcha (inside Sthana Bala) near max
+    from services.rule_engine.strength_engine import _uchcha
+    assert _uchcha("Sun", EXALTATION_DEGREE["Sun"]) == pytest.approx(60.0, abs=0.5)
     chart = _chart({"Sun": _planet("Sun", EXALTATION_DEGREE["Sun"], 1)})
     s = compute_planet_strength("Sun", chart, sun_long=EXALTATION_DEGREE["Sun"], moon_long=200.0)
-    assert s.components["uchcha"] == pytest.approx(60.0, abs=0.5)
     assert "near exaltation" in s.notes
+    assert "sthana" in s.components and s.components["sthana"] > 100
 
 
-def test_debilitated_planet_scores_low_uchcha():
-    # Sun at debilitation (Libra 10° = 190°) → uchcha bala ~0
+def test_debilitated_planet_low_uchcha():
+    from services.rule_engine.strength_engine import _uchcha
     debil = (EXALTATION_DEGREE["Sun"] + 180) % 360
+    assert _uchcha("Sun", debil) == pytest.approx(0.0, abs=0.5)
     chart = _chart({"Sun": _planet("Sun", debil, 7)})
     s = compute_planet_strength("Sun", chart, sun_long=debil, moon_long=10.0)
-    assert s.components["uchcha"] == pytest.approx(0.0, abs=0.5)
     assert "near debilitation" in s.notes
+
+
+def test_six_balas_present():
+    chart = _chart({"Jupiter": _planet("Jupiter", 95.0, 1)})
+    s = compute_planet_strength("Jupiter", chart, sun_long=200.0, moon_long=50.0)
+    assert set(s.components) == {"sthana", "dig", "kala", "cheshta", "naisargika", "drik"}
 
 
 def test_dig_bala_strong_in_correct_house():
@@ -95,3 +103,29 @@ def test_compute_all_returns_every_planet():
     }
     result = compute_all_strengths(_chart(planets))
     assert set(result.keys()) == set(planets.keys())
+
+
+def test_kendradi_bala_favours_angular_houses():
+    from services.rule_engine.strength_engine import _kendradi
+    assert _kendradi(1) == 60.0    # kendra
+    assert _kendradi(2) == 30.0    # panapara
+    assert _kendradi(3) == 15.0    # apoklima
+
+
+def test_drik_bala_benefic_vs_malefic_aspect():
+    from services.rule_engine.strength_engine import _drik
+    from services.rule_engine.aspect_engine import get_aspects_by_planet
+    # Target in house 1; a benefic (Jupiter) in 7 aspects it → drik up; a malefic in 7 → down
+    benefic = _chart({"Mars": _planet("Mars", 0, 1), "Jupiter": _planet("Jupiter", 180, 7)})
+    malefic = _chart({"Mars": _planet("Mars", 0, 1), "Saturn": _planet("Saturn", 180, 7)})
+    db = _drik("Mars", benefic, get_aspects_by_planet(benefic))
+    dm = _drik("Mars", malefic, get_aspects_by_planet(malefic))
+    assert db > dm
+
+
+def test_strength_band_uses_required_ratio():
+    # A planet meeting its requirement is strong; well below is weak.
+    chart = _chart({"Mars": _planet("Mars", 210, 1)})   # Mars own sign Scorpio in kendra
+    s = compute_planet_strength("Mars", chart, sun_long=30.0, moon_long=120.0)
+    assert s.band in ("strong", "moderate", "weak")
+    assert s.total_virupas > 0

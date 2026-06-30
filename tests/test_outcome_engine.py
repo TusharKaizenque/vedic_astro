@@ -58,7 +58,9 @@ def test_significations_maps():
 def test_career_outcome_has_fields_and_plain_language():
     out = _outcome("career")
     assert out.field_candidates                      # concrete fields named
-    assert "engineering" in out.field_candidates     # Mars in own sign leads
+    # Field is driven by the 10th lord/karakas (Saturn/Sun here), not by Mars.
+    assert any("administration" in f or "government" in f or "law" in f or "construction" in f
+               for f in out.field_candidates)
     assert out.headline and out.trajectory_text
     assert out.strengths and out.challenges
     # Challenges must NOT describe an affliction with positive traits

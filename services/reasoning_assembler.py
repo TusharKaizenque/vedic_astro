@@ -212,7 +212,8 @@ def assemble(
     report.dasha = DashaLine(
         statement=(
             f"{d.maha_lord} Mahadasha / {d.antar_lord} Antardasha "
-            f"(ends {d.antar_end}) — activation: {d.activation_strength}"
+            f"(the {d.antar_lord} sub-period ends {d.antar_end}; the {d.maha_lord} "
+            f"Mahadasha itself runs much longer) — activation: {d.activation_strength}"
         ),
         maha_lord=d.maha_lord,
         antar_lord=d.antar_lord,

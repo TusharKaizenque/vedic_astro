@@ -294,21 +294,42 @@ class TestAdhiYoga:
 # ===========================================================================
 
 class TestMangalDosha:
-    @pytest.mark.parametrize("house", [1, 2, 4, 7, 8, 12])
-    def test_present_in_dosha_houses(self, house):
-        # Use Cancer lagna so we can easily place Mars in various houses
-        lagna_signs = {1: "Aries", 2: "Taurus", 3: "Gemini", 4: "Cancer",
-                       5: "Leo", 6: "Virgo", 7: "Libra", 8: "Scorpio",
-                       9: "Sagittarius", 10: "Capricorn", 11: "Aquarius", 12: "Pisces"}
-        mars_sign = ZODIAC_SIGNS[(ZODIAC_SIGNS.index("Aries") + house - 1) % 12]
-        chart = _make_chart({"Mars": _planet("Mars", (house - 1) * 30 + 5, mars_sign, house)})
-        assert detect_mangal_dosha(chart), f"Expected Mangal Dosha with Mars in house {house}"
+    # Mangal Dosha is checked from the lagna, the Moon, AND Venus; cancelled if Mars is
+    # in its own/exalted sign. Tests control Moon & Venus explicitly (they default to the
+    # 2nd/4th in _make_chart) so each reference path is isolated.
+    def test_present_from_lagna(self):
+        chart = _make_chart({
+            "Mars": _planet("Mars", 6 * 30 + 5, "Libra", 7),    # 7th from lagna, neutral sign
+            "Moon": _planet("Moon", 5, "Aries", 1),
+            "Venus": _planet("Venus", 5, "Aries", 1),
+        })
+        assert detect_mangal_dosha(chart)
 
-    @pytest.mark.parametrize("house", [3, 5, 6, 9, 10, 11])
-    def test_absent_in_non_dosha_houses(self, house):
-        mars_sign = ZODIAC_SIGNS[(ZODIAC_SIGNS.index("Aries") + house - 1) % 12]
-        chart = _make_chart({"Mars": _planet("Mars", (house - 1) * 30 + 5, mars_sign, house)})
-        assert not detect_mangal_dosha(chart), f"Expected no Mangal Dosha with Mars in house {house}"
+    def test_present_from_moon_only(self):
+        # Mars in 3rd from lagna (not a dosha house) but 2nd from the Moon → still Manglik.
+        chart = _make_chart({
+            "Mars": _planet("Mars", 2 * 30 + 5, "Gemini", 3),
+            "Moon": _planet("Moon", 30 + 5, "Taurus", 2),       # Mars is 2nd from Moon
+            "Venus": _planet("Venus", 5, "Aries", 1),
+        })
+        assert detect_mangal_dosha(chart)
+
+    def test_cancelled_when_mars_in_own_sign(self):
+        # Mars in the 8th but in its own sign Scorpio → dosha cancelled.
+        chart = _make_chart({
+            "Mars": _planet("Mars", 7 * 30 + 5, "Scorpio", 8),
+            "Moon": _planet("Moon", 5, "Aries", 1),
+            "Venus": _planet("Venus", 5, "Aries", 1),
+        })
+        assert not detect_mangal_dosha(chart)
+
+    def test_absent_when_clear_of_all_references(self):
+        chart = _make_chart({
+            "Mars": _planet("Mars", 2 * 30 + 5, "Gemini", 3),   # 3rd from lagna/Moon/Venus
+            "Moon": _planet("Moon", 5, "Aries", 1),
+            "Venus": _planet("Venus", 5, "Aries", 1),
+        })
+        assert not detect_mangal_dosha(chart)
 
 
 class TestPitraDosha:
@@ -513,11 +534,19 @@ class TestCombustDetection:
         strengths = calculate_all_strengths(chart)
         assert "combust" not in strengths["Mercury"]
 
-    def test_moon_never_combust(self):
-        """Moon is never counted as combust (classical rule)."""
+    def test_moon_combust_within_orb(self):
+        """The Moon DOES combust near the new moon (within its 12° orb)."""
         chart = _make_chart({
             "Sun":  _planet("Sun",  10, "Aries", 1, degree_in_sign=10),
-            "Moon": _planet("Moon", 13, "Aries", 1, degree_in_sign=13),
+            "Moon": _planet("Moon", 13, "Aries", 1, degree_in_sign=13),   # 3° from Sun
+        })
+        strengths = calculate_all_strengths(chart)
+        assert "combust" in strengths["Moon"]
+
+    def test_moon_not_combust_when_far(self):
+        chart = _make_chart({
+            "Sun":  _planet("Sun",  10, "Aries", 1, degree_in_sign=10),
+            "Moon": _planet("Moon", 200, "Libra", 7, degree_in_sign=20),  # ~opposition
         })
         strengths = calculate_all_strengths(chart)
         assert "combust" not in strengths["Moon"]

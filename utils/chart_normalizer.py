@@ -5,8 +5,36 @@ from datetime import datetime, timezone
 
 from models.chart import BirthData, DashaData, HouseData, NormalizedChart, PlanetPosition
 from utils.astro_constants import SANSKRIT_TO_ENGLISH, SIGN_RULERS, ZODIAC_SIGNS
+from utils.nakshatras import nakshatra_of, pada_of
 
 logger = logging.getLogger(__name__)
+
+
+def _num(value, default: float = 0.0) -> float:
+    """Parse a possibly-string/None numeric Prokerala field without throwing."""
+    try:
+        if value is None or value == "":
+            return default
+        return float(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def _int(value, default: int = 0) -> int:
+    try:
+        if value is None or value == "":
+            return default
+        return int(float(value))
+    except (TypeError, ValueError):
+        return default
+
+
+def _truthy(value) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, str):
+        return value.strip().lower() in ("true", "1", "yes", "y", "r", "retrograde")
+    return bool(value)
 
 
 def normalize_prokerala_response(raw: dict, user_id: str, birth_data: BirthData) -> NormalizedChart:
@@ -16,19 +44,27 @@ def normalize_prokerala_response(raw: dict, user_id: str, birth_data: BirthData)
         planets = _parse_planets(data)
         houses = _parse_houses(data)
         dasha = _parse_dasha(data)
-        lagna = _get_lagna_sign(data, houses)
+        asc_sign, asc_longitude = _extract_ascendant(data)
+        lagna = _get_lagna_sign(data, houses)  # raises loudly if indeterminable
         _assign_planet_houses(planets, lagna)
         moon = planets.get("Moon")
         sun = planets.get("Sun")
+        # Minimum-viable-chart gate: a chart with no luminaries is unusable; fail loudly
+        # rather than silently producing a degenerate reading.
+        if moon is None and sun is None:
+            raise ValueError("Chart has neither Moon nor Sun — unusable data")
         return NormalizedChart(
             user_id=user_id,
             birth_data=birth_data,
             lagna_sign=lagna,
-            lagna_degree=float(data.get("ascendant", {}).get("longitude", 0)),
+            lagna_degree=asc_longitude % 30,
             moon_sign=moon.sign if moon else "Unknown",
             sun_sign=sun.sign if sun else "Unknown",
-            nakshatra=data.get("nakshatra", {}).get("name", moon.nakshatra if moon else ""),
-            nakshatra_pada=int(data.get("nakshatra", {}).get("pada", moon.nakshatra_pada if moon else 1)),
+            # Janma nakshatra = the Moon's nakshatra (computed from longitude).
+            nakshatra=(moon.nakshatra if moon and moon.nakshatra else
+                       (nakshatra_of(moon.longitude) if moon else "")),
+            nakshatra_pada=(moon.nakshatra_pada if moon and moon.nakshatra_pada else
+                            (pada_of(moon.longitude) if moon else 1)),
             planets=planets,
             houses=houses,
             dasha=dasha,
@@ -53,16 +89,26 @@ def _parse_planets(data: dict) -> dict[str, PlanetPosition]:
             continue
         rasi = item.get("rasi", item.get("sign", {}))
         sign = _normalize_sign(rasi.get("name", "") if isinstance(rasi, dict) else str(rasi))
+        longitude = _num(item.get("longitude"))
+        # If Prokerala omits the rasi, derive the sign from the sidereal longitude so the
+        # planet still gets a valid sign (and therefore a whole-sign house).
+        if sign not in ZODIAC_SIGNS and longitude:
+            sign = ZODIAC_SIGNS[int(longitude // 30) % 12]
+        # Prokerala often returns blank nakshatra fields — compute deterministically
+        # from the sidereal longitude (and fall back to any provided value).
         nak = item.get("nakshatra", {})
+        provided_name = nak.get("name", "") if isinstance(nak, dict) else str(nak)
+        provided_pada = _int(nak.get("pada")) if isinstance(nak, dict) else 0
         result[canonical] = PlanetPosition(
             planet=canonical,
-            longitude=float(item.get("longitude", 0)),
+            longitude=longitude,
             sign=sign,
-            house=int(item.get("house", 0)),
-            nakshatra=nak.get("name", "") if isinstance(nak, dict) else str(nak),
-            nakshatra_pada=int(nak.get("pada", 1)) if isinstance(nak, dict) else 1,
-            is_retrograde=bool(item.get("isRetrograde", item.get("is_retrograde", False))),
-            degree_in_sign=float(item.get("degree", item.get("longitude_within_sign", 0))),
+            house=_int(item.get("house")),
+            nakshatra=provided_name or nakshatra_of(longitude),
+            nakshatra_pada=provided_pada or pada_of(longitude),
+            is_retrograde=_truthy(item.get("isRetrograde", item.get("is_retrograde", False))),
+            # Fall back to longitude-within-sign when no explicit in-sign degree is given.
+            degree_in_sign=_num(item.get("degree", item.get("longitude_within_sign")), longitude % 30),
         )
     return result
 
@@ -71,19 +117,23 @@ def _parse_houses(data: dict) -> dict[int, HouseData]:
     source = data.get("houses", data.get("bhava", []))
     houses = {}
     for item in source or []:
-        number = int(item.get("number", item.get("house", 0)))
+        number = _int(item.get("number", item.get("house", 0)))
         sign_data = item.get("sign", {})
-        sign = sign_data.get("name", "") if isinstance(sign_data, dict) else str(sign_data)
+        raw_sign = sign_data.get("name", "") if isinstance(sign_data, dict) else str(sign_data)
+        sign = _normalize_sign(raw_sign)
         if 1 <= number <= 12:
             houses[number] = HouseData(
                 house_number=number, sign=sign, lord=SIGN_RULERS.get(sign, ""),
-                degree=float(item.get("degree", 0)),
+                degree=_num(item.get("degree")),
             )
     if not houses:
-        asc = data.get("ascendant", {})
-        rasi = asc.get("rasi", asc.get("sign", {})) if isinstance(asc, dict) else {}
-        asc_sign = rasi.get("name", "Aries") if isinstance(rasi, dict) else str(rasi)
-        start = ZODIAC_SIGNS.index(asc_sign) if asc_sign in ZODIAC_SIGNS else 0
+        asc_sign, _ = _extract_ascendant(data)
+        # No silent Aries default: if the ascendant is unusable, leave houses empty so the
+        # caller (_get_lagna_sign) raises loudly instead of fabricating an Aries chart.
+        if asc_sign not in ZODIAC_SIGNS:
+            logger.warning("No house data and no valid ascendant sign (%r); cannot build whole-sign houses", asc_sign)
+            return houses
+        start = ZODIAC_SIGNS.index(asc_sign)
         for offset in range(12):
             sign = ZODIAC_SIGNS[(start + offset) % 12]
             houses[offset + 1] = HouseData(
@@ -98,16 +148,21 @@ def _parse_dasha(data: dict) -> DashaData:
     if isinstance(periods, list) and periods:
         now = datetime.now(timezone.utc)
 
+        def _parse_dt(value) -> datetime:
+            s = str(value).strip().replace("Z", "+00:00")
+            dt = datetime.fromisoformat(s)
+            return dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None else dt
+
         def _in_range(item: dict) -> bool:
             try:
-                return (
-                    datetime.fromisoformat(item["start"]) <= now
-                    <= datetime.fromisoformat(item["end"])
-                )
+                return _parse_dt(item["start"]) <= now <= _parse_dt(item["end"])
             except Exception:
                 return False
 
-        maha = next((p for p in periods if _in_range(p)), periods[-1])
+        maha = next((p for p in periods if _in_range(p)), None)
+        if maha is None:
+            logger.warning("No Mahadasha period covers the current date; defaulting to the last period")
+            maha = periods[-1]
         antars = maha.get("antardasha", [])
         antar = next((a for a in antars if _in_range(a)), antars[-1] if antars else {})
         pratys = antar.get("pratyantardasha", [])
@@ -151,9 +206,42 @@ def _parse_dasha(data: dict) -> DashaData:
     )
 
 
+def _extract_ascendant(data: dict) -> tuple[str, float]:
+    """Prokerala returns the ascendant as a 'planet' named "Ascendant" inside the
+    planet-position list (there is no separate ascendant/houses field). Return its
+    (normalized_sign, longitude), falling back to an explicit ``ascendant`` field if present."""
+    source = data.get("planets", data.get("planet_position", []))
+    items = source if isinstance(source, list) else (source.values() if isinstance(source, dict) else [])
+    for item in items:
+        if not isinstance(item, dict):
+            continue
+        if str(item.get("name", "")).strip().lower() == "ascendant":
+            rasi = item.get("rasi", item.get("sign", {}))
+            sign = _normalize_sign(rasi.get("name", "") if isinstance(rasi, dict) else str(rasi))
+            return sign, _num(item.get("longitude"))
+    # Explicit ascendant field (other Prokerala endpoints / legacy shapes).
+    asc = data.get("ascendant", {})
+    if isinstance(asc, dict):
+        rasi = asc.get("rasi", asc.get("sign", {}))
+        sign = _normalize_sign(rasi.get("name", "") if isinstance(rasi, dict) else str(rasi))
+        return sign, _num(asc.get("longitude"))
+    return "", 0.0
+
+
 def _normalize_sign(raw: str) -> str:
-    """Convert Sanskrit sign names to English for internal consistency."""
-    return SANSKRIT_TO_ENGLISH.get(raw, raw)
+    """Convert Sanskrit/variant sign names to canonical English; log anything unrecognized."""
+    raw = (raw or "").strip()
+    if not raw:
+        return ""
+    if raw in SANSKRIT_TO_ENGLISH:
+        return SANSKRIT_TO_ENGLISH[raw]
+    titled = raw.title()
+    if titled in ZODIAC_SIGNS:
+        return titled
+    if titled in SANSKRIT_TO_ENGLISH:
+        return SANSKRIT_TO_ENGLISH[titled]
+    logger.warning("Unrecognized sign name from Prokerala: %r", raw)
+    return titled
 
 
 def _assign_planet_houses(planets: dict[str, "PlanetPosition"], lagna: str) -> None:
@@ -168,26 +256,51 @@ def _assign_planet_houses(planets: dict[str, "PlanetPosition"], lagna: str) -> N
 
 
 def _get_lagna_sign(data: dict, houses: dict[int, HouseData]) -> str:
-    asc = data.get("ascendant", {})
-    rasi = asc.get("rasi", asc.get("sign", {})) if isinstance(asc, dict) else {}
-    value = _normalize_sign(rasi.get("name", "") if isinstance(rasi, dict) else str(rasi))
-    return value or houses[1].sign
+    value, _ = _extract_ascendant(data)
+    if value in ZODIAC_SIGNS:
+        return value
+    h1 = houses.get(1)
+    if h1 and h1.sign in ZODIAC_SIGNS:
+        return h1.sign
+    # Lagna drives every house assignment — never guess it. Fail loudly.
+    raise ValueError("Could not determine a valid lagna (ascendant) from the chart data")
 
 
 def build_chart_summary(chart: NormalizedChart) -> str:
+    """Authoritative, locked snapshot of the chart. Every placement and dasha date here is
+    FIXED — the synthesis must never state a value that contradicts this block."""
+    from utils.formatting import format_date
+    from services.rule_engine.strength_calculator import get_planet_strength
+    d = chart.dasha
+    # Self-heal janma nakshatra for charts cached before nakshatra-from-longitude existed.
+    moon = chart.planets.get("Moon")
+    nak_name = chart.nakshatra or (nakshatra_of(moon.longitude) if moon else "")
+    nak_pada = chart.nakshatra_pada or (pada_of(moon.longitude) if moon else 1)
     lines = [
         f"Birth: {chart.birth_data.date} {chart.birth_data.time} | {chart.birth_data.place_name}",
-        f"Lagna: {chart.lagna_sign} | Moon: {chart.moon_sign} | Sun: {chart.sun_sign}",
-        f"Janma Nakshatra: {chart.nakshatra} Pada {chart.nakshatra_pada}",
-        "Planetary Positions:",
+        f"Lagna (Ascendant): {chart.lagna_sign}",
+        f"Janma Nakshatra (Moon's): {nak_name} pada {nak_pada}",
+        "Planetary placements (sign | dignity | house | nakshatra) — FIXED, never restate differently:",
     ]
     for name, pos in chart.planets.items():
-        flags = f"{' (R)' if pos.is_retrograde else ''}{' | ' + pos.strength if pos.strength else ''}"
-        lines.append(f"  {name}: {pos.sign}, House {pos.house}{flags}")
-    lines.extend([
-        f"Current Dasha: {chart.dasha.maha_dasha_lord} Mahadasha / "
-        f"{chart.dasha.antar_dasha_lord} Antardasha",
-        f"Maha period: {chart.dasha.maha_dasha_start} → {chart.dasha.maha_dasha_end}",
-        f"Antar period: {chart.dasha.antar_dasha_start} → {chart.dasha.antar_dasha_end}",
-    ])
+        retro = " | retrograde" if pos.is_retrograde else ""
+        nak = f" | {pos.nakshatra}" if pos.nakshatra else ""
+        # State the rasi dignity so the narrator never asserts a strength that contradicts it
+        # (e.g. a debilitated planet must be flagged as such, even if a yoga later redeems it).
+        dignity = (
+            f" | {get_planet_strength(name, pos.sign, pos.degree_in_sign)}"
+            if name not in ("Rahu", "Ketu") else ""
+        )
+        lines.append(f"  {name}: {pos.sign}{dignity} | house {pos.house}{nak}{retro}")
+    if d.maha_dasha_lord:
+        lines.append("Vimshottari dasha (FIXED dates — do NOT recompute or guess):")
+        lines.append(
+            f"  Mahadasha: {d.maha_dasha_lord} — runs {format_date(d.maha_dasha_start)} "
+            f"to {format_date(d.maha_dasha_end)} (a multi-year period)"
+        )
+        if d.antar_dasha_lord:
+            lines.append(
+                f"  Antardasha (sub-period inside it): {d.antar_dasha_lord} — "
+                f"{format_date(d.antar_dasha_start)} to {format_date(d.antar_dasha_end)}"
+            )
     return "\n".join(lines)

@@ -70,9 +70,11 @@ def test_wealth_and_finance_dedup():
 
 # --- #7 Karaka corrections ---
 
-def test_mercury_not_a_career_karaka():
-    assert "Mercury" not in TOPIC_PLANET_MAP["career"]
-    assert "Saturn" in TOPIC_PLANET_MAP["career"]   # the true karma karaka
+def test_career_karakas_correct():
+    # Saturn (primary) + Sun (secondary); Mars is NOT a career karaka.
+    assert "Saturn" in TOPIC_PLANET_MAP["career"]
+    assert "Sun" in TOPIC_PLANET_MAP["career"]
+    assert "Mars" not in TOPIC_PLANET_MAP["career"]
 
 
 def test_business_has_karakas():
@@ -84,10 +86,13 @@ def test_business_has_karakas():
 
 def test_descriptive_queries_detected():
     from services.intent_classifier import is_descriptive_query
-    assert is_descriptive_query("how will my wife be?")
-    assert is_descriptive_query("what is my spouse like?")
-    assert is_descriptive_query("describe my career")
-    assert is_descriptive_query("how will my married life be?")
+    assert is_descriptive_query("how will my wife be?")        # person subject
+    assert is_descriptive_query("what is my spouse like?")     # person subject
+    assert is_descriptive_query("describe my career")          # explicit 'describe'
+    # NOTE: "how will my married life be?" is now treated as a marriage VERDICT question
+    # (no person subject, no explicit 'describe') — the prior broad rule wrongly suppressed
+    # the verdict for every "how will my <topic> be" question. See test_intent_routing.
+    assert not is_descriptive_query("how will my married life be?")
 
 
 def test_timing_queries_not_descriptive():

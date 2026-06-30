@@ -1,16 +1,42 @@
 from models.chart import NormalizedChart
 from utils.astro_constants import (
-    DEBILITATION_SIGNS, EXALTATION_SIGNS, KENDRA_HOUSES, OWN_SIGNS,
-    SIGN_RULERS, TRIKONA_HOUSES,
+    DEBILITATION_SIGNS, EXALTATION_SIGNS, KENDRA_HOUSES, NATURAL_BENEFICS,
+    NATURAL_MALEFICS, OWN_SIGNS, SIGN_RULERS, TRIKONA_HOUSES,
 )
 
 DUSTHANA_HOUSES = [6, 8, 12]
 BENEFIC_PLANETS = {"Jupiter", "Venus", "Mercury", "Moon"}
 
 
+def _house_from(reference_house: int, target_house: int) -> int:
+    """Position (1-12) of target_house counted from reference_house."""
+    return ((target_house - reference_house) % 12) + 1
+
+
 def _distance(a: int, b: int) -> int:
     diff = abs(a - b)
     return min(diff, 12 - diff)
+
+
+def _in_sambandha(chart: NormalizedChart, p1_name: str, p2_name: str) -> bool:
+    """Two planets form a classical RELATIONSHIP (sambandha): conjunction (same house),
+    graha-drishti (either aspects the other's house, incl. Mars/Jupiter/Saturn special
+    aspects), or parivartana (sign exchange). Mere mutual-kendra placement WITHOUT an
+    aspect is NOT a relationship — counting it over-generates Raja yogas."""
+    from services.rule_engine.aspect_engine import houses_aspected_by_planet
+
+    p1 = chart.planets.get(p1_name)
+    p2 = chart.planets.get(p2_name)
+    if not p1 or not p2:
+        return False
+    if p1.house == p2.house:                                        # conjunction
+        return True
+    if p2.house in houses_aspected_by_planet(chart, p1_name) or \
+            p1.house in houses_aspected_by_planet(chart, p2_name):  # graha-drishti
+        return True
+    if SIGN_RULERS.get(p1.sign) == p2_name and SIGN_RULERS.get(p2.sign) == p1_name:  # exchange
+        return True
+    return False
 
 
 def _mutual_kendra(a: str, b: str, chart: NormalizedChart) -> bool:
@@ -175,11 +201,7 @@ def detect_dharma_karmadhipati(chart: NormalizedChart) -> bool:
     tenth_lord = SIGN_RULERS.get(chart.houses[10].sign)
     if not ninth_lord or not tenth_lord or ninth_lord == tenth_lord:
         return False
-    p9 = chart.planets.get(ninth_lord)
-    p10 = chart.planets.get(tenth_lord)
-    if not p9 or not p10:
-        return False
-    return _distance(p9.house, p10.house) in (0, 3, 6, 9)
+    return _in_sambandha(chart, ninth_lord, tenth_lord)
 
 
 def detect_raja_yoga(chart: NormalizedChart) -> bool:
@@ -196,26 +218,32 @@ def detect_raja_yoga(chart: NormalizedChart) -> bool:
             if pair in pairs_checked:
                 continue
             pairs_checked.add(pair)
-            pk = chart.planets.get(kl)
-            pt = chart.planets.get(tl)
-            if pk and pt and _distance(pk.house, pt.house) in (0, 3, 6, 9):
+            if _in_sambandha(chart, kl, tl):
                 return True
     return False
 
 
 def detect_dhana_yoga(chart: NormalizedChart) -> bool:
-    """Dhana Yoga: 2nd and 11th lords conjunct, or both in association with Jupiter/Venus."""
+    """Dhana Yoga: the lords of the 2nd and 11th (the wealth houses) are linked — by
+    conjunction, mutual aspect (opposition), or sign exchange (parivartana). Same planet
+    lording both also qualifies."""
     second_lord = SIGN_RULERS.get(chart.houses[2].sign)
     eleventh_lord = SIGN_RULERS.get(chart.houses[11].sign)
     if not second_lord or not eleventh_lord:
         return False
     if second_lord == eleventh_lord:
-        return True  # Same planet lords both wealth houses
+        return True  # same planet lords both wealth houses
     p2 = chart.planets.get(second_lord)
     p11 = chart.planets.get(eleventh_lord)
     if not p2 or not p11:
         return False
-    return p2.house == p11.house  # conjunct
+    if p2.house == p11.house:
+        return True                                   # conjunction
+    if _distance(p2.house, p11.house) == 6:
+        return True                                   # mutual 7th aspect (opposition)
+    if p2.house == 11 and p11.house == 2:
+        return True                                   # parivartana (2nd & 11th lords exchange)
+    return False
 
 
 def detect_lakshmi_yoga(chart: NormalizedChart) -> bool:
@@ -302,6 +330,179 @@ def detect_anapha(chart: NormalizedChart) -> bool:
     )
 
 
+# ---------------------------------------------------------------------------
+# Lunar & solar yogas (planets flanking the Moon / Sun)
+# ---------------------------------------------------------------------------
+
+def _flanking(chart: NormalizedChart, ref: str, exclude: set[str]) -> tuple[bool, bool]:
+    """Whether eligible planets sit in the 2nd and 12th from a reference planet."""
+    pos = chart.planets.get(ref)
+    if not pos:
+        return False, False
+    second = (pos.house % 12) + 1
+    twelfth = ((pos.house - 2) % 12) + 1
+    elig = [p for n, p in chart.planets.items() if n not in exclude]
+    return (any(p.house == second for p in elig), any(p.house == twelfth for p in elig))
+
+
+def detect_durudhara(chart: NormalizedChart) -> bool:
+    """Planets (excl. Sun/nodes) in BOTH 2nd and 12th from the Moon — wealth & support."""
+    has2, has12 = _flanking(chart, "Moon", {"Moon", "Sun", "Rahu", "Ketu"})
+    return has2 and has12
+
+
+def detect_vesi(chart: NormalizedChart) -> bool:
+    """Planet (excl. Moon/nodes) in the 2nd from the Sun."""
+    has2, _ = _flanking(chart, "Sun", {"Sun", "Moon", "Rahu", "Ketu"})
+    return has2
+
+
+def detect_vasi(chart: NormalizedChart) -> bool:
+    """Planet (excl. Moon/nodes) in the 12th from the Sun."""
+    _, has12 = _flanking(chart, "Sun", {"Sun", "Moon", "Rahu", "Ketu"})
+    return has12
+
+
+def detect_ubhayachari(chart: NormalizedChart) -> bool:
+    """Planets on both sides of the Sun (2nd and 12th) — all-round success."""
+    has2, has12 = _flanking(chart, "Sun", {"Sun", "Moon", "Rahu", "Ketu"})
+    return has2 and has12
+
+
+# ---------------------------------------------------------------------------
+# Kartari (scissor) yogas — planets flanking the lagna
+# ---------------------------------------------------------------------------
+
+def detect_shubha_kartari(chart: NormalizedChart) -> bool:
+    """Natural benefics in both the 2nd and 12th houses — protective 'good scissors'."""
+    h2 = any(p.house == 2 and n in NATURAL_BENEFICS for n, p in chart.planets.items())
+    h12 = any(p.house == 12 and n in NATURAL_BENEFICS for n, p in chart.planets.items())
+    return h2 and h12
+
+
+def detect_papa_kartari(chart: NormalizedChart) -> bool:
+    """Natural malefics in both the 2nd and 12th houses — afflicting 'bad scissors'."""
+    h2 = any(p.house == 2 and n in NATURAL_MALEFICS for n, p in chart.planets.items())
+    h12 = any(p.house == 12 and n in NATURAL_MALEFICS for n, p in chart.planets.items())
+    return h2 and h12
+
+
+# ---------------------------------------------------------------------------
+# Other classical yogas
+# ---------------------------------------------------------------------------
+
+def detect_amala(chart: NormalizedChart) -> bool:
+    """Amala Yoga: a natural benefic in the 10th from the lagna or from the Moon — a
+    spotless reputation and lasting fame."""
+    moon = chart.planets.get("Moon")
+    tenth_from_moon = ((moon.house + 8) % 12) + 1 if moon else None
+    for n, p in chart.planets.items():
+        if n in NATURAL_BENEFICS and (p.house == 10 or (tenth_from_moon and p.house == tenth_from_moon)):
+            return True
+    return False
+
+
+def detect_shakata(chart: NormalizedChart) -> bool:
+    """Shakata Yoga: the Moon in the 6th, 8th, or 12th from Jupiter — fluctuating fortunes."""
+    moon, jup = chart.planets.get("Moon"), chart.planets.get("Jupiter")
+    if not moon or not jup:
+        return False
+    return _house_from(jup.house, moon.house) in (6, 8, 12)
+
+
+def detect_guru_mangala(chart: NormalizedChart) -> bool:
+    """Guru-Mangala Yoga: Jupiter and Mars conjunct or in mutual aspect (including their
+    special aspects) — drive guided by wisdom."""
+    jup, mars = chart.planets.get("Jupiter"), chart.planets.get("Mars")
+    if not jup or not mars:
+        return False
+    if jup.house == mars.house:
+        return True
+    from services.rule_engine.aspect_engine import houses_aspected_by_planet
+    jup_aspects = houses_aspected_by_planet(chart, "Jupiter")
+    mars_aspects = houses_aspected_by_planet(chart, "Mars")
+    return mars.house in jup_aspects and jup.house in mars_aspects
+
+
+def detect_kahala(chart: NormalizedChart) -> bool:
+    """Kahala Yoga: 4th and 9th lords in mutual kendra — energy, courage and command."""
+    l4 = SIGN_RULERS.get(chart.houses[4].sign)
+    l9 = SIGN_RULERS.get(chart.houses[9].sign)
+    if not l4 or not l9 or l4 == l9:
+        return False
+    p4, p9 = chart.planets.get(l4), chart.planets.get(l9)
+    return bool(p4 and p9 and _distance(p4.house, p9.house) in (0, 3, 6, 9))
+
+
+def detect_kalanidhi(chart: NormalizedChart) -> bool:
+    """Kalanidhi Yoga: Jupiter in the 2nd or 5th, joined or aspected by Mercury and Venus —
+    wealth, learning and refinement."""
+    jup = chart.planets.get("Jupiter")
+    if not jup or jup.house not in (2, 5):
+        return False
+
+    def influences(name: str) -> bool:
+        p = chart.planets.get(name)
+        if not p:
+            return False
+        return p.house == jup.house or _house_from(p.house, jup.house) == 7
+    return influences("Mercury") and influences("Venus")
+
+
+def detect_maha_bhagya(chart: NormalizedChart) -> bool:
+    """Maha Bhagya Yoga: for a day birth, lagna, Sun and Moon all in odd signs; for a night
+    birth, all in even signs — great fortune and good character."""
+    from utils.astro_constants import ZODIAC_SIGNS
+    try:
+        hour = int(chart.birth_data.time.split(":")[0])
+    except Exception:
+        return False
+    is_day = 6 <= hour < 18
+    signs = [chart.lagna_sign,
+             chart.planets["Sun"].sign if "Sun" in chart.planets else "",
+             chart.planets["Moon"].sign if "Moon" in chart.planets else ""]
+    idxs = [ZODIAC_SIGNS.index(s) for s in signs if s in ZODIAC_SIGNS]
+    if len(idxs) < 3:
+        return False
+    odd = all(i % 2 == 0 for i in idxs)    # Aries(0) is an odd sign
+    even = all(i % 2 == 1 for i in idxs)
+    return odd if is_day else even
+
+
+def detect_chatussagara(chart: NormalizedChart) -> bool:
+    """Chatussagara Yoga: planets occupying all four kendras (1,4,7,10) — all-round prosperity."""
+    occupied = {p.house for p in chart.planets.values()}
+    return all(k in occupied for k in (1, 4, 7, 10))
+
+
+def find_parivartana(chart: NormalizedChart) -> list[str]:
+    """Parivartana (sign-exchange) yogas: two planets each occupying the other's sign.
+    Classified by the houses involved: Maha (good houses), Dainya (a dusthana), Khala (3rd)."""
+    found: list[str] = []
+    seen: set[tuple] = set()
+    for n1, p1 in chart.planets.items():
+        if n1 in ("Rahu", "Ketu"):
+            continue
+        l1 = SIGN_RULERS.get(p1.sign)
+        if not l1 or l1 == n1:
+            continue
+        p2 = chart.planets.get(l1)
+        if not p2 or SIGN_RULERS.get(p2.sign) != n1:
+            continue
+        pair = tuple(sorted([n1, l1]))
+        if pair in seen:
+            continue
+        seen.add(pair)
+        houses = {p1.house, p2.house}
+        if houses & {6, 8, 12}:
+            found.append("Dainya Parivartana")
+        elif 3 in houses:
+            found.append("Khala Parivartana")
+        else:
+            found.append("Maha Parivartana")
+    return list(dict.fromkeys(found))
+
+
 def detect_all_yogas(chart: NormalizedChart) -> list[str]:
     yogas = []
     checks = [
@@ -319,10 +520,24 @@ def detect_all_yogas(chart: NormalizedChart) -> list[str]:
         (detect_kemadruma,           "Kemadruma"),
         (detect_sunapha,             "Sunapha"),
         (detect_anapha,              "Anapha"),
+        (detect_durudhara,           "Durudhara"),
         (detect_kaal_sarp,           "Kaal Sarp"),
+        (detect_vesi,                "Vesi"),
+        (detect_vasi,                "Vasi"),
+        (detect_ubhayachari,         "Ubhayachari"),
+        (detect_shubha_kartari,      "Shubha Kartari"),
+        (detect_papa_kartari,        "Papa Kartari"),
+        (detect_amala,               "Amala"),
+        (detect_shakata,             "Shakata"),
+        (detect_guru_mangala,        "Guru-Mangala"),
+        (detect_kahala,              "Kahala"),
+        (detect_kalanidhi,           "Kalanidhi"),
+        (detect_maha_bhagya,         "Maha Bhagya"),
+        (detect_chatussagara,        "Chatussagara"),
     ]
     for predicate, name in checks:
         if predicate(chart):
             yogas.append(name)
     yogas.extend(detect_panch_mahapurusha(chart))
+    yogas.extend(find_parivartana(chart))
     return yogas

@@ -31,27 +31,57 @@ async def _get_prokerala_token() -> str:
             )
             response.raise_for_status()
             payload = response.json()
+        token_value = payload.get("access_token")
+        if not token_value:
+            raise RuntimeError("Prokerala token response did not contain access_token")
         _prokerala_token.update(
-            token=payload["access_token"], expires_at=now + int(payload.get("expires_in", 3600))
+            token=token_value, expires_at=now + int(payload.get("expires_in", 3600))
         )
-        return str(payload["access_token"])
+        return str(token_value)
 
 
 async def _call_prokerala(endpoint: str, params: dict, token: str) -> dict:
-    async with httpx.AsyncClient(timeout=15) as client:
-        response = await client.get(
-            f"{settings.prokerala_base_url}/{endpoint}",
-            params=params,
-            headers={"Authorization": f"Bearer {token}"},
-        )
-        response.raise_for_status()
-        return response.json()
+    """GET a Prokerala endpoint with bounded retries: refresh-and-retry once on 401,
+    exponential backoff on timeouts and 5xx. Raises if all attempts fail."""
+    url = f"{settings.prokerala_base_url}/{endpoint}"
+    delay = 0.5
+    for attempt in range(3):
+        try:
+            async with httpx.AsyncClient(timeout=15) as client:
+                response = await client.get(
+                    url, params=params, headers={"Authorization": f"Bearer {token}"}
+                )
+                response.raise_for_status()
+                return response.json()
+        except httpx.HTTPStatusError as exc:
+            status = exc.response.status_code
+            if status == 401 and attempt == 0:
+                _prokerala_token.clear()          # token stale/revoked — force a fresh one
+                token = await _get_prokerala_token()
+                continue
+            if status >= 500 and attempt < 2:
+                await asyncio.sleep(delay)
+                delay *= 2
+                continue
+            raise
+        except (httpx.TimeoutException, httpx.TransportError):
+            if attempt < 2:
+                await asyncio.sleep(delay)
+                delay *= 2
+                continue
+            raise
+    raise RuntimeError(f"Prokerala call to {endpoint} failed after retries")
 
 
 async def fetch_full_chart(birth_data: BirthData) -> dict:
     # TODO: ASTROLOGY EXPERT REQUIRED — Verify endpoint names and response fields live.
     token = await _get_prokerala_token()
-    local_dt = datetime.fromisoformat(f"{birth_data.date}T{birth_data.time}:00").replace(
+    # Accept time as HH:MM or HH:MM:SS — append seconds only when they're absent, so a
+    # caller-supplied "19:30:00" doesn't become the invalid "19:30:00:00".
+    time_str = birth_data.time.strip()
+    if time_str.count(":") == 1:
+        time_str += ":00"
+    local_dt = datetime.fromisoformat(f"{birth_data.date}T{time_str}").replace(
         tzinfo=ZoneInfo(birth_data.timezone)
     )
     params = {
@@ -69,6 +99,26 @@ async def fetch_full_chart(birth_data: BirthData) -> dict:
     merged.setdefault("yoga_details", kundli_data.get("yoga_details", []))
     merged.setdefault("nakshatra", kundli_data.get("nakshatra_details", {}))
     return merged
+
+
+async def build_partner_chart(birth_data: BirthData) -> NormalizedChart:
+    """A lightweight chart for a compatibility partner — only the planet-position endpoint
+    (30 credits, not the full 330): Guna Milan + Mangal need just Moon nakshatra/sign and the
+    Mars/Venus placements. NOT persisted (transient)."""
+    token = await _get_prokerala_token()
+    time_str = birth_data.time.strip()
+    if time_str.count(":") == 1:
+        time_str += ":00"
+    local_dt = datetime.fromisoformat(f"{birth_data.date}T{time_str}").replace(
+        tzinfo=ZoneInfo(birth_data.timezone)
+    )
+    params = {
+        "ayanamsa": 1,
+        "coordinates": f"{birth_data.latitude},{birth_data.longitude}",
+        "datetime": local_dt.isoformat(),
+    }
+    raw = await _call_prokerala("planet-position", params, token)
+    return normalize_prokerala_response(raw, "partner", birth_data)
 
 
 async def fetch_transit_positions(target_dt: datetime, latitude: float, longitude: float) -> dict:
@@ -95,7 +145,13 @@ async def get_chart(user_id: str) -> NormalizedChart | None:
     if not document:
         return None
     document.pop("_id", None)
-    return NormalizedChart(**document)
+    try:
+        return NormalizedChart(**document)
+    except Exception:
+        # A corrupt cached chart should look like "no chart" (prompt to regenerate),
+        # not crash the request.
+        logger.exception("Cached chart for %s is corrupt; treating as missing", user_id)
+        return None
 
 
 async def save_chart(chart: NormalizedChart) -> None:
@@ -108,8 +164,44 @@ async def save_chart(chart: NormalizedChart) -> None:
     )
 
 
-async def generate_and_save_chart(user_id: str, birth_data: BirthData) -> NormalizedChart:
+def _time_key(t: str) -> tuple:
+    """Normalize 'HH:MM' / 'HH:MM:SS' to (h, m, s) so the two formats compare equal."""
+    try:
+        parts = [int(x) for x in t.strip().split(":")]
+        while len(parts) < 3:
+            parts.append(0)
+        return tuple(parts[:3])
+    except (ValueError, AttributeError):
+        return (t,)  # unparseable → compare raw, so a mismatch errs toward regenerating
+
+
+def _same_birth(a: BirthData, b: BirthData) -> bool:
+    """Same astronomically-relevant birth inputs → the chart would be identical, so there's
+    no reason to pay Prokerala again. (place_name is cosmetic and ignored.)"""
+    return (
+        a.date == b.date
+        and _time_key(a.time) == _time_key(b.time)
+        and a.timezone == b.timezone
+        and round(a.latitude, 4) == round(b.latitude, 4)
+        and round(a.longitude, 4) == round(b.longitude, 4)
+    )
+
+
+async def generate_and_save_chart(
+    user_id: str, birth_data: BirthData, force: bool = False
+) -> NormalizedChart:
+    # Cache-first: if a chart for the SAME birth data already exists, reuse it instead of
+    # re-billing Prokerala. Only call the API for a new/changed chart or an explicit force.
+    if not force:
+        existing = await get_chart(user_id)
+        if existing is not None and _same_birth(existing.birth_data, birth_data):
+            logger.info("Reusing cached chart for %s (no Prokerala call)", user_id)
+            return existing
     chart = normalize_prokerala_response(await fetch_full_chart(birth_data), user_id, birth_data)
+    # Don't persist a degenerate chart — normalize already gates luminaries/lagna, but
+    # guard the planet set explicitly so a bad upstream response can't poison the cache.
+    if not chart.planets:
+        raise ValueError("Generated chart has no planets — refusing to save")
     await save_chart(chart)
     return chart
 

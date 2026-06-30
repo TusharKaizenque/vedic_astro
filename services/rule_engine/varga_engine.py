@@ -58,8 +58,15 @@ def _d7_saptamsa(longitude: float) -> int:
 
 
 def _d9_navamsa(longitude: float) -> int:
-    # Continuous division: navamsa index across the zodiac, mod 12.
-    return int(longitude // (30.0 / 9)) % 12
+    # Compute from the in-sign degree (like the other vargas) to avoid the floating-point
+    # boundary error of the continuous form at exact sign cusps (0°, 30°, 60° ...).
+    # Start sign by modality: movable→same sign, fixed→9th from it, dual→5th from it
+    # (equivalent to the element rule: fire→Aries, earth→Capricorn, air→Libra, water→Cancer).
+    sign = _sign_index(longitude)
+    part = int(_deg_in_sign(longitude) // (30.0 / 9))   # 0..8
+    mod = sign % 3                                       # 0 movable, 1 fixed, 2 dual
+    start = sign if mod == 0 else (sign + 8) % 12 if mod == 1 else (sign + 4) % 12
+    return (start + part) % 12
 
 
 def _d10_dasamsa(longitude: float) -> int:
@@ -76,10 +83,37 @@ def _d24_chaturvimsamsa(longitude: float) -> int:
     return (start + part) % 12
 
 
+def _d12_dwadasamsa(longitude: float) -> int:
+    sign = _sign_index(longitude)
+    part = int(_deg_in_sign(longitude) // 2.5)           # 0..11
+    return (sign + part) % 12                             # starts from the sign itself
+
+
+# Trimsamsa (D30) lords per 1° unequal divisions, mapped to a representative sign.
+# Odd signs: Mars 0-5, Saturn 5-10, Jupiter 10-18, Mercury 18-25, Venus 25-30.
+# Even signs: Venus 0-5, Mercury 5-12, Jupiter 12-20, Saturn 20-25, Mars 25-30.
+_TRIMSAMSA_SIGN = {  # ruler -> representative sign index for dignity lookup
+    "Mars": 0, "Venus": 1, "Mercury": 5, "Saturn": 10, "Jupiter": 8,
+}
+
+
+def _d30_trimsamsa(longitude: float) -> int:
+    sign = _sign_index(longitude)
+    deg = _deg_in_sign(longitude)
+    odd = sign % 2 == 0
+    if odd:
+        ruler = ("Mars" if deg < 5 else "Saturn" if deg < 10 else "Jupiter"
+                 if deg < 18 else "Mercury" if deg < 25 else "Venus")
+    else:
+        ruler = ("Venus" if deg < 5 else "Mercury" if deg < 12 else "Jupiter"
+                 if deg < 20 else "Saturn" if deg < 25 else "Mars")
+    return _TRIMSAMSA_SIGN[ruler]
+
+
 _VARGA_FUNCS = {
     "D2": _d2_hora, "D3": _d3_drekkana, "D4": _d4_chaturthamsa,
     "D7": _d7_saptamsa, "D9": _d9_navamsa, "D10": _d10_dasamsa,
-    "D24": _d24_chaturvimsamsa,
+    "D12": _d12_dwadasamsa, "D24": _d24_chaturvimsamsa, "D30": _d30_trimsamsa,
 }
 
 

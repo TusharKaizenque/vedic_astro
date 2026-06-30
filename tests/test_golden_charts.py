@@ -61,18 +61,33 @@ def _assess(chart, topic):
 
 def test_golden_career_verdict(golden_chart):
     a = _assess(golden_chart, "career")
-    assert a.direction == "favourable"
-    assert a.confidence == "moderate"
+    # Saturn (10th & 11th lord) is now ONE neutral primary factor (not double-counted as a
+    # spurious afflicter), and the yoga boost is capped — so career lands MIXED with LOW
+    # confidence (the main significator is neutral), just under the favourable threshold.
+    assert a.direction == "mixed"
+    assert a.confidence == "low"
     assert a.sav_primary_house == 30          # 10th house Sarvashtakavarga
     assert a.sav_band == "strong"
-    assert [w.planet for w in a.dominant_supporting] == ["Mars", "Sun", "Jupiter"]
-    assert [w.planet for w in a.dominant_afflicting] == ["Venus", "Mercury", "Saturn"]
-    assert "Mars" in a.key_tension and "Venus" in a.key_tension
+    assert [w.planet for w in a.dominant_supporting] == ["Sun", "Mars", "Jupiter"]
+    assert [w.planet for w in a.dominant_afflicting] == ["Venus", "Mercury"]  # Saturn no longer here
+    assert "Venus" in a.key_tension
 
 
 def test_golden_career_margin_stable(golden_chart):
     a = _assess(golden_chart, "career")
-    assert a.margin == pytest.approx(0.237, abs=0.001)
+    assert a.margin == pytest.approx(0.197, abs=0.001)
+
+
+def test_golden_house_lord_not_double_counted(golden_chart):
+    """Saturn rules the 10th AND 11th (both career houses) — it must appear as exactly ONE
+    merged factor, never two, so its vote isn't double-weighted."""
+    rules = run_rule_engine(golden_chart)
+    intent = IntentResult(intent=IntentCategory.TOPIC_READING,
+                          entities=IntentEntities(topics=["career"]))
+    sig = get_significators(intent, golden_chart, rules, topic="career")
+    saturn_factors = [f for f in sig.factors if f.planet == "Saturn"]
+    assert len(saturn_factors) == 1
+    assert "10th & 11th lord" in saturn_factors[0].role
 
 
 def test_golden_is_deterministic(golden_chart):
@@ -87,20 +102,26 @@ def test_golden_is_deterministic(golden_chart):
 
 def test_golden_marriage_verdict(golden_chart):
     """Marriage uses the 7th house — distinct SAV from career's 10th."""
-    a = _assess(golden_chart, "marriage")
+    rules = run_rule_engine(golden_chart)
+    intent = IntentResult(intent=IntentCategory.TOPIC_READING,
+                          entities=IntentEntities(topics=["marriage"]))
+    sig = get_significators(intent, golden_chart, rules, topic="marriage")
+    strengths = compute_all_strengths(golden_chart)
+    a = assess_topic(sig, strengths, rules, grounded_ratio=0.6, chart=golden_chart)
     assert a.topic == "marriage"
     assert a.sav_primary_house == 19          # 7th house SAV (Libra) — weak
     assert a.direction in ("favourable", "mixed", "challenged")
-    # Venus is the marriage karaka and should appear among the factors
-    planets = {w.planet for w in a.dominant_supporting + a.dominant_afflicting}
-    assert "Venus" in planets
+    # Venus is the marriage karaka + 7th lord — it must be present as a (single, merged) factor.
+    venus = [f for f in sig.factors if f.planet == "Venus"]
+    assert len(venus) == 1 and "karaka" in venus[0].role and "7th" in venus[0].role
 
 
 def test_golden_strengths_stable(golden_chart):
-    """Shadbala-lite ranking is stable: Venus/Jupiter strongest, Saturn weakest here."""
+    """Full Shadbala ranking (ratio to required): Mars (own sign) & Moon strong; Sun weak."""
     strengths = compute_all_strengths(golden_chart)
-    assert strengths["Venus"].band == "strong"
-    assert strengths["Jupiter"].band == "strong"
-    assert strengths["Saturn"].band == "weak"
-    # Moon's debilitation is cancelled (neecha bhanga) — it is not the weakest
-    assert strengths["Saturn"].total_virupas < strengths["Venus"].total_virupas
+    assert strengths["Mars"].band == "strong"      # own sign Scorpio
+    assert strengths["Moon"].band == "strong"
+    assert strengths["Sun"].band == "weak"          # night birth, low dig/kala
+    assert strengths["Venus"].band == "moderate"
+    # Mars is the strongest by ratio-to-required (relative), even if not by raw virupas.
+    assert strengths["Mars"].relative == max(s.relative for s in strengths.values())

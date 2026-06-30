@@ -6,10 +6,20 @@ ZODIAC_SIGNS = [
 ]
 PLANETS = ["Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"]
 SANSKRIT_TO_ENGLISH: dict[str, str] = {
-    "Mesha": "Aries", "Vrishabha": "Taurus", "Mithuna": "Gemini",
-    "Karka": "Cancer", "Simha": "Leo", "Kanya": "Virgo",
-    "Tula": "Libra", "Vrischika": "Scorpio", "Dhanu": "Sagittarius",
-    "Makara": "Capricorn", "Kumbha": "Aquarius", "Meena": "Pisces",
+    # Primary names + common Prokerala/transliteration variants. Keep this forgiving:
+    # an unmapped ascendant sign fails the whole chart, so cover the spelling variants.
+    "Mesha": "Aries", "Mesh": "Aries",
+    "Vrishabha": "Taurus", "Vrishabh": "Taurus", "Rishabha": "Taurus", "Vrushabha": "Taurus",
+    "Mithuna": "Gemini", "Mithun": "Gemini",
+    "Karka": "Cancer", "Kataka": "Cancer", "Karkata": "Cancer", "Karkataka": "Cancer",
+    "Simha": "Leo", "Sinha": "Leo",
+    "Kanya": "Virgo",
+    "Tula": "Libra", "Thula": "Libra",
+    "Vrischika": "Scorpio", "Vrishchika": "Scorpio", "Vrushchika": "Scorpio", "Vruschika": "Scorpio",
+    "Dhanu": "Sagittarius", "Dhanus": "Sagittarius",
+    "Makara": "Capricorn", "Makar": "Capricorn",
+    "Kumbha": "Aquarius", "Kumbh": "Aquarius",
+    "Meena": "Pisces", "Meen": "Pisces",
 }
 
 SIGN_TO_NUMBER = {sign: i + 1 for i, sign in enumerate(ZODIAC_SIGNS)}
@@ -54,6 +64,21 @@ DIG_BALA_STRONG_HOUSE = {
 # Natural benefics vs malefics (for Paksha Bala and aspect-quality weighting).
 NATURAL_BENEFICS = {"Jupiter", "Venus", "Mercury", "Moon"}
 NATURAL_MALEFICS = {"Sun", "Mars", "Saturn", "Rahu", "Ketu"}
+
+# Combustion (astangata) orbs in degrees from the Sun — per-planet, not a flat value.
+# Standard classical/Surya-Siddhanta values; retrograde Mercury/Venus use tighter orbs.
+COMBUSTION_ORBS = {
+    "Moon": 12.0, "Mars": 17.0, "Mercury": 14.0,
+    "Jupiter": 11.0, "Venus": 10.0, "Saturn": 15.0,
+}
+COMBUSTION_ORBS_RETRO = {"Mercury": 12.0, "Venus": 8.0}
+
+
+def combustion_orb(planet: str, is_retrograde: bool = False) -> float:
+    """The combustion orb (degrees from the Sun) for a planet, accounting for retrogression."""
+    if is_retrograde and planet in COMBUSTION_ORBS_RETRO:
+        return COMBUSTION_ORBS_RETRO[planet]
+    return COMBUSTION_ORBS.get(planet, 0.0)
 OWN_SIGNS = {
     "Sun": ["Leo"], "Moon": ["Cancer"], "Mars": ["Aries", "Scorpio"],
     "Mercury": ["Gemini", "Virgo"], "Jupiter": ["Sagittarius", "Pisces"],
@@ -72,7 +97,7 @@ NATURAL_FRIENDS = {
     "Ketu": ["Mars", "Venus", "Saturn"],
 }
 NATURAL_ENEMIES = {
-    "Sun": ["Venus", "Saturn"], "Moon": ["Rahu", "Ketu"], "Mars": ["Mercury"],
+    "Sun": ["Venus", "Saturn"], "Moon": [], "Mars": ["Mercury"],
     "Mercury": ["Moon"], "Jupiter": ["Mercury", "Venus"], "Venus": ["Sun", "Moon"],
     "Saturn": ["Sun", "Moon", "Mars"], "Rahu": ["Sun", "Moon", "Mars"],
     "Ketu": ["Sun", "Moon", "Mercury"],
@@ -102,10 +127,21 @@ TOPIC_HOUSE_MAP = {
     "creativity": [5], "arts": [5, 12], "sports": [3, 6],
     "communication": [3], "writing": [3, 5],
 }
+# Houses that, when a significator sits in them, indicate AFFLICTION of the topic
+# (dusthana/difficult houses specific to the matter). Defaults to [6, 8, 12] elsewhere.
+TOPIC_AFFLICTING_HOUSES: dict[str, list[int]] = {
+    "career":   [6, 8, 12],
+    "marriage": [6, 8, 12],
+    "children": [5],
+    "health":   [6, 8],
+    "finance":  [8, 12],
+    "property": [8, 12],
+}
 TOPIC_PLANET_MAP = {
-    # Career karakas: Saturn (karma karaka, primary) + Sun (authority/rajya) + Mars (drive).
-    # Mercury removed — it is a karaka for intellect/commerce, not career broadly.
-    "career": ["Saturn", "Sun", "Mars"],
+    # Career karakas: Saturn (primary karma karaka) and Sun (authority/rajya). Mars is NOT a
+    # career karaka (it signifies energy/siblings/conflict). The Jaimini Amatyakaraka is also
+    # folded into the career FIELD derivation separately (outcome_engine).
+    "career": ["Saturn", "Sun"],
     "business": ["Mercury", "Mars", "Sun"],   # commerce + enterprise + leadership
     "marriage": ["Venus", "Jupiter", "Moon"], "children": ["Jupiter", "Moon"],
     "health": ["Sun", "Mars", "Moon"], "finance": ["Jupiter", "Venus", "Mercury"],

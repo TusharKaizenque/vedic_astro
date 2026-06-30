@@ -10,8 +10,8 @@ def utc_now() -> datetime:
 class BirthData(BaseModel):
     date: str
     time: str
-    latitude: float
-    longitude: float
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
     timezone: str
     place_name: str
 

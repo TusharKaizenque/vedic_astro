@@ -38,6 +38,7 @@ class LifeOutcome:
     strengths: list[str] = field(default_factory=list)
     challenges: list[str] = field(default_factory=list)
     traits: list[str] = field(default_factory=list)   # for person topics
+    temperament: str = ""              # from the janma (Moon) nakshatra
 
 
 def _band_weight(band: str) -> float:
@@ -209,8 +210,15 @@ def derive_outcome(
     out.strengths = [_plain_strength(f) for f in sup[:3]]
     out.challenges = [_plain_challenge(f, strengths) for f in aff[:3]]
 
+    # Janma (Moon) nakshatra → the native's core temperament (used for self/person reads).
+    moon = chart.planets.get("Moon")
+    if moon is not None:
+        from utils.nakshatras import nakshatra_of, traits_of
+        out.temperament = traits_of(nakshatra_of(moon.longitude))
+
     if is_person:
-        # Spouse/partner temperament from the 7th lord + Venus.
+        # Spouse/partner temperament from the 7th lord (sign + nakshatra) + Venus.
+        from utils.nakshatras import nakshatra_of as _nak_of, traits_of as _nak_traits
         seventh = next((f for f in significators.factors if f.lords_house == 7), None)
         venus = chart.planets.get("Venus")
         trait_set: list[str] = []
@@ -218,6 +226,11 @@ def derive_outcome(
             trait_set += traits_for(seventh.planet, 2)
             if seventh.sign:
                 trait_set.append(sign_keywords(seventh.sign))
+            pos7 = chart.planets.get(seventh.planet)
+            if pos7:   # the 7th lord's nakshatra colours the spouse's nature
+                nak_t = _nak_traits(_nak_of(pos7.longitude))
+                if nak_t:
+                    trait_set.append(nak_t)
         if venus:
             trait_set.append(sign_keywords(venus.sign))
         out.traits = [t for t in dict.fromkeys(trait_set) if t]
@@ -253,6 +266,8 @@ def format_outcome_for_prompt(out: LifeOutcome) -> str:
         lines.append(f"- result/income pattern: {out.result_pattern}")
     if out.traits:
         lines.append(f"- likely temperament of the person: {', '.join(out.traits)}")
+    if out.temperament and not out.traits:
+        lines.append(f"- the native's core temperament (janma nakshatra): {out.temperament}")
     if out.strengths:
         lines.append("- strengths to lean on: " + "; ".join(out.strengths))
     if out.challenges:

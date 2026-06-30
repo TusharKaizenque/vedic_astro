@@ -11,10 +11,11 @@ router = APIRouter()
 
 
 @router.post("/{user_id}/generate")
-async def generate_chart(user_id: str, request: ChartRequest):
+async def generate_chart(user_id: str, request: ChartRequest, force: bool = False):
+    # force=true bypasses the cache and re-fetches from Prokerala (e.g. corrected birth data).
     try:
         chart = await chart_service.generate_and_save_chart(
-            user_id, BirthData(**request.model_dump())
+            user_id, BirthData(**request.model_dump()), force=force
         )
         return {
             "status": "success", "lagna": chart.lagna_sign,

@@ -22,24 +22,39 @@ def _now() -> datetime:
 
 
 async def get_conversation_history(user_id: str, session_id: str) -> list[dict]:
-    doc = await conversations_collection().find_one({"user_id": user_id, "session_id": session_id})
-    return [{"role": t["role"], "content": t["content"]} for t in doc.get("turns", [])] if doc else []
+    # Fetch only the recent tail (not the whole array) and degrade to [] on any DB error —
+    # memory is non-essential context; a DB blip must not abort the reading.
+    cap = settings.max_conversation_turns * 2 + 10
+    try:
+        doc = await conversations_collection().find_one(
+            {"user_id": user_id, "session_id": session_id},
+            {"turns": {"$slice": -cap}},
+        )
+        turns = doc.get("turns", []) if doc else []
+        return [{"role": t["role"], "content": t["content"]} for t in turns]
+    except Exception:
+        logger.warning("Conversation history read failed; continuing without it", exc_info=True)
+        return []
 
 
 async def save_turn(user_id: str, session_id: str, user_message: str, assistant_response: str) -> None:
     now = _now()
-    await conversations_collection().update_one(
-        {"user_id": user_id, "session_id": session_id},
-        {
-            "$push": {"turns": {"$each": [
-                {"role": "user", "content": user_message, "timestamp": now},
-                {"role": "assistant", "content": assistant_response, "timestamp": now},
-            ]}},
-            "$set": {"updated_at": now},
-            "$setOnInsert": {"created_at": now, "is_summarized": False},
-        },
-        upsert=True,
-    )
+    try:
+        await conversations_collection().update_one(
+            {"user_id": user_id, "session_id": session_id},
+            {
+                # $slice caps stored turns so the doc never approaches Mongo's 16MB limit.
+                "$push": {"turns": {"$each": [
+                    {"role": "user", "content": user_message, "timestamp": now},
+                    {"role": "assistant", "content": assistant_response, "timestamp": now},
+                ], "$slice": -200}},
+                "$set": {"updated_at": now},
+                "$setOnInsert": {"created_at": now, "is_summarized": False},
+            },
+            upsert=True,
+        )
+    except Exception:
+        logger.exception("save_turn failed for %s/%s (turn not persisted)", user_id, session_id)
 
 
 async def summarize_session(user_id: str, session_id: str) -> None:
@@ -53,18 +68,9 @@ async def summarize_session(user_id: str, session_id: str) -> None:
             {"role": "user", "content": text},
         ]))
         summary_text = data.get("reading_summary", "")
-        embedding_vector: list[float] = []
-        if settings.openai_api_key and not settings.llm_base_url:
-            from openai import AsyncOpenAI
-            try:
-                emb = await AsyncOpenAI(api_key=settings.openai_api_key).embeddings.create(
-                    model=settings.openai_embedding_model,
-                    input=summary_text,
-                    dimensions=settings.openai_embedding_dimensions,
-                )
-                embedding_vector = emb.data[0].embedding
-            except Exception:
-                logger.warning("Embedding skipped — provider does not support embeddings")
+        # Reuse the shared embeddings client (configured provider, graceful []-on-failure).
+        from utils.embeddings_client import embed as _embed
+        embedding_vector = await _embed(summary_text) if summary_text else []
         summary = SessionSummary(
             session_id=session_id, user_id=user_id,
             topics_covered=data.get("topics_covered", []),
@@ -91,7 +97,15 @@ async def get_session_summaries(
     user_id: str, current_query: str, top_n: int | None = None
 ) -> list[SessionSummary]:
     limit = top_n or settings.max_session_summaries
-    docs = await session_summaries_collection().find({"user_id": user_id}).sort("date", -1).limit(limit).to_list(length=limit)
+    # Sort by _id (insertion order, always present & indexed) — the summaries had no reliable
+    # `date` field. Degrade to [] on DB error so the reading still proceeds.
+    try:
+        docs = await session_summaries_collection().find(
+            {"user_id": user_id}
+        ).sort("_id", -1).limit(limit).to_list(length=limit)
+    except Exception:
+        logger.warning("Session summaries read failed; continuing without them", exc_info=True)
+        return []
     result = []
     for doc in docs:
         doc.pop("_id", None)
@@ -104,11 +118,15 @@ async def get_session_summaries(
 
 
 async def get_user_memory(user_id: str) -> UserMemoryDocument | None:
-    doc = await user_memory_collection().find_one({"user_id": user_id})
-    if not doc:
+    try:
+        doc = await user_memory_collection().find_one({"user_id": user_id})
+        if not doc:
+            return None
+        doc.pop("_id", None)
+        return UserMemoryDocument(**doc)
+    except Exception:
+        logger.warning("User memory read failed; continuing without it", exc_info=True)
         return None
-    doc.pop("_id", None)
-    return UserMemoryDocument(**doc)
 
 
 async def extract_and_update_user_facts(user_id: str, history: list[dict]) -> None:

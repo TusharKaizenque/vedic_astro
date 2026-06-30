@@ -11,7 +11,18 @@ _db: AsyncIOMotorDatabase | None = None
 
 async def connect_db() -> None:
     global _client, _db
-    _client = AsyncIOMotorClient(settings.mongodb_uri)
+    if _client is not None:          # idempotent: don't leak a prior client on reconnect
+        _client.close()
+    # Bounded timeouts + pooling so a slow/unreachable DB fails fast instead of hanging 30s
+    # per request and exhausting the event loop under load.
+    _client = AsyncIOMotorClient(
+        settings.mongodb_uri,
+        serverSelectionTimeoutMS=5000,
+        connectTimeoutMS=5000,
+        socketTimeoutMS=20000,
+        maxPoolSize=50,
+        retryWrites=True,
+    )
     _db = _client[settings.mongodb_db_name]
     await _client.admin.command("ping")
     logger.info("Connected to MongoDB: %s", settings.mongodb_db_name)
@@ -38,6 +49,11 @@ def charts_collection():
 
 def knowledge_collection():
     return get_db()["knowledge"]
+
+
+def knowledge_gaps_collection():
+    """Tracks chart factors that had no classical source — drives data-driven KB growth."""
+    return get_db()["knowledge_gaps"]
 
 
 def conversations_collection():

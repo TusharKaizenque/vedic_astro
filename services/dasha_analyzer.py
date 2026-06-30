@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 from models.chart import NormalizedChart
 from services.rule_engine.engine import RuleEngineResult
 from services.rule_engine.strength_engine import PlanetStrength
+from utils.astro_constants import TOPIC_AFFLICTING_HOUSES
 
 
 @dataclass
@@ -26,6 +27,7 @@ class DashaLordAnalysis:
     strength_band: str = ""
     functional_nature: str = ""
     is_topic_significator: bool = False
+    placed_in_afflicting: bool = False  # lord sits in a dusthana/difficult house for the topic
     aspects_topic_houses: list[int] = field(default_factory=list)
     yogas: list[str] = field(default_factory=list)
     reading: str = ""
@@ -45,18 +47,37 @@ def _yogas_for_planet(planet: str, yogas: list[str]) -> list[str]:
     return out
 
 
+def _ord(n: int) -> str:
+    if 10 <= n % 100 <= 20:
+        return f"{n}th"
+    return f"{n}{ {1: 'st', 2: 'nd', 3: 'rd'}.get(n % 10, 'th') }"
+
+
 def _read(a: DashaLordAnalysis, topic: str) -> str:
-    lorded = ", ".join(f"{h}th" for h in a.lords_houses) or "no"
+    # Rahu/Ketu rule no sign, so they own no house.
+    if a.lords_houses:
+        lordship = "lords the " + ", ".join(_ord(h) for h in a.lords_houses) + " house"
+    elif a.lord in ("Rahu", "Ketu"):
+        lordship = "rules no house (a shadow graha)"
+    else:
+        lordship = "rules no house"
     base = (
-        f"{a.lord} ({a.level} lord) sits in the {a.placed_house}th house, lords the "
-        f"{lorded} house(s), dignity {a.dignity or 'n/a'}, strength {a.strength_band or 'n/a'}"
+        f"{a.lord} ({a.level} lord) sits in the {_ord(a.placed_house)} house, {lordship}, "
+        f"dignity {a.dignity or 'n/a'}, strength {a.strength_band or 'n/a'}"
     )
     if a.functional_nature and a.functional_nature != "unknown":
         base += f", functional {a.functional_nature}"
     base += "."
     if a.is_topic_significator:
         base += f" It is a significator for {topic}, so its period directly activates {topic} matters"
-        if a.strength_band == "strong":
+        if a.placed_in_afflicting:
+            # Sitting in a dusthana/difficult house for the topic: it activates the matter, but
+            # through friction/obstacles — not a smooth, favourable activation.
+            base += (
+                f", but from the {_ord(a.placed_house)} (a difficult house for {topic}) — so the "
+                f"period stirs {topic} through challenges and obstacles rather than ease."
+            )
+        elif a.strength_band == "strong":
             base += " with strength."
         elif a.strength_band == "weak":
             base += ", but its weakness tempers the results."
@@ -65,7 +86,8 @@ def _read(a: DashaLordAnalysis, topic: str) -> str:
     else:
         base += f" It is not a primary {topic} significator; its period activates {topic} only indirectly"
         if a.aspects_topic_houses:
-            base += f" (it does aspect the {', '.join(str(h) for h in a.aspects_topic_houses)} house)."
+            houses = ", ".join(_ord(h) for h in a.aspects_topic_houses)
+            base += f" (it does aspect the {houses} house)."
         else:
             base += "."
     if a.yogas:
@@ -108,12 +130,14 @@ def _analyze_lord(chart, rule_result, strengths, topic, topic_houses, karakas, l
         or bool(set(lorded) & set(topic_houses))
         or pos.house in topic_houses
     )
+    afflicting_houses = TOPIC_AFFLICTING_HOUSES.get(topic, [6, 8, 12])
     a = DashaLordAnalysis(
         lord=lord, level=level, placed_house=pos.house, lords_houses=lorded,
         dignity=rule_result.planet_strengths.get(lord, ""),
         strength_band=st.band if st else "",
         functional_nature=rule_result.functional_nature.get(lord, "unknown"),
         is_topic_significator=is_sig,
+        placed_in_afflicting=pos.house in afflicting_houses,
         aspects_topic_houses=[h for h in aspects if h in topic_houses],
         yogas=_yogas_for_planet(lord, rule_result.yogas_present),
     )

@@ -8,7 +8,7 @@ matching ``models.knowledge.KnowledgeChunk``.
 import asyncio
 import logging
 
-from pymongo import ASCENDING, TEXT
+from pymongo import ASCENDING, DESCENDING, TEXT
 
 from database.mongodb import close_db, connect_db, get_db
 
@@ -30,8 +30,11 @@ async def create_indexes() -> None:
         await db["conversations"].create_index(
             [("updated_at", ASCENDING)], expireAfterSeconds=2_592_000
         )
-        await db["session_summaries"].create_index([("user_id", ASCENDING)])
-        await db["session_summaries"].create_index([("date", ASCENDING)])
+        # Compound (user_id, _id desc) serves the "latest summaries for a user" query
+        # (filter by user_id, sort by _id) directly from the index.
+        await db["session_summaries"].create_index(
+            [("user_id", ASCENDING), ("_id", DESCENDING)]
+        )
         await db["user_memory"].create_index([("user_id", ASCENDING)], unique=True)
         await db["users"].create_index([("email", ASCENDING)], unique=True)
         await db["users"].create_index([("user_id", ASCENDING)], unique=True)

@@ -94,6 +94,13 @@ def test_unknown_varga_returns_empty():
     assert varga_sign(100.0, "D99") == ""
 
 
+def test_d12_and_d30_computed():
+    # D12 starts from the sign itself; D30 maps to a trimsamsa-ruler sign.
+    assert varga_sign(1.0, "D12") == "Aries"        # Aries 0-2.5° → 1st dwadasamsa = Aries
+    d30 = varga_sign(1.0, "D30")                     # Aries (odd) 0-5° → Mars trimsamsa
+    assert d30 in ZODIAC_SIGNS
+
+
 def test_sign_dignity():
     assert sign_dignity("Sun", "Aries") == "exalted"
     assert sign_dignity("Sun", "Libra") == "debilitated"

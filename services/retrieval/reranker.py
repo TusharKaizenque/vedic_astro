@@ -55,12 +55,20 @@ async def rerank_chunks(
 
         reranked: list[RerankedChunk] = []
         for i, result in enumerate(data.get("results", [])):
-            original_chunk = chunks[result["index"]]
+            idx = result.get("index")
+            if not isinstance(idx, int) or not (0 <= idx < len(chunks)):
+                # Defend against a malformed/out-of-range index rather than letting one bad
+                # row throw and discard the entire rerank via the outer fallback.
+                logger.warning("Rerank result has invalid index %r; skipping", idx)
+                continue
             reranked.append(RerankedChunk(
-                chunk=original_chunk,
-                relevance_score=float(result["relevance_score"]),
+                chunk=chunks[idx],
+                relevance_score=float(result.get("relevance_score", 0.5)),
                 retrieval_rank=i + 1,
             ))
+        # If every row was invalid, fall back to original order rather than returning nothing.
+        if not reranked:
+            raise ValueError("no valid rerank results")
         return reranked
 
     except Exception as e:

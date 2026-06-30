@@ -43,8 +43,9 @@ async def analyze_topics(
     rules: RuleEngineResult,
     strengths: dict[str, PlanetStrength],
     message: str,
+    topics: list[str] | None = None,
 ) -> list[TopicBundle]:
-    topics = resolve_topics(intent)
+    topics = topics or resolve_topics(intent)
 
     # Significators are deterministic + fast — compute all up front.
     sigs = {t: get_significators(intent, chart, rules, topic=t) for t in topics}

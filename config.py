@@ -35,6 +35,13 @@ class Settings(BaseSettings):
     max_conversation_turns: int = 4
     max_session_summaries: int = 5
     prompt_token_budget: int = 4000
+    # Comma-separated allowed CORS origins. "*" is permitted only without credentials
+    # (browsers reject wildcard-with-credentials); pin real origins in production.
+    cors_allow_origins: str = "*"
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.cors_allow_origins.split(",") if o.strip()] or ["*"]
 
     @field_validator("debug", mode="before")
     @classmethod

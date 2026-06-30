@@ -1,0 +1,37 @@
+"""
+Nakshatra analysis — the lunar-mansion layer for the technical (part 2) section.
+
+Surfaces the janma (Moon) nakshatra and the nakshatra-lord *linkage* of the topic's main
+significator. The linkage is a genuine predictive technique: a planet placed in a nakshatra
+ruled by X channels its results through X — e.g. the 10th lord in a Jupiter-ruled nakshatra
+ties the career to Jupiter's significations even if Jupiter is otherwise unrelated.
+"""
+from __future__ import annotations
+
+from utils.nakshatras import nakshatra_lord, nakshatra_of, pada_of, traits_of
+
+
+def format_nakshatra_section(chart, topic_bundles=None) -> str:
+    moon = chart.planets.get("Moon")
+    if moon is None:
+        return ""
+    jn = nakshatra_of(moon.longitude)
+    lines = ["[NAKSHATRA — lunar-mansion layer]"]
+    lines.append(
+        f"Janma (Moon) nakshatra: {jn} pada {pada_of(moon.longitude)}, ruled by "
+        f"{nakshatra_lord(moon.longitude)} — core temperament: {traits_of(jn)}."
+    )
+    # Nakshatra-lord linkage for the main significator of the first topic.
+    if topic_bundles:
+        sig = topic_bundles[0].significators
+        main = sig.primary_houses[0] if sig.primary_houses else None
+        lord = next((f.planet for f in sig.factors if f.lords_house == main), None)
+        if lord:
+            pos = chart.planets.get(lord)
+            if pos:
+                nl = nakshatra_lord(pos.longitude)
+                lines.append(
+                    f"The {main}th lord {lord} sits in {nakshatra_of(pos.longitude)}, ruled by "
+                    f"{nl} — so its results are channelled through {nl}'s significations."
+                )
+    return "\n".join(lines)

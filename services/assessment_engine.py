@@ -135,7 +135,10 @@ def _dasha_timing(
         _lord_read(d.maha_lord, d.maha_functional_nature, d.maha_is_significator),
         _lord_read(d.antar_lord, d.antar_functional_nature, d.antar_is_significator),
     ]
-    reads = [r for r in reads if r]
+    # When Mahadasha and Antardasha share the same lord (e.g. Ketu–Ketu), both reads are
+    # identical — dedupe so the timing line doesn't repeat itself verbatim.
+    seen: set[str] = set()
+    reads = [r for r in reads if r and not (r in seen or seen.add(r))]
 
     if not reads:
         return "neutral", (
@@ -215,9 +218,11 @@ def assess_topic(
     denom = support_score + afflict_score
     margin = round((support_score - afflict_score) / denom, 3) if denom > 0 else 0.0
 
-    # Yogas shift the structural reading: each relevant benefic yoga nudges favourable.
-    yoga_boost = 0.10 * len(significators.relevant_yogas)
-    dosha_drag = 0.08 * len(significators.relevant_doshas)
+    # Yogas/doshas corroborate the structural reading — but are CAPPED so they can't single-
+    # handedly flip a verdict against the lord/karaka margin (e.g. 3 career yogas would
+    # otherwise add +0.30 and mask a genuinely afflicted 10th lord).
+    yoga_boost = min(0.20, 0.10 * len(significators.relevant_yogas))
+    dosha_drag = min(0.16, 0.08 * len(significators.relevant_doshas))
 
     # --- Phase D corroboration: Ashtakavarga (SAV) of the primary house ---
     primary_house = significators.primary_houses[0] if significators.primary_houses else 1

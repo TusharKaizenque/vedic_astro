@@ -33,3 +33,10 @@ def atmakaraka(chart) -> str:
 def amatyakaraka(chart) -> str:
     order = chara_karaka_order(chart)
     return order[1] if len(order) > 1 else ""
+
+
+def darakaraka(chart) -> str:
+    """The Darakaraka (DK) — the chara karaka with the LOWEST degree-in-sign (last in the
+    order). In Jaimini it signifies the spouse's soul / inner nature."""
+    order = chara_karaka_order(chart)
+    return order[-1] if order else ""

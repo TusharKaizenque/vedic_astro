@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Vedic Astro — Reading</title>
+<style>
+  :root {
+    /* Daylight + gold */
+    --bg: #f7f1e3; --panel: #fffdf8; --panel2: #fbf5e7; --accent: #9a7b1f;
+    --accent2: #b8860b; --text: #342f23; --muted: #8c836d;
+    --line: #e7dcc2; --user: #f5ead0; --bot: #fffdf7; --ok: #2e9e6b; --err: #c0392b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: "Segoe UI", system-ui, sans-serif;
+    background: linear-gradient(165deg, #fbf6ea 0%, #f3ead6 100%);
+    color: var(--text); height: 100vh; display: flex; flex-direction: column;
+  }
+  header {
+    display: flex; align-items: center; gap: 12px; padding: 12px 20px;
+    background: linear-gradient(90deg, #fffdf8, #fbf3e0);
+    border-bottom: 1px solid var(--line); box-shadow: 0 1px 10px rgba(154,123,31,.06);
+  }
+  header h1 { font-size: 18px; margin: 0; font-weight: 600; letter-spacing: .3px;
+    display: flex; align-items: center; gap: 9px; }
+  header h1 .logo { width: 30px; height: 30px; border-radius: 50%; object-fit: cover;
+    box-shadow: 0 1px 5px rgba(154,123,31,.35); }
+  header .who { margin-left: auto; font-size: 13px; color: var(--muted); }
+  header button.link {
+    background: none; border: 1px solid var(--line); color: var(--muted);
+    padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;
+  }
+  header button.link:hover { color: var(--text); border-color: var(--accent2); }
+
+  main { flex: 1; display: flex; min-height: 0; }
+  #setup {
+    width: 360px; background: var(--panel); border-right: 1px solid var(--line);
+    padding: 18px; overflow-y: auto; transition: width .2s;
+  }
+  #setup.collapsed { width: 0; padding: 0; overflow: hidden; border: none; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+          padding: 16px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(154,123,31,.07); }
+  .card h2 { font-size: 14px; margin: 0 0 12px; color: var(--accent); display: flex; gap: 8px; }
+  .card h2 .num { background: var(--accent2); color: #fff; width: 20px; height: 20px;
+                  border-radius: 50%; font-size: 12px; display: grid; place-items: center; }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 10px 0 4px; }
+  input, select {
+    width: 100%; padding: 9px 10px; background: var(--bg); border: 1px solid var(--line);
+    border-radius: 8px; color: var(--text); font-size: 14px;
+  }
+  select { cursor: pointer; }
+  input:focus, select:focus { outline: none; border-color: var(--accent2); }
+  .row { display: flex; gap: 10px; }
+  .row > div { flex: 1; }
+  button.primary {
+    width: 100%; margin-top: 14px; padding: 10px; background: var(--accent2); color: #fff;
+    border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(184,134,11,.28);
+  }
+  button.primary:hover { background: var(--accent); }
+  button.primary:disabled { opacity: .5; cursor: not-allowed; }
+  .status { font-size: 12px; margin-top: 10px; min-height: 16px; }
+  .status.ok { color: var(--ok); } .status.err { color: var(--err); }
+  .done { color: var(--ok); font-size: 12px; }
+  /* account switcher */
+  .userlist { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+  .userlist .u { display: flex; align-items: center; gap: 9px; padding: 8px 10px;
+    border: 1px solid var(--line); border-radius: 9px; cursor: pointer; background: var(--panel); }
+  .userlist .u:hover { border-color: var(--accent2); }
+  .userlist .u.active { border-color: var(--accent2); background: var(--user); box-shadow: 0 1px 8px rgba(184,134,11,.12); }
+  .userlist .u .avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent2);
+    color: #fff; display: grid; place-items: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+  .userlist .u .meta { min-width: 0; flex: 1; }
+  .userlist .u .meta .nm { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .userlist .u .meta .em { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .userlist .u .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .userlist .u .dot.ready { background: var(--ok); } .userlist .u .dot.none { background: var(--line); }
+  .userlist .empty-u { font-size: 12px; color: var(--muted); padding: 4px 2px; }
+  .userlist .u .del { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 15px;
+    padding: 2px 5px; border-radius: 6px; flex-shrink: 0; opacity: 0; line-height: 1; }
+  .userlist .u:hover .del { opacity: 1; }
+  .userlist .u .del:hover { color: var(--err); background: rgba(192,57,43,.1); }
+  button.addacct { width: 100%; padding: 8px; background: transparent; border: 1px dashed var(--line);
+    color: var(--muted); border-radius: 8px; cursor: pointer; font-size: 13px; }
+  button.addacct:hover { color: var(--accent); border-color: var(--accent2); }
+
+  /* place search */
+  .geo { display: flex; gap: 8px; }
+  .geo input { flex: 1; }
+  .geo button { background: var(--accent2); color: #fff; border: none; border-radius: 8px;
+    padding: 0 14px; cursor: pointer; font-size: 13px; white-space: nowrap; }
+  .geo button:hover { background: var(--accent); }
+  .georesults { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
+  .georesults .gr { padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; font-size: 12px;
+    cursor: pointer; background: var(--panel); line-height: 1.4; }
+  .georesults .gr:hover { border-color: var(--accent2); background: var(--user); }
+  .georesults .gr .co { color: var(--muted); font-size: 11px; margin-top: 2px; }
+  .georesults .gr.note { cursor: default; color: var(--muted); border-style: dashed; }
+
+  .chartbox { font-size: 13px; line-height: 1.7; }
+  .chartbox b { color: var(--accent); }
+  .small { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+  /* chat */
+  #chat { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  #messages { flex: 1; overflow-y: auto; padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+  .msg { max-width: 760px; }
+  .msg.user { align-self: flex-end; }
+  .msg .bubble {
+    padding: 13px 16px; border-radius: 14px; font-size: 14.5px; line-height: 1.65;
+    box-shadow: 0 1px 8px rgba(154,123,31,.06);
+  }
+  .msg.user .bubble { background: var(--user); border: 1px solid var(--line); border-bottom-right-radius: 4px; }
+  .msg.bot .bubble { background: var(--bot); border: 1px solid var(--line); border-bottom-left-radius: 4px; }
+  .msg .bubble strong { color: var(--accent); }
+  .msg .bubble p { margin: 0 0 10px; } .msg .bubble p:last-child { margin: 0; }
+  .msg .role { font-size: 11px; color: var(--muted); margin: 0 4px 4px; }
+  .msg.user .role { text-align: right; }
+  .typing span { display: inline-block; width: 7px; height: 7px; margin: 0 2px; border-radius: 50%;
+                 background: var(--accent); animation: blink 1.2s infinite both; }
+  .typing span:nth-child(2){ animation-delay:.2s } .typing span:nth-child(3){ animation-delay:.4s }
+  @keyframes blink { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+  .empty { color: var(--muted); text-align: center; margin: auto; max-width: 420px; line-height: 1.7; }
+  .empty .biglogo { width: 132px; height: 132px; border-radius: 50%; object-fit: cover;
+    display: block; margin: 0 auto 14px; box-shadow: 0 4px 22px rgba(154,123,31,.28); }
+  .suggest { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; }
+  .suggest button { background: var(--panel2); border: 1px solid var(--line); color: var(--text);
+    padding: 7px 12px; border-radius: 20px; font-size: 12.5px; cursor: pointer; }
+  .suggest button:hover { border-color: var(--accent2); }
+
+  #composer { border-top: 1px solid var(--line); padding: 14px 20px; display: flex; gap: 10px; background: var(--panel); }
+  #composer textarea {
+    flex: 1; resize: none; height: 46px; max-height: 140px; padding: 12px 14px; background: var(--bg);
+    border: 1px solid var(--line); border-radius: 12px; color: var(--text); font-size: 14.5px; font-family: inherit;
+  }
+  #composer textarea:focus { outline: none; border-color: var(--accent2); }
+  #composer button { background: var(--accent2); color: #fff; border: none; border-radius: 12px;
+    padding: 0 22px; font-size: 14px; font-weight: 600; cursor: pointer; }
+  #composer button:disabled { opacity: .5; cursor: not-allowed; }
+  .gate { color: var(--muted); font-size: 13px; padding: 0 4px; align-self: center; }
+
+  /* compatibility modal */
+  .modal { position: fixed; inset: 0; background: rgba(40,30,10,.45); display: grid; place-items: center; z-index: 50; }
+  .dialog { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; width: 560px;
+    max-width: 94vw; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 12px 44px rgba(0,0,0,.25); }
+  .dhead { display: flex; align-items: center; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+  .dhead h2 { margin: 0; font-size: 16px; color: var(--accent); flex: 1; }
+  .dhead button { background: none; border: none; font-size: 18px; color: var(--muted); cursor: pointer; }
+  .dbody { padding: 18px; overflow-y: auto; }
+  .cscore { display: flex; align-items: baseline; gap: 10px; margin: 6px 0 4px; }
+  .cscore .num { font-size: 32px; font-weight: 700; color: var(--accent); }
+  .cscore .max { color: var(--muted); font-size: 14px; }
+  .cverdict { font-size: 14px; line-height: 1.55; margin-bottom: 14px; padding: 11px 13px;
+    background: var(--user); border-radius: 10px; border: 1px solid var(--line); }
+  .koota { margin: 9px 0; }
+  .koota .kr { display: flex; justify-content: space-between; font-size: 12.5px; margin-bottom: 3px; }
+  .koota .kr b { color: var(--text); font-weight: 600; } .koota .kr span { color: var(--muted); }
+  .bar { height: 7px; background: var(--line); border-radius: 4px; overflow: hidden; }
+  .bar > i { display: block; height: 100%; background: var(--accent2); border-radius: 4px; }
+  .bar > i.zero { background: var(--err); }
+  .knote { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+  .clist { margin: 8px 0 0; padding: 0; list-style: none; }
+  .clist li { font-size: 12.5px; line-height: 1.5; padding: 7px 11px; border-radius: 8px; margin-bottom: 5px; }
+  .clist li.good { background: rgba(46,158,107,.12); color: #1f7a50; }
+  .clist li.warn { background: rgba(192,57,43,.09); color: #a3402f; }
+  .csub { font-size: 11px; color: var(--muted); margin: 16px 0 6px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+</style>
+</head>
+<body>
+<header>
+  <h1><img class="logo" src="/logo.jpg" alt="" /> Vedic Astro</h1>
+  <span class="who" id="who"></span>
+  <button class="link" id="compatBtn" title="Check marriage compatibility">♥ Compatibility</button>
+  <button class="link" id="toggleSetup">Setup</button>
+  <button class="link" id="newSession" title="Start a fresh conversation">New session</button>
+</header>
+
+<div id="compatModal" class="modal" style="display:none">
+  <div class="dialog">
+    <div class="dhead"><h2>♥ Marriage Compatibility</h2><button id="compatClose" title="Close">✕</button></div>
+    <div class="dbody">
+      <div class="small">Enter your partner's birth details. Your own chart is used as the first person.</div>
+      <label>Partner's date of birth</label>
+      <input id="pdate" type="date" />
+      <label>Time (24h)</label>
+      <input id="ptime" type="time" step="1" value="12:00" />
+      <label>Find place (auto-fills coordinates)</label>
+      <div class="geo"><input id="pplaceSearch" placeholder="e.g. Delhi, India" /><button type="button" id="pgeoBtn">Search</button></div>
+      <div id="pgeoResults" class="georesults"></div>
+      <div class="row">
+        <div><label>Latitude</label><input id="plat" type="number" step="any" /></div>
+        <div><label>Longitude</label><input id="plon" type="number" step="any" /></div>
+      </div>
+      <label>Timezone</label>
+      <select id="ptz"></select>
+      <label>Place name</label>
+      <input id="pplace" placeholder="Delhi, India" />
+      <button class="primary" id="compatCheck">Check compatibility</button>
+      <div class="status" id="compatStatus"></div>
+      <div id="compatResult"></div>
+    </div>
+  </div>
+</div>
+
+<main>
+  <aside id="setup">
+    <!-- 1. Accounts -->
+    <div class="card">
+      <h2><span class="num">1</span> Accounts</h2>
+      <div id="userList" class="userlist"></div>
+      <button class="addacct" id="addAcctBtn">＋ New account</button>
+      <div id="acctForm" style="display:none">
+        <label>Name</label>
+        <input id="name" placeholder="Your name" />
+        <label>Email</label>
+        <input id="email" type="email" placeholder="you@example.com" />
+        <button class="primary" id="registerBtn">Create account</button>
+        <button class="addacct" id="cancelAcctBtn" style="margin-top:8px">Cancel</button>
+        <div class="status" id="acctStatus"></div>
+      </div>
+    </div>
+
+    <!-- 2. Birth chart -->
+    <div class="card" id="chartCard">
+      <h2><span class="num">2</span> Birth chart</h2>
+      <div id="chartForm">
+        <label>Date of birth</label>
+        <input id="date" type="date" />
+        <div class="row">
+          <div><label>Time (24h)</label><input id="time" type="time" step="1" value="12:00" /></div>
+        </div>
+        <label>Find place (auto-fills coordinates)</label>
+        <div class="geo">
+          <input id="placeSearch" placeholder="e.g. Mumbai, India" />
+          <button type="button" id="geoBtn">Search</button>
+        </div>
+        <div id="geoResults" class="georesults"></div>
+        <div class="row">
+          <div><label>Latitude</label><input id="lat" type="number" step="any" placeholder="19.07" /></div>
+          <div><label>Longitude</label><input id="lon" type="number" step="any" placeholder="72.87" /></div>
+        </div>
+        <label>Timezone (of birth location)</label>
+        <select id="tz"></select>
+        <label>Place name</label>
+        <input id="place" placeholder="Mumbai, India" />
+        <button class="primary" id="genBtn">Generate chart</button>
+        <div class="status" id="chartStatus"></div>
+        <div class="small">Tip: exact birth time matters — 1 minute ≈ 0.25° of the ascendant.</div>
+      </div>
+      <div id="chartView" style="display:none">
+        <div class="chartbox" id="chartSummary"></div>
+        <button class="primary" id="regenBtn" style="background:transparent;color:var(--accent);border:1px solid var(--line)">Edit / regenerate</button>
+      </div>
+    </div>
+  </aside>
+
+  <section id="chat">
+    <div id="messages"></div>
+    <div id="composer">
+      <textarea id="input" placeholder="Ask about your life, career, marriage, timing…" disabled></textarea>
+      <button id="sendBtn" disabled>Send</button>
+    </div>
+  </section>
+</main>
+
+<script>
+const API = ""; // same origin
+const S = JSON.parse(localStorage.getItem("astroState") || "{}");
+function save() { localStorage.setItem("astroState", JSON.stringify(S)); }
+function $(id) { return document.getElementById(id); }
+
+function newSessionId() { return "s-" + Math.random().toString(36).slice(2, 10); }
+if (!S.sessionId) { S.sessionId = newSessionId(); save(); }
+
+// ---------- timezones ----------
+// Used only if the browser lacks Intl.supportedValuesOf (older browsers).
+const FALLBACK_TZ = [
+  "UTC", "Asia/Kolkata", "Asia/Karachi", "Asia/Dhaka", "Asia/Kathmandu", "Asia/Colombo",
+  "Asia/Dubai", "Asia/Tehran", "Asia/Jerusalem", "Asia/Bangkok", "Asia/Singapore",
+  "Asia/Hong_Kong", "Asia/Shanghai", "Asia/Tokyo", "Asia/Seoul",
+  "Europe/London", "Europe/Dublin", "Europe/Paris", "Europe/Berlin", "Europe/Madrid",
+  "Europe/Rome", "Europe/Amsterdam", "Europe/Moscow", "Europe/Istanbul",
+  "Africa/Cairo", "Africa/Lagos", "Africa/Nairobi", "Africa/Johannesburg", "Africa/Casablanca",
+  "America/New_York", "America/Chicago", "America/Denver", "America/Los_Angeles",
+  "America/Toronto", "America/Mexico_City", "America/Sao_Paulo", "America/Argentina/Buenos_Aires",
+  "Australia/Sydney", "Australia/Perth", "Pacific/Auckland"
+];
+
+function populateTimezones(selectId = "tz", defaultTz = "Asia/Kolkata") {
+  const sel = $(selectId);
+  let zones = null;
+  try { if (Intl.supportedValuesOf) zones = Intl.supportedValuesOf("timeZone"); } catch (e) {}
+  if (!zones || !zones.length) zones = FALLBACK_TZ;
+  const groups = {};
+  zones.forEach(z => {
+    const region = z.includes("/") ? z.split("/")[0] : "UTC / Other";
+    (groups[region] = groups[region] || []).push(z);
+  });
+  sel.innerHTML = "";
+  Object.keys(groups).sort().forEach(region => {
+    const og = document.createElement("optgroup"); og.label = region;
+    groups[region].sort().forEach(z => {
+      const o = document.createElement("option"); o.value = z;
+      o.textContent = (z.includes("/") ? z.split("/").slice(1).join(" / ") : z).replace(/_/g, " ");
+      og.appendChild(o);
+    });
+    sel.appendChild(og);
+  });
+  sel.value = defaultTz;
+  if (!sel.value) sel.value = "Asia/Kolkata";
+}
+
+// ---------- rendering ----------
+function escapeHtml(s) { return s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])); }
+function renderMarkdown(text) {
+  const esc = escapeHtml(text);
+  return esc.split(/\n\n+/).map(p => {
+    let h = p.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/\n/g, "<br>");
+    return "<p>" + h + "</p>";
+  }).join("");
+}
+
+function addMessage(role, html, cls) {
+  const wrap = document.createElement("div");
+  wrap.className = "msg " + role;
+  wrap.innerHTML = '<div class="role">' + (role === "user" ? "You" : "Astrologer") +
+                   '</div><div class="bubble ' + (cls || "") + '">' + html + "</div>";
+  $("messages").appendChild(wrap);
+  scrollDown();
+  return wrap.querySelector(".bubble");
+}
+function scrollDown() { const m = $("messages"); m.scrollTop = m.scrollHeight; }
+
+function showEmpty() {
+  $("messages").innerHTML =
+    '<div class="empty"><img class="biglogo" src="/logo.jpg" alt="" />' +
+    (S.chartReady
+      ? "Your chart is ready. Ask anything about your life.<div class='suggest' id='suggest'></div>"
+      : "Create your account and generate your birth chart to begin.") +
+    "</div>";
+  if (S.chartReady) {
+    const sugs = ["Tell me about how my life will be", "What about my career?",
+                  "When is a good time for marriage?", "Describe my future spouse"];
+    const box = $("suggest");
+    sugs.forEach(t => { const b = document.createElement("button"); b.textContent = t;
+      b.onclick = () => { $("input").value = t; sendMessage(); }; box.appendChild(b); });
+  }
+}
+
+// ---------- accounts ----------
+async function fetchUsers() {
+  try {
+    const r = await fetch(API + "/api/v1/user");
+    if (!r.ok) return;
+    S.users = (await r.json()).users || [];
+    renderUserList();
+  } catch (e) { /* offline — keep last known */ }
+}
+
+function initials(name, email) {
+  const s = (name || email || "?").trim(); const p = s.split(/\s+/);
+  return (((p[0] || "")[0] || "") + ((p[1] || "")[0] || "")).toUpperCase() || "?";
+}
+
+function updateHeader() {
+  $("who").textContent = S.userId ? ((S.name ? S.name + " · " : "") + "session " + S.sessionId.slice(2)) : "";
+}
+
+function renderUserList() {
+  const box = $("userList"), users = S.users || [];
+  box.innerHTML = "";
+  if (!users.length) { box.innerHTML = '<div class="empty-u">No accounts yet — add one below.</div>'; updateHeader(); return; }
+  users.forEach(u => {
+    const row = document.createElement("div");
+    row.className = "u" + (u.user_id === S.userId ? " active" : "");
+    row.innerHTML =
+      '<div class="avatar">' + initials(u.name, u.email) + "</div>" +
+      '<div class="meta"><div class="nm">' + escapeHtml(u.name || "(no name)") + "</div>" +
+      '<div class="em">' + escapeHtml(u.email || "") + "</div></div>" +
+      '<div class="dot ' + (u.has_chart ? "ready" : "none") + '" title="' +
+      (u.has_chart ? "chart ready" : "no chart yet") + '"></div>' +
+      '<button class="del" title="Delete account">✕</button>';
+    row.onclick = () => selectUser(u);
+    row.querySelector(".del").onclick = (e) => { e.stopPropagation(); deleteUser(u); };
+    box.appendChild(row);
+  });
+  updateHeader();
+}
+
+async function deleteUser(u) {
+  if (!confirm('Delete "' + (u.name || u.email) + '" and all their data (chart, chats)? This cannot be undone.')) return;
+  try {
+    const r = await fetch(API + "/api/v1/user/" + u.user_id, { method: "DELETE" });
+    if (!r.ok && r.status !== 404) throw new Error("Delete failed (" + r.status + ")");
+  } catch (e) { alert(e.message); return; }
+  if (u.user_id === S.userId) {        // deleted the active account → clear selection
+    S.userId = null; S.name = null; S.email = null; S.chartReady = false; S.birth = null;
+    S.sessionId = newSessionId(); save();
+    resetChartCard(); $("messages").innerHTML = "";
+  }
+  await fetchUsers();
+  updateGate(); showEmpty();
+}
+
+function resetChartCard() {
+  $("chartForm").style.display = "block"; $("chartView").style.display = "none";
+  ["date", "lat", "lon", "place"].forEach(id => $(id).value = "");
+  $("time").value = "12:00"; $("tz").value = "Asia/Kolkata"; $("chartStatus").textContent = "";
+}
+
+async function selectUser(u) {
+  if (!u) return;
+  if (u.user_id === S.userId) { $("setup").classList.remove("collapsed"); return; }
+  S.userId = u.user_id; S.name = u.name; S.email = u.email;
+  S.sessionId = newSessionId(); S.chartReady = false; S.birth = null; save();
+  $("messages").innerHTML = ""; $("acctForm").style.display = "none";
+  resetChartCard(); renderUserList();
+  await loadExistingChart();      // loads this user's chart + prefills birth form if present
+  updateGate(); showEmpty();
+}
+
+async function register() {
+  const name = $("name").value.trim(), email = $("email").value.trim();
+  const st = $("acctStatus");
+  if (!name || !email) { st.className = "status err"; st.textContent = "Name and email are required."; return; }
+  $("registerBtn").disabled = true; st.className = "status"; st.textContent = "Creating…";
+  try {
+    const r = await fetch(API + "/api/v1/user/register", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email })
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.detail || "Registration failed");
+    S.userId = data.user_id; S.name = data.name; S.email = data.email;
+    S.sessionId = newSessionId(); S.chartReady = false; S.birth = null; save();
+    $("name").value = ""; $("email").value = ""; $("acctForm").style.display = "none"; st.textContent = "";
+    resetChartCard(); $("messages").innerHTML = "";
+    await fetchUsers();             // refresh list (now includes + highlights the new user)
+    updateGate(); showEmpty();
+  } catch (e) {
+    st.className = "status err"; st.textContent = e.message;
+  } finally { $("registerBtn").disabled = false; }
+}
+
+// ---------- place search (geocoding) — reused by the chart form and the partner form ----------
+async function searchPlace(ids) {
+  ids = ids || { q: "placeSearch", box: "geoResults", lat: "lat", lon: "lon", tz: "tz", place: "place" };
+  const q = $(ids.q).value.trim(); const box = $(ids.box);
+  if (q.length < 2) { box.innerHTML = ""; return; }
+  box.innerHTML = '<div class="gr note">Searching…</div>';
+  try {
+    const r = await fetch(API + "/api/v1/geocode?q=" + encodeURIComponent(q));
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.detail || "Search failed");
+    const results = data.results || [];
+    if (!results.length) { box.innerHTML = '<div class="gr note">No matches found.</div>'; return; }
+    box.innerHTML = "";
+    results.forEach(res => {
+      const el = document.createElement("div");
+      el.className = "gr";
+      el.innerHTML = escapeHtml(res.display_name) +
+        '<div class="co">' + res.latitude.toFixed(4) + ", " + res.longitude.toFixed(4) +
+        (res.timezone ? "  ·  " + escapeHtml(res.timezone.replace(/_/g, " ")) : "") + "</div>";
+      el.onclick = () => {
+        $(ids.lat).value = res.latitude; $(ids.lon).value = res.longitude;
+        $(ids.place).value = res.display_name.split(",").slice(0, 2).join(",").trim() || res.display_name;
+        let tzMsg = "please pick the timezone below";
+        if (res.timezone) {
+          const sel = $(ids.tz);
+          if (Array.from(sel.options).some(o => o.value === res.timezone)) {
+            sel.value = res.timezone;
+            tzMsg = "timezone set to " + res.timezone.replace(/_/g, " ");
+          } else {
+            tzMsg = "timezone " + res.timezone + " — select it manually";
+          }
+        }
+        box.innerHTML = '<div class="gr note">✓ Coordinates filled · ' + escapeHtml(tzMsg) + "</div>";
+      };
+      box.appendChild(el);
+    });
+  } catch (e) { box.innerHTML = '<div class="gr note">' + escapeHtml(e.message) + "</div>"; }
+}
+
+// ---------- compatibility ----------
+function openCompat() {
+  if (!S.userId || !S.chartReady) { alert("Generate your own chart first, then check compatibility."); return; }
+  if (!$("ptz").options.length) populateTimezones("ptz", "Asia/Kolkata");
+  $("compatStatus").textContent = "";
+  $("compatModal").style.display = "grid";
+}
+
+function renderCompatibility(rep) {
+  let h = '<div class="cscore"><span class="num">' + rep.total + '</span><span class="max">/ ' + rep.max_total + ' guna</span></div>';
+  h += '<div class="cverdict">' + escapeHtml(rep.verdict) + "</div>";
+  h += '<div class="csub">Breakdown</div>';
+  (rep.kootas || []).forEach(k => {
+    const pct = k.maximum ? Math.round((k.score / k.maximum) * 100) : 0;
+    h += '<div class="koota"><div class="kr"><b>' + escapeHtml(k.name) + "</b><span>" + k.score + " / " + k.maximum + "</span></div>" +
+      '<div class="bar"><i class="' + (k.score === 0 ? "zero" : "") + '" style="width:' + pct + '%"></i></div>' +
+      '<div class="knote">' + escapeHtml(k.note) + "</div></div>";
+  });
+  h += '<div class="csub">Mangal Dosha</div><div class="knote" style="font-size:12.5px">' + escapeHtml(rep.mangal_note || "") + "</div>";
+  if (rep.chart_level)
+    h += '<div class="csub">Chart-level (7th house — deciding layer)</div><div class="knote" style="font-size:12.5px">' + escapeHtml(rep.chart_level) + "</div>";
+  if (rep.strengths && rep.strengths.length)
+    h += '<div class="csub">Strengths</div><ul class="clist">' + rep.strengths.map(s => '<li class="good">✓ ' + escapeHtml(s) + "</li>").join("") + "</ul>";
+  if (rep.cautions && rep.cautions.length)
+    h += '<div class="csub">Cautions</div><ul class="clist">' + rep.cautions.map(s => '<li class="warn">⚠ ' + escapeHtml(s) + "</li>").join("") + "</ul>";
+  $("compatResult").innerHTML = h;
+}
+
+async function checkCompatibility() {
+  const st = $("compatStatus");
+  if (!S.userId || !S.chartReady) { st.className = "status err"; st.textContent = "Generate your own chart first."; return; }
+  const body = {
+    date: $("pdate").value, time: $("ptime").value || "12:00",
+    latitude: parseFloat($("plat").value), longitude: parseFloat($("plon").value),
+    timezone: $("ptz").value, place_name: $("pplace").value.trim() || "Partner",
+  };
+  if (!body.date || isNaN(body.latitude) || isNaN(body.longitude) || !body.timezone) {
+    st.className = "status err"; st.textContent = "Fill the partner's date, coordinates and timezone."; return;
+  }
+  $("compatCheck").disabled = true; st.className = "status"; st.textContent = "Computing match…";
+  try {
+    const r = await fetch(API + "/api/v1/compatibility/" + S.userId, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body),
+    });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.detail || "Compatibility check failed");
+    st.textContent = ""; renderCompatibility(data);
+  } catch (e) { st.className = "status err"; st.textContent = e.message; }
+  finally { $("compatCheck").disabled = false; }
+}
+
+// ---------- chart ----------
+async function generateChart(force) {
+  const st = $("chartStatus");
+  if (!S.userId) { st.className = "status err"; st.textContent = "Create an account first."; return; }
+  const body = {
+    date: $("date").value, time: $("time").value || "12:00",
+    latitude: parseFloat($("lat").value), longitude: parseFloat($("lon").value),
+    timezone: $("tz").value.trim(), place_name: $("place").value.trim() || "Unknown"
+  };
+  if (!body.date || isNaN(body.latitude) || isNaN(body.longitude) || !body.timezone) {
+    st.className = "status err"; st.textContent = "Fill date, latitude, longitude and timezone."; return;
+  }
+  $("genBtn").disabled = true; st.className = "status"; st.textContent = "Generating from Prokerala…";
+  try {
+    const url = API + "/api/v1/chart/" + S.userId + "/generate" + (force ? "?force=true" : "");
+    const r = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+    const data = await r.json();
+    if (!r.ok) throw new Error(data.detail || "Chart generation failed");
+    S.chartReady = true; S.birth = body; save();
+    renderChart(data);
+    showEmpty();
+  } catch (e) {
+    st.className = "status err"; st.textContent = e.message;
+  } finally { $("genBtn").disabled = false; }
+}
+
+function renderChart(d) {
+  $("chartForm").style.display = "none"; $("chartView").style.display = "block";
+  const dasha = d.active_dasha ? (d.active_dasha.maha + " / " + d.active_dasha.antar) : "—";
+  $("chartSummary").innerHTML =
+    "<div><b>Lagna:</b> " + d.lagna + "</div>" +
+    "<div><b>Moon:</b> " + d.moon_sign + "&nbsp;&nbsp;<b>Sun:</b> " + d.sun_sign + "</div>" +
+    "<div><b>Nakshatra:</b> " + (d.nakshatra || "—") + "</div>" +
+    "<div><b>Dasha:</b> " + dasha + "</div>";
+  updateGate();
+}
+
+async function loadExistingChart() {
+  if (!S.userId) return;
+  try {
+    const r = await fetch(API + "/api/v1/chart/" + S.userId);
+    if (!r.ok) { S.chartReady = false; save(); resetChartCard(); return; }
+    const c = await r.json();
+    S.chartReady = true;
+    const b = c.birth_data;
+    if (b) {
+      S.birth = b;
+      $("date").value = b.date || ""; $("time").value = b.time || "12:00";
+      $("lat").value = b.latitude ?? ""; $("lon").value = b.longitude ?? "";
+      $("tz").value = b.timezone || "Asia/Kolkata"; $("place").value = b.place_name || "";
+    }
+    save();
+    renderChart({ lagna: c.lagna_sign, moon_sign: c.moon_sign, sun_sign: c.sun_sign,
+      nakshatra: c.nakshatra, active_dasha: { maha: c.dasha.maha_dasha_lord, antar: c.dasha.antar_dasha_lord } });
+  } catch (e) { /* offline — leave as-is */ }
+}
+
+// ---------- chat (SSE over fetch) ----------
+let streaming = false;
+function updateGate() {
+  const ready = !!(S.userId && S.chartReady);
+  $("input").disabled = !ready || streaming;
+  $("sendBtn").disabled = !ready || streaming;
+  $("input").placeholder = ready ? "Ask about your life, career, marriage, timing…"
+    : "Finish setup (account + chart) to start chatting";
+}
+
+async function sendMessage() {
+  const inp = $("input"); const text = inp.value.trim();
+  if (!text || streaming || !S.userId || !S.chartReady) return;
+  if ($("messages").querySelector(".empty")) $("messages").innerHTML = "";
+  addMessage("user", renderMarkdown(text));
+  inp.value = ""; inp.style.height = "46px";
+  streaming = true; updateGate();
+
+  const bubble = addMessage("bot", '<span class="typing"><span></span><span></span><span></span></span>');
+  let acc = "";
+  try {
+    const r = await fetch(API + "/api/v1/chat/" + S.userId, {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message: text, session_id: S.sessionId })
+    });
+    if (!r.ok || !r.body) throw new Error("Request failed (" + r.status + ")");
+    const reader = r.body.getReader(); const dec = new TextDecoder();
+    let buf = "";
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buf = (buf + dec.decode(value, { stream: true })).replace(/\r\n/g, "\n");
+      const events = buf.split("\n\n"); buf = events.pop();
+      for (const ev of events) {
+        for (const line of ev.split("\n")) {
+          if (!line.startsWith("data:")) continue;
+          let obj; try { obj = JSON.parse(line.slice(5).trim()); } catch { continue; }
+          if (obj.type === "content") { acc += obj.content; bubble.innerHTML = renderMarkdown(acc); scrollDown(); }
+          else if (obj.type === "error") { bubble.innerHTML = renderMarkdown(obj.error || "An error occurred."); bubble.classList.add("err"); }
+        }
+      }
+    }
+    if (!acc) bubble.innerHTML = renderMarkdown("No response received. Please try again.");
+  } catch (e) {
+    bubble.innerHTML = renderMarkdown("⚠ " + e.message);
+  } finally {
+    streaming = false; updateGate(); $("input").focus();
+  }
+}
+
+// ---------- wiring ----------
+$("registerBtn").onclick = register;
+$("addAcctBtn").onclick = () => { $("acctForm").style.display = "block"; $("acctStatus").textContent = ""; $("name").focus(); };
+$("cancelAcctBtn").onclick = () => { $("acctForm").style.display = "none"; $("acctStatus").textContent = ""; };
+$("genBtn").onclick = () => generateChart(false);
+$("geoBtn").onclick = () => searchPlace();
+$("placeSearch").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); searchPlace(); } });
+// compatibility modal
+const _P_IDS = { q: "pplaceSearch", box: "pgeoResults", lat: "plat", lon: "plon", tz: "ptz", place: "pplace" };
+$("compatBtn").onclick = openCompat;
+$("compatClose").onclick = () => { $("compatModal").style.display = "none"; };
+$("compatModal").addEventListener("click", e => { if (e.target === $("compatModal")) $("compatModal").style.display = "none"; });
+$("pgeoBtn").onclick = () => searchPlace(_P_IDS);
+$("pplaceSearch").addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); searchPlace(_P_IDS); } });
+$("compatCheck").onclick = checkCompatibility;
+$("regenBtn").onclick = () => { $("chartForm").style.display = "block"; $("chartView").style.display = "none"; };
+$("sendBtn").onclick = sendMessage;
+$("toggleSetup").onclick = () => $("setup").classList.toggle("collapsed");
+$("newSession").onclick = () => { S.sessionId = newSessionId(); save(); $("messages").innerHTML = ""; showEmpty(); updateHeader(); };
+$("input").addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+});
+$("input").addEventListener("input", function () {
+  this.style.height = "46px"; this.style.height = Math.min(this.scrollHeight, 140) + "px";
+});
+
+// ---------- boot ----------
+(async function init() {
+  populateTimezones("tz", (S.birth && S.birth.timezone) || "Asia/Kolkata");
+  // Offline-friendly: prefill the last-used birth form before any network call.
+  if (S.birth) {
+    $("date").value = S.birth.date || ""; $("time").value = S.birth.time || "12:00";
+    $("lat").value = S.birth.latitude ?? ""; $("lon").value = S.birth.longitude ?? "";
+    $("tz").value = S.birth.timezone || "Asia/Kolkata"; $("place").value = S.birth.place_name || "";
+  }
+  await fetchUsers();
+  if (S.userId) await loadExistingChart();
+  renderUserList();
+  if (S.userId && S.chartReady) $("setup").classList.add("collapsed");
+  updateGate();
+  showEmpty();
+})();
+</script>
+</body>
+</html>

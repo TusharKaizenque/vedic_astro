@@ -17,7 +17,7 @@ from services.rule_engine.engine import RuleEngineResult
 from services.rule_engine.varga_engine import varga_dignity as _varga_dig
 from services.rule_engine.yoga_detector import neecha_bhanga_planets
 from utils.astro_constants import (
-    DIG_BALA_HOUSES, FUNCTIONAL_NATURE_BY_LAGNA, NATURAL_MALEFICS,
+    DIG_BALA_HOUSES, FUNCTIONAL_NATURE_BY_LAGNA, NATURAL_MALEFICS, TOPIC_AFFLICTING_HOUSES,
     TOPIC_FAMILIES, TOPIC_HOUSE_MAP, TOPIC_KEYWORDS, TOPIC_PLANET_MAP, UPACHAYA_HOUSES,
 )
 
@@ -35,15 +35,6 @@ TOPIC_VARGA_MAP: dict[str, str] = {
 }
 
 # Which dusthana houses afflict each topic's primary houses
-TOPIC_AFFLICTING_HOUSES: dict[str, list[int]] = {
-    "career":   [6, 8, 12],
-    "marriage": [6, 8, 12],
-    "children": [5],
-    "health":   [6, 8],
-    "finance":  [8, 12],
-    "property": [8, 12],
-}
-
 
 @dataclass
 class SignificatorFactor:
@@ -145,10 +136,14 @@ def _classify_kind(
 
     Still categorical — the numeric weighting happens later in the assessment engine.
     """
-    is_strong = dignity in ("exalted", "moolatrikona", "own sign") or (
-        "debilitated" in dignity and neecha_bhanga
+    # Substring tests (dignity may carry a " (combust)" suffix, e.g. "exalted (combust)").
+    strong_dignity = any(d in dignity for d in ("exalted", "moolatrikona", "own sign"))
+    is_strong = strong_dignity or ("debilitated" in dignity and neecha_bhanga)
+    # Combustion weakens — but it must not erase exaltation/own-sign: an exalted-but-combust
+    # planet is still a strong significator (combustion reduces, it does not invert dignity).
+    is_weak = ("debilitated" in dignity and not neecha_bhanga) or (
+        "combust" in dignity and not strong_dignity
     )
-    is_weak = ("debilitated" in dignity and not neecha_bhanga) or "combust" in dignity
     is_func_benefic = functional_nature in ("benefic", "yogakaraka")
     is_func_malefic = functional_nature == "malefic"
     natural_malefic = planet in NATURAL_MALEFICS
@@ -340,14 +335,22 @@ def get_significators(
     seen_planets: set[str] = set()
 
     # --- 1. House lord analysis ---
+    # One factor per planet: a planet that rules TWO of the topic's houses (e.g. Saturn
+    # ruling the 10th & 11th for Aries career) is ONE significator, not two. Emitting it
+    # twice would double-weight its vote in the verdict, so we merge its lordships here.
+    lord_to_houses: dict[str, list[int]] = {}
     for house_num in primary_houses:
         lord = rule_result.house_lords.get(house_num, "")
-        if not lord or lord == "Unknown":
-            continue
+        if lord and lord != "Unknown":
+            lord_to_houses.setdefault(lord, []).append(house_num)
+
+    for lord, houses_ruled in lord_to_houses.items():
         pos = chart.planets.get(lord)
         if not pos:
             continue
 
+        is_primary = main_house in houses_ruled
+        ref_house = main_house if is_primary else houses_ruled[0]
         is_afflicting_lord = pos.house in afflicting_houses
         fn = functional.get(lord, "unknown")
         dignity = rule_result.planet_strengths.get(lord, "neutral sign")
@@ -356,10 +359,10 @@ def get_significators(
             for h in primary_houses
         )
         enr = _enrich(lord)
-        is_primary = house_num == main_house
+        role = " & ".join(_ord(h) for h in houses_ruled) + " lord"
 
         factors.append(SignificatorFactor(
-            role=f"{_ord(house_num)} lord",
+            role=role,
             planet=lord,
             placed_house=pos.house,
             sign=pos.sign,
@@ -379,7 +382,7 @@ def get_significators(
             conjunctions=enr["conjunctions"],
             conjunction_influence=enr["conjunction_influence"],
             dispositor=enr["dispositor"],
-            lords_house=house_num,
+            lords_house=ref_house,
         ))
         seen_planets.add(lord)
 
@@ -577,12 +580,13 @@ _YOGA_TOPIC_MAP: dict[str, list[str]] = {
 }
 
 _DOSHA_TOPIC_MAP: dict[str, list[str]] = {
-    "career":     ["Shrapit Dosha", "Pitra Dosha", "Kaal Sarp Dosha"],
+    # Pitra Dosha is ancestral/progeny/peace-related, not a career affliction.
+    "career":     ["Shrapit Dosha", "Kaal Sarp Dosha"],
     "marriage":   ["Mangal Dosha", "Kaal Sarp Dosha"],
     "health":     ["Grahan Dosha", "Mangal Dosha"],
-    "children":   ["Grahan Dosha"],
+    "children":   ["Grahan Dosha", "Pitra Dosha"],
     "finance":    ["Shrapit Dosha", "Kaal Sarp Dosha"],
-    "spirituality": ["Kaal Sarp Dosha"],
+    "spirituality": ["Kaal Sarp Dosha", "Pitra Dosha"],
 }
 
 
