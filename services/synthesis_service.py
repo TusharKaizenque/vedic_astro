@@ -24,8 +24,11 @@ def is_error_reply(text: str) -> bool:
 async def _stream_with_model(
     messages: list[dict], model: str, max_tokens: int = 2400
 ) -> AsyncGenerator[str, None]:
+    # Low temperature: the verdict and chart facts are deterministic, so we want a faithful,
+    # repeatable narration — NOT creative variation. High temp was the main reason re-asking
+    # the same question produced different (and drifting) answers.
     stream = await get_llm_client().chat.completions.create(
-        model=model, messages=messages, temperature=0.72, max_tokens=max_tokens, stream=True,
+        model=model, messages=messages, temperature=0.35, max_tokens=max_tokens, stream=True,
     )
     async for chunk in stream:
         content = chunk.choices[0].delta.content

@@ -92,7 +92,20 @@ Rules:
    in the blocks. No generic "be aware of challenges" filler.
 9. Use a planet's strength EXACTLY as the blocks state it (e.g. if a dasha lord is listed
    "strength moderate", do not call it "weak"). Shadow planets (Rahu/Ketu) are not
-   inherently weak."""
+   inherently weak.
+10. CONSISTENCY ACROSS THE CONVERSATION. The analysis blocks below are recomputed
+    deterministically from the chart and are IDENTICAL every time this person asks about this
+    topic — so your assessment must NOT change between askings. If you (or the user) said
+    something earlier in the conversation, do not contradict the analysis blocks or your own
+    prior verdict to sound fresh. On a repeated or rephrased question, give the SAME core
+    judgment; you may add further grounded detail from the blocks, but never invent new claims,
+    reverse the direction, or drift toward generic statements. The blocks — not the prior
+    chat — are the source of truth.
+11. BE SPECIFIC TO THIS CHART, NOT GENERIC. Every claim must trace to a specific factor in the
+    blocks (a named planet/house/dignity/yoga/dasha). Do not pad with horoscope-column
+    generalities ("you are hardworking and face ups and downs") that would fit anyone. If the
+    blocks support a precise, individual statement, make it; if they do not support a claim,
+    omit it rather than filling space with vague reassurance."""
 
 
 def _render_bundle(bundle, multi: bool, descriptive: bool = False) -> list[str]:
