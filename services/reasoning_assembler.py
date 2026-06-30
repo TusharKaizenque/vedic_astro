@@ -209,10 +209,12 @@ def assemble(
     # --- Dasha line ---
     d = significators.dasha_activation
     dasha_chunk = _find_chunk_for_dasha(d, chunks)
+    from utils.formatting import format_date
+    _antar_end = format_date(d.antar_end) or d.antar_end
     report.dasha = DashaLine(
         statement=(
             f"{d.maha_lord} Mahadasha / {d.antar_lord} Antardasha "
-            f"(the {d.antar_lord} sub-period ends {d.antar_end}; the {d.maha_lord} "
+            f"(the {d.antar_lord} sub-period ends {_antar_end}; the {d.maha_lord} "
             f"Mahadasha itself runs much longer) — activation: {d.activation_strength}"
         ),
         maha_lord=d.maha_lord,
@@ -298,15 +300,15 @@ def format_report_for_prompt(report: ReasoningReport) -> str:
                 lines.append(f"    Source ({line.source}): \"{excerpt}\"")
         lines.append("")
 
-    if report.dasha:
+    # The dasha activation statement already appears in the [VERDICT] timing line and the
+    # [DASHA ANALYSIS] block — only repeat it here when it adds a UNIQUE classical citation,
+    # otherwise it's the same line a third time (noise + token waste).
+    if report.dasha and report.dasha.grounded:
         d = report.dasha
-        lines.append(f"DASHA / TIMING: {d.statement}")
-        if d.grounded:
-            src_label = f"[{d.source}] " if d.source else ""
-            excerpt = d.source_text[:300].rsplit(" ", 1)[0] + "..." if len(d.source_text) > 300 else d.source_text
-            lines.append(f"  Source ({src_label}): \"{excerpt}\"")
-        else:
-            lines.append("  [NO CLASSICAL SOURCE LOADED FOR THIS DASHA COMBINATION]")
+        lines.append(f"DASHA / TIMING (classical source): {d.statement}")
+        src_label = f"[{d.source}] " if d.source else ""
+        excerpt = d.source_text[:300].rsplit(" ", 1)[0] + "..." if len(d.source_text) > 300 else d.source_text
+        lines.append(f"  Source ({src_label}): \"{excerpt}\"")
         lines.append("")
 
     if report.yogas:

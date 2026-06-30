@@ -6,6 +6,20 @@ from utils.llm_client import get_llm_client
 
 logger = logging.getLogger(__name__)
 
+# User-facing failure messages streamed when synthesis can't complete. They are surfaced to
+# the user (so they get feedback) but the router uses these markers to AVOID persisting a
+# failed reading as if it were real conversation history.
+_ERR_GENERIC = "\n\nI encountered an error generating your reading. Please try again."
+_ERR_LIMIT = ("\n\nThe astrology AI service has reached its daily usage limit. "
+              "Your chart analysis is complete, but the written summary can't be "
+              "generated right now — please try again later.")
+ERROR_MARKERS = (_ERR_GENERIC, _ERR_LIMIT)
+
+
+def is_error_reply(text: str) -> bool:
+    """True if the streamed text ended in a synthesis-failure sentinel (don't persist it)."""
+    return any(text.rstrip().endswith(m.rstrip()) for m in ERROR_MARKERS)
+
 
 async def _stream_with_model(
     messages: list[dict], model: str, max_tokens: int = 2400
@@ -67,7 +81,7 @@ async def stream_response(messages: list[dict]) -> AsyncGenerator[str, None]:
         # Don't restart on the fallback if we already streamed part of an answer
         # (would duplicate text); only fall back on a clean rate-limit before output.
         if emitted or not (_is_rate_limit(exc) and fallback and fallback != primary):
-            yield "\n\nI encountered an error generating your reading. Please try again."
+            yield _ERR_GENERIC
             return
 
     # Primary was rate-limited — retry once on the fallback model. The fallback (8b) has a
@@ -81,11 +95,9 @@ async def stream_response(messages: list[dict]) -> AsyncGenerator[str, None]:
     except Exception as exc:
         logger.exception("Fallback synthesis also failed")
         if _is_rate_limit(exc):
-            yield ("\n\nThe astrology AI service has reached its daily usage limit. "
-                   "Your chart analysis is complete, but the written summary can't be "
-                   "generated right now — please try again later.")
+            yield _ERR_LIMIT
         else:
-            yield "\n\nI encountered an error generating your reading. Please try again."
+            yield _ERR_GENERIC
 
 
 async def generate_response(messages: list[dict]) -> str:

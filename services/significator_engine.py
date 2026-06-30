@@ -586,6 +586,7 @@ _DOSHA_TOPIC_MAP: dict[str, list[str]] = {
     "health":     ["Grahan Dosha", "Mangal Dosha"],
     "children":   ["Grahan Dosha", "Pitra Dosha"],
     "finance":    ["Shrapit Dosha", "Kaal Sarp Dosha"],
+    "wealth":     ["Shrapit Dosha", "Kaal Sarp Dosha"],
     "spirituality": ["Kaal Sarp Dosha", "Pitra Dosha"],
 }
 
@@ -674,7 +675,9 @@ def format_significators_for_prompt(result: SignificatorResult) -> str:
     lines.append("")
     # Dasha
     d = result.dasha_activation
-    dasha_line = f"Dasha: {d.maha_lord} Mahadasha / {d.antar_lord} Antardasha (ends {d.antar_end})"
+    from utils.formatting import format_date
+    dasha_line = (f"Dasha: {d.maha_lord} Mahadasha / {d.antar_lord} Antardasha "
+                  f"(ends {format_date(d.antar_end) or d.antar_end})")
     dasha_line += f" — topic activation: {d.activation_strength}"
     if d.maha_is_significator:
         dasha_line += f" [{d.maha_lord} is a topic significator, fn: {d.maha_functional_nature}]"

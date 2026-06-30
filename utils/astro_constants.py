@@ -145,6 +145,7 @@ TOPIC_PLANET_MAP = {
     "business": ["Mercury", "Mars", "Sun"],   # commerce + enterprise + leadership
     "marriage": ["Venus", "Jupiter", "Moon"], "children": ["Jupiter", "Moon"],
     "health": ["Sun", "Mars", "Moon"], "finance": ["Jupiter", "Venus", "Mercury"],
+    "wealth": ["Jupiter", "Venus", "Mercury"], "money": ["Jupiter", "Venus", "Mercury"],
     "property": ["Mars", "Moon"], "education": ["Mercury", "Jupiter"],
     "siblings": ["Mars", "Mercury"], "parents": ["Sun", "Moon"],
     "father": ["Sun"], "mother": ["Moon"], "spirituality": ["Jupiter", "Ketu", "Saturn"],

@@ -58,6 +58,59 @@ NAKSHATRA_TRAITS: dict[str, str] = {
 }
 
 
+# Prokerala (and other ephemerides) return nakshatra names in many spellings/transliterations.
+# Map every variant to our canonical name so the lord / traits / pada lookups never silently
+# fail on a benign spelling difference. Keys are "squashed" (lowercased, alphanumerics only).
+def _squash(name: str) -> str:
+    return "".join(ch for ch in str(name).lower() if ch.isalnum())
+
+
+_NAK_ALIASES: dict[str, str] = {
+    # canonical spellings (squashed) map to themselves
+    **{_squash(n): n for n in NAKSHATRAS},
+    # common transliteration / regional variants
+    "aswini": "Ashwini", "ashvini": "Ashwini", "asvini": "Ashwini",
+    "kritika": "Krittika", "krithika": "Krittika", "karthika": "Krittika", "krithikai": "Krittika",
+    "mrigasira": "Mrigashira", "mrigashirsha": "Mrigashira", "mrugashira": "Mrigashira",
+    "mrigshira": "Mrigashira", "makayiram": "Mrigashira",
+    "aardra": "Ardra", "arudra": "Ardra", "thiruvathira": "Ardra",
+    "punervasu": "Punarvasu", "punarpoosam": "Punarvasu",
+    "pushyami": "Pushya", "pushyam": "Pushya", "poosam": "Pushya",
+    "aslesha": "Ashlesha", "ashlesa": "Ashlesha", "ayilyam": "Ashlesha",
+    "makha": "Magha", "makam": "Magha",
+    "purvaphalguni": "Purva Phalguni", "poorvaphalguni": "Purva Phalguni",
+    "pubba": "Purva Phalguni", "purvafalguni": "Purva Phalguni", "pooram": "Purva Phalguni",
+    "uttaraphalguni": "Uttara Phalguni", "uttarafalguni": "Uttara Phalguni", "uthiram": "Uttara Phalguni",
+    "hastha": "Hasta", "hastham": "Hasta",
+    "chithra": "Chitra", "chithira": "Chitra", "chitta": "Chitra",
+    "svati": "Swati", "swathi": "Swati", "chothi": "Swati",
+    "visakha": "Vishakha", "vishaka": "Vishakha", "vishakam": "Vishakha", "visakam": "Vishakha",
+    "anusham": "Anuradha", "anizham": "Anuradha",
+    "jyeshta": "Jyeshtha", "jyestha": "Jyeshtha", "kettai": "Jyeshtha", "jeshta": "Jyeshtha",
+    "moola": "Mula", "mool": "Mula", "moolam": "Mula",
+    "purvashada": "Purva Ashadha", "poorvashada": "Purva Ashadha", "purvaashadha": "Purva Ashadha",
+    "purvaashada": "Purva Ashadha", "pooradam": "Purva Ashadha", "purvashadha": "Purva Ashadha",
+    "uttarashada": "Uttara Ashadha", "uttaraashadha": "Uttara Ashadha", "uttaraashada": "Uttara Ashadha",
+    "uttaradam": "Uttara Ashadha", "uttarashadha": "Uttara Ashadha",
+    "sravana": "Shravana", "shravan": "Shravana", "thiruvonam": "Shravana",
+    "dhanishtha": "Dhanishta", "dhanista": "Dhanishta", "avittam": "Dhanishta",
+    "shatabhishaj": "Shatabhisha", "satabhisha": "Shatabhisha", "shatabhishak": "Shatabhisha",
+    "shatataraka": "Shatabhisha", "sadayam": "Shatabhisha", "satabhishaj": "Shatabhisha",
+    "purvabhadra": "Purva Bhadrapada", "purvabhadrapada": "Purva Bhadrapada",
+    "poorvabhadrapada": "Purva Bhadrapada", "pooruttathi": "Purva Bhadrapada",
+    "uttarabhadra": "Uttara Bhadrapada", "uttarabhadrapada": "Uttara Bhadrapada",
+    "uttarattathi": "Uttara Bhadrapada", "uthrattathi": "Uttara Bhadrapada",
+    "revathi": "Revati", "revthi": "Revati",
+}
+
+
+def normalize_nakshatra(name: str) -> str:
+    """Map any spelling/transliteration of a nakshatra to our canonical name ("" if unknown)."""
+    if not name:
+        return ""
+    return _NAK_ALIASES.get(_squash(name), "")
+
+
 def nakshatra_index(longitude: float) -> int:
     """0-based nakshatra index (0=Ashwini … 26=Revati)."""
     return int((longitude % 360.0) // _NAK_SPAN) % 27
@@ -79,10 +132,13 @@ def nakshatra_lord(longitude: float) -> str:
 
 
 def nakshatra_lord_by_name(name: str) -> str:
-    if name not in NAKSHATRAS:
+    canonical = name if name in NAKSHATRAS else normalize_nakshatra(name)
+    if canonical not in NAKSHATRAS:
         return ""
-    return VIMSHOTTARI_ORDER[NAKSHATRAS.index(name) % 9]
+    return VIMSHOTTARI_ORDER[NAKSHATRAS.index(canonical) % 9]
 
 
 def traits_of(name: str) -> str:
-    return NAKSHATRA_TRAITS.get(name, "")
+    if name in NAKSHATRA_TRAITS:
+        return NAKSHATRA_TRAITS[name]
+    return NAKSHATRA_TRAITS.get(normalize_nakshatra(name), "")

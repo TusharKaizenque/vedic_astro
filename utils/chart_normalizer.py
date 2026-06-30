@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 
 from models.chart import BirthData, DashaData, HouseData, NormalizedChart, PlanetPosition
 from utils.astro_constants import SANSKRIT_TO_ENGLISH, SIGN_RULERS, ZODIAC_SIGNS
-from utils.nakshatras import nakshatra_of, pada_of
+from utils.nakshatras import nakshatra_of, normalize_nakshatra, pada_of
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +77,31 @@ def normalize_prokerala_response(raw: dict, user_id: str, birth_data: BirthData)
         raise ValueError(f"Chart normalization failed: {exc}") from exc
 
 
+def _resolve_nakshatra(
+    planet: str, longitude: float, provided_name: str, provided_pada: int
+) -> tuple[str, int]:
+    """Single source of truth for a planet's nakshatra + pada.
+
+    The nakshatra/pada are a pure deterministic function of the sidereal longitude (which
+    Prokerala always supplies under ayanamsa=1), so we derive both from it — guaranteeing the
+    name, pada, lord and every prompt block stay mutually consistent. Prokerala's own name is
+    normalised and used only (a) to log a genuine disagreement and (b) as a fallback when the
+    longitude is missing."""
+    norm_provided = normalize_nakshatra(provided_name)
+    if longitude:
+        derived_name = nakshatra_of(longitude)
+        derived_pada = pada_of(longitude)
+        if norm_provided and norm_provided != derived_name:
+            logger.warning(
+                "Nakshatra mismatch for %s: Prokerala '%s' vs longitude-derived '%s' "
+                "(%.4f°) — using longitude-derived for consistency.",
+                planet, provided_name, derived_name, longitude,
+            )
+        return derived_name, derived_pada
+    # No usable longitude — fall back to Prokerala's (normalised) values.
+    return (norm_provided or provided_name or ""), (provided_pada or 1)
+
+
 def _parse_planets(data: dict) -> dict[str, PlanetPosition]:
     result = {}
     source = data.get("planets", data.get("planet_position", {}))
@@ -94,18 +119,22 @@ def _parse_planets(data: dict) -> dict[str, PlanetPosition]:
         # planet still gets a valid sign (and therefore a whole-sign house).
         if sign not in ZODIAC_SIGNS and longitude:
             sign = ZODIAC_SIGNS[int(longitude // 30) % 12]
-        # Prokerala often returns blank nakshatra fields — compute deterministically
-        # from the sidereal longitude (and fall back to any provided value).
+        # Nakshatra and pada are, by definition, a function of the sidereal longitude. We
+        # derive BOTH from the (always-present) Prokerala longitude so the name, pada, lord,
+        # and every downstream prompt block agree exactly — Prokerala's own name field is only
+        # used to cross-check (and as a fallback if the longitude is somehow missing). This
+        # also avoids feeding the LLM two different "locked" janma nakshatras for one planet.
         nak = item.get("nakshatra", {})
         provided_name = nak.get("name", "") if isinstance(nak, dict) else str(nak)
         provided_pada = _int(nak.get("pada")) if isinstance(nak, dict) else 0
+        nak_name, nak_pada = _resolve_nakshatra(canonical, longitude, provided_name, provided_pada)
         result[canonical] = PlanetPosition(
             planet=canonical,
             longitude=longitude,
             sign=sign,
             house=_int(item.get("house")),
-            nakshatra=provided_name or nakshatra_of(longitude),
-            nakshatra_pada=provided_pada or pada_of(longitude),
+            nakshatra=nak_name,
+            nakshatra_pada=nak_pada,
             is_retrograde=_truthy(item.get("isRetrograde", item.get("is_retrograde", False))),
             # Fall back to longitude-within-sign when no explicit in-sign degree is given.
             degree_in_sign=_num(item.get("degree", item.get("longitude_within_sign")), longitude % 30),

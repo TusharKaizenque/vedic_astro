@@ -102,3 +102,34 @@ def test_dhana_yoga_by_opposition():
     # Aries lagna: 2nd lord Venus (Taurus), 11th lord Saturn (Aquarius). Place them opposite.
     chart = _chart({"Venus": _p("Venus", 5, "Aries", 1), "Saturn": _p("Saturn", 6 * 30 + 5, "Libra", 7)})
     assert detect_dhana_yoga(chart)
+
+
+def test_timing_question_leads_with_window():
+    """A 'when …' question injects the ANSWER-FIRST timing directive; a quality question doesn't."""
+    from services import prompt_builder
+    from services.intent_classifier import is_timing_question
+    from models.intent import IntentResult, IntentCategory
+
+    assert is_timing_question("when will I get married")
+    assert is_timing_question("what is a good time for marriage")
+    assert not is_timing_question("how is my marriage")
+    assert not is_timing_question("what is my spouse like")
+
+    intent = IntentResult(intent=IntentCategory.TIMING_QUERY, requires_chart=True)
+    timing_block = "[MARRIAGE TIMING]\n- Mar 2027 – Sep 2027 (Venus MD / Jupiter AD) [STRONG]: ..."
+
+    # WHEN question + a timing block present → the ANSWER-FIRST directive is in the prompt.
+    msgs = prompt_builder.build(
+        "when will I get married", intent, None, None, None, [], None, [], [],
+        marriage_timing=timing_block, timing_lead=True,
+    )
+    ctx = "\n".join(m["content"] for m in msgs)
+    assert "ANSWER THE 'WHEN' FIRST" in ctx
+    assert "VERY FIRST sentence" in ctx
+
+    # Quality question (timing_lead False) → no answer-first directive even if a block exists.
+    msgs2 = prompt_builder.build(
+        "how is my marriage", intent, None, None, None, [], None, [], [],
+        marriage_timing=timing_block, timing_lead=False,
+    )
+    assert "ANSWER THE 'WHEN' FIRST" not in "\n".join(m["content"] for m in msgs2)
