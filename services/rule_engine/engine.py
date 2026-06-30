@@ -2,9 +2,7 @@ from dataclasses import dataclass, field
 
 from models.chart import NormalizedChart
 from services.rule_engine.aspect_engine import get_aspects_by_planet, planets_aspecting_house
-from services.rule_engine.bhava_lords import (
-    BhavaLordReading, analyze_bhava_lords, format_bhava_lords_for_prompt,
-)
+from services.rule_engine.bhava_lords import BhavaLordReading, analyze_bhava_lords
 from services.rule_engine.dosha_detector import detect_all_doshas
 from services.rule_engine.planetary_states import (
     PlanetState, compute_planet_states, format_planet_states_for_prompt,
@@ -118,8 +116,6 @@ def format_rule_result_for_prompt(result: RuleEngineResult) -> str:
     states_block = format_planet_states_for_prompt(result.planet_states)
     if states_block:
         lines.append(states_block)
-    # How each life area plays out, via its house lord's placement.
-    bhava_block = format_bhava_lords_for_prompt(result.bhava_lords)
-    if bhava_block:
-        lines.append(bhava_block)
+    # NB: the bhava-lord placements are emitted as their OWN section in prompt_builder (focused
+    # on the topic's houses and given higher priority), so they survive token-budget trimming.
     return "\n".join(lines)

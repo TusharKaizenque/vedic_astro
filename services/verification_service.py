@@ -15,7 +15,6 @@ genericness/contradictions are caught BEFORE delivery rather than logged after.
 """
 from __future__ import annotations
 
-import json
 import logging
 from dataclasses import dataclass
 
@@ -24,28 +23,39 @@ from utils.llm_client import get_llm_client
 
 logger = logging.getLogger(__name__)
 
-_REVIEW_SYSTEM = """You are the senior reviewer for a Vedic astrology reading. You are given
-the deterministic ANALYSIS BLOCKS (the ground truth) and a DRAFT reading written from them.
+# Plain-text protocol (NOT JSON): a full ~2000-token reading does not survive being embedded as
+# a JSON string at a bounded max_tokens — it truncates/mis-escapes and silently falls back to
+# the generic draft, defeating the pass. So the reviewer replies with either the word PASS or
+# the corrected reading verbatim.
+_PASS_TOKEN = "PASS"
+
+_REVIEW_SYSTEM = """You are the senior reviewer for a Vedic astrology reading. You are given the
+deterministic ANALYSIS BLOCKS (the ground truth) and a DRAFT reading written from them.
 
 Judge the draft on two axes:
 1. GROUNDING — does every astrological claim trace to a specific factor in the blocks (a named
-   planet, house, dignity, yoga, planetary state, bhava-lord placement, or dasha)? Any claim
-   not supported by the blocks, or that contradicts the locked chart facts, is a defect.
-2. SPECIFICITY — is it about THIS chart, or is it generic horoscope filler that would fit
-   anyone ("you are hardworking", "life has ups and downs", "stay positive")? Generic padding
-   is a defect.
+   planet, house, dignity, yoga, planetary state, bhava-lord placement, or dasha)? Any claim not
+   supported by the blocks, or that contradicts the locked chart facts, is a defect.
+2. SPECIFICITY — is it about THIS chart, or generic horoscope filler that would fit anyone
+   ("you are hardworking", "life has ups and downs", "stay positive")? Generic padding is a defect.
 
-Also verify it still answers the user's actual question (timing questions must lead with the
-time window) and keeps the same verdict/direction as the blocks.
+Also confirm it answers the user's actual question (a timing/"when" question must LEAD with the
+time window) and keeps the SAME verdict/direction as the blocks.
 
-Return ONLY JSON:
-{"ok": true}                       if the draft is well-grounded AND specific — no changes needed
-{"ok": false, "refined": "<the full corrected reading>"}   otherwise
+OUTPUT — reply with ONE of exactly these two forms, and NOTHING else:
+- If the draft is well-grounded AND specific AND answers the question: reply with the single
+  word  PASS
+- Otherwise: reply with the FULL corrected reading and nothing else (no preamble, no "REVISED:",
+  no explanation) — start directly with the first section header.
 
-When refining: keep everything the draft got right, keep the EXACT two-section format with the
-same bold headers, cut the generic sentences, replace them with specific block-grounded ones,
-fix contradictions, and never introduce a claim absent from the blocks. Do not mention this
-review, the blocks, or bracket labels in the refined text."""
+When you correct, obey these output rules (same as the original writer):
+- EXACTLY two sections, headers verbatim on their own line:
+  **In plain language**   then   **The astrology behind this**
+- Section 1 is plain language for a layperson: NO planet names, NO house numbers, NO Sanskrit,
+  NO labels. Section 2 carries the technical detail (planets, houses, yogas, dasha, sources).
+- Keep what the draft got right; cut generic sentences and replace them with specific,
+  block-grounded ones; fix any contradiction with the locked facts; never add a claim absent
+  from the blocks. Never print bracket labels or field names from the blocks."""
 
 
 @dataclass
@@ -72,20 +82,20 @@ async def review_reading(draft: str, analysis_blocks: str, question: str) -> Rev
             model=settings.openai_synthesis_model,
             messages=[{"role": "system", "content": _REVIEW_SYSTEM},
                       {"role": "user", "content": user}],
-            temperature=0.2,
-            max_tokens=2600,
-            response_format={"type": "json_object"},
+            temperature=0.0,   # deterministic review — don't reintroduce cross-ask drift
+            max_tokens=3200,    # headroom for a full rewrite in plain text
         )
-        data = json.loads(resp.choices[0].message.content or "{}")
+        out = (resp.choices[0].message.content or "").strip()
     except Exception as exc:
         logger.warning("Verification pass failed (passing draft through): %s", exc)
         return ReviewResult(ok=True, text=draft, refined=False)
 
-    if data.get("ok") is True:
+    # PASS (allow trailing punctuation/explanation) → keep the draft unchanged.
+    if not out or out.upper().startswith(_PASS_TOKEN):
         return ReviewResult(ok=True, text=draft, refined=False)
-    refined = data.get("refined")
-    if isinstance(refined, str) and len(refined) >= 40:
+    # A real correction must look like a reading (has the section header). Otherwise keep the
+    # draft rather than risk delivering reviewer chatter or a truncated fragment.
+    if len(out) >= 80 and ("In plain language" in out or "**" in out):
         logger.info("Verification pass refined the reading for specificity/grounding.")
-        return ReviewResult(ok=False, text=refined, refined=True)
-    # Malformed reviewer output → keep the draft rather than risk a worse/empty reply.
+        return ReviewResult(ok=False, text=out, refined=True)
     return ReviewResult(ok=True, text=draft, refined=False)

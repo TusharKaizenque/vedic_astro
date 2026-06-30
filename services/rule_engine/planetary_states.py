@@ -37,6 +37,12 @@ _MOOLATRIKONA_RANGE = {
     "Venus": ("Libra", 0.0, 15.0), "Saturn": ("Aquarius", 0.0, 20.0),
 }
 
+# Strength ordering of dignities — used as the graha-yuddha victor proxy (see below).
+_DIGNITY_RANK = {
+    "exalted": 5, "moolatrikona": 4, "own sign": 3, "friendly sign": 2,
+    "neutral sign": 1, "enemy sign": 0, "debilitated": -1,
+}
+
 _BALADI = ["Infant", "Adolescent", "Young", "Old", "Dead"]
 # How much of its result a planet in each Baladi avastha can deliver.
 _BALADI_POTENCY = {
@@ -127,16 +133,22 @@ def compute_planet_states(chart: NormalizedChart) -> dict[str, PlanetState]:
             st.avastha_effect = _BALADI_POTENCY.get(st.avastha, "")
         states[name] = st
 
-    # Planetary war (Graha Yuddha): two true planets in the SAME sign within 1°. The planet with
-    # the lower longitude (the one "ahead"/closer to the start of the sign) is taken as the
-    # victor per common convention; the other is defeated and gives diminished results.
+    # Planetary war (Graha Yuddha): two true planets in the SAME sign within 1°. The classical
+    # victor is the stronger/brighter (northern) planet; lacking celestial latitude here, we use
+    # the better dignity as the strength proxy (a defensible deterministic rule), and only fall
+    # back to the lower-longitude convention to break an exact tie. The loser is weakened.
     war_planets = [n for n in _TRUE_PLANETS if n in chart.planets]
     for i in range(len(war_planets)):
         for j in range(i + 1, len(war_planets)):
             a, b = war_planets[i], war_planets[j]
             pa, pb = chart.planets[a], chart.planets[b]
             if pa.sign == pb.sign and _sep(pa.longitude, pb.longitude) <= 1.0:
-                winner, loser = (a, b) if pa.longitude <= pb.longitude else (b, a)
+                ra = _DIGNITY_RANK.get(states[a].dignity, 1)
+                rb = _DIGNITY_RANK.get(states[b].dignity, 1)
+                if ra != rb:
+                    winner, loser = (a, b) if ra > rb else (b, a)
+                else:
+                    winner, loser = (a, b) if pa.longitude <= pb.longitude else (b, a)
                 for who, won in ((winner, True), (loser, False)):
                     s = states[who]
                     s.war = True

@@ -38,7 +38,10 @@ class Settings(BaseSettings):
     # message (more when a refine is actually needed); accuracy is the priority here.
     enable_verification_pass: bool = True
     max_session_summaries: int = 5
-    prompt_token_budget: int = 4000
+    # Raised from 4000 so the deterministic depth (graded yogas, planetary states, bhava-lord
+    # placements, nakshatra layer) survives trimming alongside the chart + bundles. The live
+    # models have 32k+ context, so this is well within budget.
+    prompt_token_budget: int = 6500
     # Comma-separated allowed CORS origins. "*" is permitted only without credentials
     # (browsers reject wildcard-with-credentials); pin real origins in production.
     cors_allow_origins: str = "*"

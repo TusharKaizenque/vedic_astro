@@ -104,22 +104,27 @@ async def stream_response(messages: list[dict]) -> AsyncGenerator[str, None]:
 
 
 async def generate_reading(messages: list[dict], max_tokens: int = 2400) -> str:
-    """Non-streamed full reading (the DRAFT for the verification pass). Falls back to the
-    smaller model on a clean rate-limit, mirroring stream_response."""
+    """Non-streamed full reading (the DRAFT for the verification pass). Tries the primary, then
+    the fallback model on ANY primary failure (not only rate-limits), and returns the same
+    user-facing error sentinel as stream_response on total failure (never a bare '')."""
     primary = settings.openai_synthesis_model
     fallback = settings.openai_reasoning_model
-    for model, mt, msgs in ((primary, max_tokens, messages),
-                            (fallback, 1500, _trim_messages(messages, 3800))):
+    attempts = [(primary, max_tokens, messages)]
+    if fallback and fallback != primary:
+        attempts.append((fallback, 1500, _trim_messages(messages, 3800)))
+    last_exc: Exception | None = None
+    for model, mt, msgs in attempts:
         try:
             resp = await get_llm_client().chat.completions.create(
                 model=model, messages=msgs, temperature=0.35, max_tokens=mt,
             )
-            return resp.choices[0].message.content or ""
+            text = resp.choices[0].message.content or ""
+            if text:
+                return text
         except Exception as exc:
+            last_exc = exc
             logger.warning("Draft synthesis on '%s' failed: %s", model, exc)
-            if not (_is_rate_limit(exc) and fallback and fallback != primary):
-                break
-    return ""
+    return _ERR_LIMIT if (last_exc and _is_rate_limit(last_exc)) else _ERR_GENERIC
 
 
 async def generate_response(messages: list[dict]) -> str:

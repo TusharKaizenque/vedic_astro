@@ -1,5 +1,4 @@
 """Tests for the Phase-3 verification pass (review_reading): pass-through, refine, and degrade."""
-import json
 import types
 
 import pytest
@@ -39,16 +38,23 @@ async def test_short_draft_passthrough_no_llm():
 
 @pytest.mark.asyncio
 async def test_clean_draft_passthrough(monkeypatch):
-    monkeypatch.setattr(vs, "get_llm_client", lambda: _client_returning(json.dumps({"ok": True})))
+    monkeypatch.setattr(vs, "get_llm_client", lambda: _client_returning("PASS"))
     res = await vs.review_reading(DRAFT, "BLOCKS", "how is my career")
     assert res.ok and not res.refined and res.text == DRAFT
 
 
 @pytest.mark.asyncio
+async def test_pass_with_trailing_text_still_passthrough(monkeypatch):
+    monkeypatch.setattr(vs, "get_llm_client", lambda: _client_returning("PASS — well grounded"))
+    res = await vs.review_reading(DRAFT, "BLOCKS", "how is my career")
+    assert res.ok and res.text == DRAFT
+
+
+@pytest.mark.asyncio
 async def test_refine_applied(monkeypatch):
-    refined = DRAFT + "\n\nSpecifically, exalted Saturn in the 10th drives this."
-    monkeypatch.setattr(vs, "get_llm_client",
-                        lambda: _client_returning(json.dumps({"ok": False, "refined": refined})))
+    refined = ("**In plain language**\nYour career rises through disciplined effort.\n\n"
+               "**The astrology behind this**\nExalted Saturn in the 10th drives this.")
+    monkeypatch.setattr(vs, "get_llm_client", lambda: _client_returning(refined))
     res = await vs.review_reading(DRAFT, "BLOCKS", "how is my career")
     assert not res.ok and res.refined and res.text == refined
 
@@ -61,9 +67,8 @@ async def test_degrades_to_draft_on_error(monkeypatch):
 
 
 @pytest.mark.asyncio
-async def test_malformed_refine_keeps_draft(monkeypatch):
-    # ok=false but no usable 'refined' → keep the draft rather than risk an empty reply.
-    monkeypatch.setattr(vs, "get_llm_client",
-                        lambda: _client_returning(json.dumps({"ok": False, "refined": ""})))
+async def test_short_reviewer_output_keeps_draft(monkeypatch):
+    # A too-short / non-reading reply → keep the draft rather than deliver a fragment.
+    monkeypatch.setattr(vs, "get_llm_client", lambda: _client_returning("looks fine"))
     res = await vs.review_reading(DRAFT, "BLOCKS", "q")
     assert res.ok and res.text == DRAFT

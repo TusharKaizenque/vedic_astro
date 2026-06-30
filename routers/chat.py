@@ -253,6 +253,13 @@ async def chat(user_id: str, request: ChatRequest):
                     review = await verification_service.review_reading(
                         draft, blocks, request.message)
                     final_text = review.text
+                    # The reviewer rewrote prose freely — if its rewrite contradicts the locked
+                    # chart facts, fall back to the (already grounded) draft before shipping it.
+                    if review.refined and faithfulness.verify_response(final_text, chart):
+                        logger.warning(
+                            "Verification refine contradicted chart facts for %s; using draft.",
+                            user_id)
+                        final_text = draft
                 for piece in _iter_chunks(final_text):
                     full_response += piece
                     yield {"data": json.dumps({"type": "content", "content": piece})}

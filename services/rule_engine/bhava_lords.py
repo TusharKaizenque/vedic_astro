@@ -60,7 +60,10 @@ def _placement_quality(house: int, placed: int, dignity: str) -> str:
     if house == placed:
         return "strengthened"                       # lord in own house — anchors its matters
     if ruled_is_dusthana and bad_house:
-        return "viparita"                            # dusthana lord in dusthana — paradoxical gain
+        # Viparita Raja Yoga (Harsha/Sarala/Vimala): a 6/8/12 lord in a dusthana CAN turn
+        # difficulty into gain — but only cleanly when the lord itself is not crippled. An
+        # afflicted (debilitated/enemy) such lord reads as strain, not a reliable blessing.
+        return "challenged" if weak_dignity else "viparita"
     if bad_house or weak_dignity:
         return "challenged"
     if good_house and strong_dignity:
@@ -74,7 +77,8 @@ _QUALITY_PHRASE = {
     "strengthened": "this area is well-anchored and tends to deliver",
     "supported": "this area finds support and generally develops well",
     "challenged": "this area meets friction and asks for conscious effort",
-    "viparita": "difficulty here paradoxically converts into gain over time (viparita)",
+    "viparita": "difficulty here can convert into gain over time (viparita raja yoga), "
+                "especially while this planet stays otherwise unafflicted",
     "neutral": "this area unfolds steadily, with mixed influences",
 }
 
@@ -89,7 +93,9 @@ def analyze_bhava_lords(
             continue
         lord = SIGN_RULERS.get(hdata.sign, "")
         pos = chart.planets.get(lord)
-        if not lord or not pos:
+        # Guard against a malformed placement (house outside 1–12) so one bad datum can't
+        # KeyError and take down the whole rule engine / reading.
+        if not lord or not pos or pos.house not in HOUSE_THEMES:
             continue
         dignity = states[lord].dignity if lord in states else ""
         quality = _placement_quality(house, pos.house, dignity)

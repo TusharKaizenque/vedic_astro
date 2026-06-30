@@ -58,15 +58,17 @@ def test_combustion_detected():
 
 
 # ---------- planetary war (graha yuddha) ----------
-def test_planetary_war():
-    # Mars 10.2° and Saturn 10.8° in Aries, within 1° → war; lower-longitude Mars wins.
+def test_planetary_war_winner_by_dignity():
+    # Mars (own sign Aries, strong) at the HIGHER longitude vs Saturn (debilitated Aries) at the
+    # LOWER longitude. The victor is decided by strength, so Mars wins despite the longitude —
+    # proving dignity overrides the old "lower longitude wins" convention.
     planets = {
         "Sun": _p("Sun", 200.0, "Libra", 7),
-        "Mars": _p("Mars", 10.2, "Aries", 1), "Saturn": _p("Saturn", 10.8, "Aries", 1),
+        "Saturn": _p("Saturn", 10.2, "Aries", 1), "Mars": _p("Mars", 10.8, "Aries", 1),
     }
     states = compute_planet_states(_chart(planets))
-    assert states["Mars"].war and states["Mars"].war_won
-    assert states["Saturn"].war and not states["Saturn"].war_won
+    assert states["Mars"].war and states["Mars"].war_won           # stronger (own sign) wins
+    assert states["Saturn"].war and not states["Saturn"].war_won   # debilitated loses
     assert states["Saturn"].war_with == "Mars"
 
 
@@ -127,3 +129,14 @@ def test_nakshatra_profile_present_for_all_27():
         assert prof.get("deity") and prof.get("careers"), f"missing profile for {n}"
     # Tolerates spelling variants via normalization.
     assert profile_of("Pushyami")["deity"].startswith("Brihaspati")
+
+
+def test_viparita_modulated_by_dignity():
+    from services.rule_engine.bhava_lords import _placement_quality
+    # 6th lord in the 8th (both dusthanas): unafflicted → viparita; afflicted → just challenged.
+    assert _placement_quality(6, 8, "neutral sign") == "viparita"
+    assert _placement_quality(6, 8, "own sign") == "viparita"
+    assert _placement_quality(6, 8, "debilitated") == "challenged"   # crippled lord, no clean VRY
+    assert _placement_quality(8, 12, "enemy sign") == "challenged"
+    # A non-dusthana lord in a dusthana is plain challenged, never viparita.
+    assert _placement_quality(4, 8, "neutral sign") == "challenged"

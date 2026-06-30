@@ -266,6 +266,19 @@ def build(
     for bundle in bundles:
         sections.extend(_render_bundle(bundle, multi, descriptive))
 
+    # Bhava-lord placements — how each life area plays out. Emitted as its OWN high-priority
+    # section (right after the bundles, ahead of transit/memory) and FOCUSED on the topic's
+    # houses, so this depth survives token-budget trimming instead of being dropped with the
+    # low-priority rule-facts block.
+    if rule_results and getattr(rule_results, "bhava_lords", None):
+        from services.rule_engine.bhava_lords import format_bhava_lords_for_prompt
+        focus = []
+        for b in bundles:
+            focus.extend(getattr(b.significators, "primary_houses", []) or [])
+        bhava_text = format_bhava_lords_for_prompt(rule_results.bhava_lords, focus or None)
+        if bhava_text:
+            sections.append(bhava_text)
+
     # Forward-looking dasha projection — for future-dated questions ("...in 2027?").
     if future_dasha:
         sections.append(future_dasha)
