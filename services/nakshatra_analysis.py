@@ -11,15 +11,17 @@ from __future__ import annotations
 from utils.nakshatras import nakshatra_lord, nakshatra_of, pada_of, profile_of, traits_of
 
 
-def format_nakshatra_section(chart, topic_bundles=None) -> str:
+def format_nakshatra_section(chart, topic_bundles=None, broad: bool = False) -> str:
     moon = chart.planets.get("Moon")
     if moon is None:
         return ""
     jn = nakshatra_of(moon.longitude)
     prof = profile_of(jn)
     lines = ["[NAKSHATRA — lunar-mansion layer]"]
+    # The full deity/symbol/vocation profile is whole-chart identity — reserve it for broad
+    # (life-overview) readings; a focused question gets the temperament line + the topic linkage.
     detail = ""
-    if prof:
+    if prof and broad:
         detail = (f" Deity {prof.get('deity', '')}, symbol the {prof.get('symbol', '')}; "
                   f"natural vocational leanings: {prof.get('careers', '')}.")
     lines.append(

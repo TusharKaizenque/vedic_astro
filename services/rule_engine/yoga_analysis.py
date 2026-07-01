@@ -253,11 +253,20 @@ def format_yoga_timing_for_prompt(
             "these are the upcoming windows]\n" + "\n".join(lines))
 
 
-def format_yoga_analysis_for_prompt(readings: list[YogaReading]) -> str:
+def format_yoga_analysis_for_prompt(readings: list[YogaReading], limit: int = 8) -> str:
+    """Render the DECISION-RELEVANT yogas only. A chart can throw 12+ yogas; dumping them all
+    (including weak/incidental ones) buries the few that actually shape the life and dilutes the
+    reading. We keep the strongest beneficial ones (already sorted strongest-first) up to `limit`,
+    drop the weakest 'weakened' tier, and ALWAYS keep the adverse ones (they are real warnings)."""
     if not readings:
         return ""
-    lines = ["[YOGA ANALYSIS — graded for this chart; cite the source when you mention one]"]
-    for y in readings:
+    benefic = [y for y in readings if not y.adverse and y.strength != "weakened"][:limit]
+    adverse = [y for y in readings if y.adverse]
+    chosen = benefic + adverse
+    if not chosen:
+        return ""
+    lines = ["[YOGA ANALYSIS — the yogas that most shape this chart; cite the source when named]"]
+    for y in chosen:
         who = f" ({', '.join(y.participants)})" if y.participants else ""
         grade = f"[{y.strength}]"
         eff = f" — {y.effect}" if y.effect else ""

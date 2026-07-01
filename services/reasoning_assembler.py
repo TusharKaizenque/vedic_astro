@@ -259,10 +259,9 @@ def format_report_for_prompt(report: ReasoningReport) -> str:
     if not report.supporting and not report.afflicting and not report.neutral:
         return ""
 
-    lines = [f"[REASONING REPORT — {report.topic}]"]
-    grounded_pct = int(report.grounded_count / report.total_factors * 100) if report.total_factors else 0
-    lines.append(f"({report.grounded_count}/{report.total_factors} factors have classical sources — {grounded_pct}% grounded)")
-    lines.append("")
+    # (The grounded-% / X-of-Y count is a QA metric the narrator is explicitly forbidden to quote
+    # — it only adds a line the model must learn to ignore, so it's kept in logs, not the prompt.)
+    lines = [f"[REASONING REPORT — {report.topic}]", ""]
 
     if report.supporting:
         lines.append("SUPPORTING FACTORS:")
@@ -326,9 +325,6 @@ def format_report_for_prompt(report: ReasoningReport) -> str:
         lines.append(f"RELEVANT DOSHAS: {', '.join(report.doshas)}")
         lines.append("")
 
-    if report.ungrounded_factors:
-        ungrounded_names = list({l.planet for l in report.ungrounded_factors})
-        lines.append(f"NOTE: {len(report.ungrounded_factors)} factor(s) have no classical source loaded "
-                     f"({', '.join(ungrounded_names)}). The knowledge base needs these chunks.")
-
+    # (KB-gap tracking is done by gap_logger for data-driven KB growth — it is NOT a narration
+    # instruction, so the "knowledge base needs these chunks" note is no longer put in the prompt.)
     return "\n".join(lines)

@@ -122,7 +122,17 @@ def format_bhava_lords_for_prompt(
     if not readings:
         return ""
     focus = set(focus_houses or [])
-    ordered = sorted(readings, key=lambda r: (r.house not in focus, r.house))
+    if focus:
+        # Focused question → show ONLY the topic's houses (and where each of their lords sits).
+        # Dumping all 12 life areas for a career question is noise that dilutes the answer.
+        lord_houses = {r.placed_house for r in readings if r.house in focus}
+        chosen = [r for r in readings if r.house in focus or r.house in lord_houses]
+        chosen.sort(key=lambda r: (r.house not in focus, r.house))
+    else:
+        # No focus (life-overview) → the whole set, in house order.
+        chosen = sorted(readings, key=lambda r: r.house)
+    if not chosen:
+        return ""
     lines = ["[BHAVA-LORD PLACEMENTS — how each life area actually plays out (deterministic)]"]
-    lines.extend(f"  • {r.statement}" for r in ordered)
+    lines.extend(f"  • {r.statement}" for r in chosen)
     return "\n".join(lines)

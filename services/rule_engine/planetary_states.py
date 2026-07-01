@@ -166,6 +166,9 @@ def format_planet_states_for_prompt(states: dict[str, PlanetState]) -> str:
     the block stays signal-dense and chart-specific."""
     notable: list[str] = []
     for name, st in states.items():
+        # A planet is listed only for a PRIMARY condition (strong dignity / combust / war /
+        # retrograde). Avastha is a secondary modifier — it never lists a planet on its own
+        # (otherwise nearly every planet appears, since the 5 avasthas tile all degrees).
         bits: list[str] = []
         if st.dignity in ("exalted", "debilitated", "moolatrikona"):
             bits.append(st.dignity)
@@ -173,12 +176,14 @@ def format_planet_states_for_prompt(states: dict[str, PlanetState]) -> str:
             bits.append(f"combust ({st.combust_orb}° from Sun)")
         if st.war:
             bits.append("won planetary war" if st.war_won else f"lost planetary war to {st.war_with}")
-        if st.avastha in ("Young", "Dead", "Infant"):
-            bits.append(f"{st.avastha} avastha — {st.avastha_effect}")
         if st.retrograde and name not in ("Rahu", "Ketu"):
             bits.append("retrograde (intensified, inward results)")
-        if bits:
-            notable.append(f"  {name}: " + "; ".join(bits))
+        if not bits:
+            continue
+        # Append only the extreme avasthas (peak or dormant), as a modifier on an already-notable planet.
+        if st.avastha in ("Young", "Dead"):
+            bits.append(f"{st.avastha} avastha — {st.avastha_effect}")
+        notable.append(f"  {name}: " + "; ".join(bits))
     if not notable:
         return ""
     return "[PLANETARY STATES — chart-specific conditions]\n" + "\n".join(notable)

@@ -91,16 +91,16 @@ def run_rule_engine(chart: NormalizedChart) -> RuleEngineResult:
     return result
 
 
-def format_rule_result_for_prompt(result: RuleEngineResult) -> str:
+def format_rule_result_for_prompt(result: RuleEngineResult, broad: bool = False) -> str:
+    # NOTE ON REDUNDANCY: each planet's dignity, its retrograde flag, and the active-dasha
+    # lords/dates are ALREADY printed authoritatively in the [NATAL CHART] block. Repeating them
+    # here just made the narrator restate the chart, so this block now carries ONLY facts that
+    # appear nowhere else: doshas, functional (lagna-specific) nature, yogas, and planetary states.
     lines = [
         "[VERIFIED CHART FACTS — deterministic rule engine]",
         f"Doshas present: {', '.join(result.doshas_present) or 'None detected'}",
-        "Planet strengths:",
     ]
-    lines.extend(f"  {planet}: {strength}" for planet, strength in result.planet_strengths.items())
-    if result.retrograde_planets:
-        lines.append(f"Retrograde planets: {', '.join(result.retrograde_planets)}")
-    if result.dig_bala_planets:
+    if broad and result.dig_bala_planets:
         lines.append(f"Dig Bala (directional strength): {', '.join(result.dig_bala_planets)}")
     if result.functional_nature:
         benefics = [p for p, n in result.functional_nature.items() if n in ("benefic", "yogakaraka")]
@@ -112,9 +112,9 @@ def format_rule_result_for_prompt(result: RuleEngineResult) -> str:
             lines.append(f"Functional benefics: {', '.join(benefics)}")
         if malefics:
             lines.append(f"Functional malefics: {', '.join(malefics)}")
-    lines.append(f"Active dasha: {result.active_dasha.get('maha')} MD / {result.active_dasha.get('antar')} AD")
-    # Graded, chart-specific yoga readings replace the old bare name list.
-    yoga_block = format_yoga_analysis_for_prompt(result.yoga_readings)
+    # Graded, chart-specific yoga readings replace the old bare name list. Fewer for a focused
+    # question (the strongest few are what matter), more for a whole-life reading.
+    yoga_block = format_yoga_analysis_for_prompt(result.yoga_readings, limit=10 if broad else 6)
     if yoga_block:
         lines.append(yoga_block)
     elif not result.yogas_present:
@@ -123,12 +123,13 @@ def format_rule_result_for_prompt(result: RuleEngineResult) -> str:
     states_block = format_planet_states_for_prompt(result.planet_states)
     if states_block:
         lines.append(states_block)
-    # Vargottama planets (D1 == D9 sign) — as strong as exalted; a promise that holds up.
-    if result.vargottama:
+    # Whole-chart strength meta (Vargottama, Vimshopaka) — chart-WIDE context that restates
+    # strength, so it's reserved for BROAD (life-overview) readings; on a focused topic question
+    # the per-topic bundle and planetary states already carry the relevant strength.
+    if broad and result.vargottama:
         lines.append("Vargottama (same sign in D1 & Navamsa — very strong): "
                      + ", ".join(result.vargottama))
-    # Vimshopaka Bala — composite divisional strength (0–20). Name the standouts only.
-    if result.vimshopaka:
+    if broad and result.vimshopaka:
         ranked = sorted(result.vimshopaka.items(), key=lambda kv: kv[1], reverse=True)
         strong = [f"{p} ({v}, {vimshopaka_band(v)})" for p, v in ranked if v >= 10]
         weak = [f"{p} ({v}, {vimshopaka_band(v)})" for p, v in ranked if v < 5]

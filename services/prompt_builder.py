@@ -317,13 +317,16 @@ def build(
     # Nakshatra (lunar-mansion) layer — chart-level, part of the technical evidence.
     if chart and bundles:
         from services.nakshatra_analysis import format_nakshatra_section
-        nak_text = format_nakshatra_section(chart, bundles)
+        nak_text = format_nakshatra_section(chart, bundles, broad=bool(life_overview))
         if nak_text:
             sections.append(nak_text)
 
     # Arudha Lagna (public image) — for identity/status/wealth/marriage topics and life readings.
-    _AL_TOPICS = {"career", "profession", "job", "business", "wealth", "finance", "money",
-                  "income", "marriage", "fame", "reputation", "status", "self"}
+    # Arudha (public image) is central to reputation/status/fame/politics and the public face of
+    # marriage & business — but tangential to a plain "how is my career / income" question, so it
+    # no longer fires for those (it would just add whole-chart image context as noise).
+    _AL_TOPICS = {"business", "marriage", "fame", "reputation", "status", "politics",
+                  "government", "self"}
     if chart and (life_overview or any(getattr(b, "topic", "") in _AL_TOPICS for b in bundles)):
         from services.arudha_analysis import build_arudha_reading, format_arudha_for_prompt
         al_text = format_arudha_for_prompt(build_arudha_reading(chart))
@@ -349,7 +352,7 @@ def build(
 
     # Deterministic rule engine facts
     if rule_results:
-        sections.append(format_rule_result_for_prompt(rule_results))
+        sections.append(format_rule_result_for_prompt(rule_results, broad=bool(life_overview)))
 
     # Fallback: no topic bundles (e.g. no chart) — show raw KB chunks
     if not bundles and chunks:
