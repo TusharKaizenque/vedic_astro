@@ -35,6 +35,13 @@ def amatyakaraka(chart) -> str:
     return order[1] if len(order) > 1 else ""
 
 
+def putrakaraka(chart) -> str:
+    """The Putrakaraka (PK) — 5th in the chara-karaka order (5th-highest degree). In Jaimini it
+    is the significator of children/progeny and creative intelligence."""
+    order = chara_karaka_order(chart)
+    return order[4] if len(order) > 4 else ""
+
+
 def darakaraka(chart) -> str:
     """The Darakaraka (DK) — the chara karaka with the LOWEST degree-in-sign (last in the
     order). In Jaimini it signifies the spouse's soul / inner nature."""

@@ -160,6 +160,7 @@ def build(
     wealth_timing: str = "",
     career_timing: str = "",
     timing_lead: bool = False,
+    children_timing: str = "",
 ) -> list[dict]:
     budget = settings.prompt_token_budget
     sections = []
@@ -253,6 +254,10 @@ def build(
     # Career-timing windows (dasha of karma significators) — additive to the career verdict.
     if career_timing:
         sections.append(career_timing)
+
+    # Children-timing windows (dasha of the 5th-house/putra significators).
+    if children_timing:
+        sections.append(children_timing)
 
     # Per-topic deterministic bundles (verdict-led). One block per resolved topic.
     # For a DESCRIPTIVE spouse question the SPOUSE PROFILE replaces the marriage verdict-bundle

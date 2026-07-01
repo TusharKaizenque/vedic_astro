@@ -158,6 +158,49 @@ def varga_dignity(planet: str, longitude: float, varga: str) -> str:
     return sign_dignity(planet, varga_sign(longitude, varga))
 
 
+def vargottama_planets(chart: NormalizedChart) -> list[str]:
+    """Planets in the SAME sign in the rasi (D1) and Navamsa (D9) — 'vargottama', classically
+    as strong as exalted: a promise that holds up under the closest divisional scrutiny."""
+    out: list[str] = []
+    for name, pos in chart.planets.items():
+        if pos.sign and varga_sign(pos.longitude, "D9") == pos.sign:
+            out.append(name)
+    return out
+
+
+# Shadvarga (six-chart) Vimshopaka weights (sum = 20) and a dignity-quality factor per varga.
+_SHADVARGA_WEIGHTS = {"D1": 6.0, "D2": 2.0, "D3": 4.0, "D9": 5.0, "D12": 2.0, "D30": 1.0}
+_VIMSHOPAKA_FACTOR = {
+    "exalted": 1.0, "moolatrikona": 1.0, "own sign": 1.0,
+    "friendly sign": 0.75, "neutral sign": 0.5, "enemy sign": 0.25, "debilitated": 0.0,
+}
+
+
+def vimshopaka_bala(chart: NormalizedChart) -> dict[str, float]:
+    """Composite Vimshopaka strength (0–20) across the six Shadvarga charts — how well a planet
+    holds its dignity when the chart is examined at finer and finer divisions."""
+    scores: dict[str, float] = {}
+    for name, pos in chart.planets.items():
+        if name in ("Rahu", "Ketu"):     # nodes own no signs → no varga dignity
+            continue
+        total = 0.0
+        for varga, weight in _SHADVARGA_WEIGHTS.items():
+            dig = varga_dignity(name, pos.longitude, varga)
+            total += weight * _VIMSHOPAKA_FACTOR.get(dig, 0.5)
+        scores[name] = round(total, 1)
+    return scores
+
+
+def vimshopaka_band(score: float) -> str:
+    if score >= 15:
+        return "very strong"
+    if score >= 10:
+        return "strong"
+    if score >= 5:
+        return "moderate"
+    return "weak"
+
+
 _STRONG = {"exalted", "own sign", "moolatrikona"}
 _WEAK = {"debilitated", "enemy sign"}
 

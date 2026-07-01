@@ -11,6 +11,9 @@ from services.rule_engine.strength_calculator import calculate_all_strengths
 from services.rule_engine.yoga_analysis import (
     YogaReading, analyze_yogas, format_yoga_analysis_for_prompt,
 )
+from services.rule_engine.varga_engine import (
+    vargottama_planets, vimshopaka_bala, vimshopaka_band,
+)
 from services.rule_engine.yoga_detector import detect_all_yogas
 from utils.astro_constants import (
     DIG_BALA_HOUSES, DUSTHANA_HOUSES, FUNCTIONAL_NATURE_BY_LAGNA,
@@ -38,6 +41,8 @@ class RuleEngineResult:
     planet_states: dict[str, PlanetState] = field(default_factory=dict)
     yoga_readings: list[YogaReading] = field(default_factory=list)
     bhava_lords: list[BhavaLordReading] = field(default_factory=list)
+    vargottama: list[str] = field(default_factory=list)
+    vimshopaka: dict[str, float] = field(default_factory=dict)
 
 
 def run_rule_engine(chart: NormalizedChart) -> RuleEngineResult:
@@ -57,6 +62,8 @@ def run_rule_engine(chart: NormalizedChart) -> RuleEngineResult:
         planet_states=states,
         yoga_readings=analyze_yogas(chart, yogas, states),
         bhava_lords=analyze_bhava_lords(chart, states),
+        vargottama=vargottama_planets(chart),
+        vimshopaka=vimshopaka_bala(chart),
         doshas_present=detect_all_doshas(chart),
         planet_strengths=calculate_all_strengths(chart),
         house_lords=house_lords,
@@ -116,6 +123,19 @@ def format_rule_result_for_prompt(result: RuleEngineResult) -> str:
     states_block = format_planet_states_for_prompt(result.planet_states)
     if states_block:
         lines.append(states_block)
+    # Vargottama planets (D1 == D9 sign) — as strong as exalted; a promise that holds up.
+    if result.vargottama:
+        lines.append("Vargottama (same sign in D1 & Navamsa — very strong): "
+                     + ", ".join(result.vargottama))
+    # Vimshopaka Bala — composite divisional strength (0–20). Name the standouts only.
+    if result.vimshopaka:
+        ranked = sorted(result.vimshopaka.items(), key=lambda kv: kv[1], reverse=True)
+        strong = [f"{p} ({v}, {vimshopaka_band(v)})" for p, v in ranked if v >= 10]
+        weak = [f"{p} ({v}, {vimshopaka_band(v)})" for p, v in ranked if v < 5]
+        if strong:
+            lines.append("Vimshopaka Bala — divisionally strongest: " + ", ".join(strong))
+        if weak:
+            lines.append("Vimshopaka Bala — divisionally weakest: " + ", ".join(weak))
     # NB: the bhava-lord placements are emitted as their OWN section in prompt_builder (focused
     # on the topic's houses and given higher priority), so they survive token-budget trimming.
     return "\n".join(lines)

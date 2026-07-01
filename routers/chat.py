@@ -22,6 +22,7 @@ from services.spouse_engine import build_spouse_profile, format_spouse_profile_f
 from services.marriage_timing import build_marriage_timing, format_marriage_timing_for_prompt
 from services.wealth_timing import build_wealth_timing, format_wealth_timing_for_prompt
 from services.career_timing import build_career_timing, format_career_timing_for_prompt
+from services.children_timing import build_children_timing, format_children_timing_for_prompt
 from services.transit_engine import (
     gochara_report, parse_transit_positions, resolve_transit_date,
 )
@@ -133,6 +134,7 @@ async def chat(user_id: str, request: ChatRequest):
             marriage_timing_text = ""
             wealth_timing_text = ""
             career_timing_text = ""
+            children_timing_text = ""
             # A pure continuation ("tell me more") carries no framing of its own — resolve the
             # answer mode against the substantive question it continues, so the reading doesn't
             # silently flip from descriptive/overview back to a default verdict on a follow-up.
@@ -210,6 +212,14 @@ async def chat(user_id: str, request: ChatRequest):
                         build_career_timing(chart, rules, datetime.now(timezone.utc)),
                         datetime.now(timezone.utc),
                     )
+                # Children-timing — for children/progeny questions that ask WHEN (same gate).
+                _is_children = not _overview and any(
+                    _b.topic in {"children", "child", "fertility", "progeny"} for _b in topic_bundles)
+                if _is_children and _wants_timing:
+                    children_timing_text = format_children_timing_for_prompt(
+                        build_children_timing(chart, rules, datetime.now(timezone.utc)),
+                        datetime.now(timezone.utc),
+                    )
                 # For timing / future-dated questions: gochara transits + forward dasha.
                 if intent.requires_transits or intent.entities.time_references:
                     target = resolve_transit_date(
@@ -236,7 +246,7 @@ async def chat(user_id: str, request: ChatRequest):
                 request.message, intent, chart, rules, topic_bundles, chunks,
                 memory, summaries, history, transit_report, future_dasha, descriptive,
                 life_overview_text, spouse_text, marriage_timing_text, wealth_timing_text,
-                career_timing_text, timing_lead,
+                career_timing_text, timing_lead, children_timing_text,
             )
             # Phase-3 verification gate: when enabled (and we have a chart), generate a draft,
             # review it against the deterministic blocks, and stream the refined result — so a
