@@ -322,10 +322,12 @@ def build(
             sections.append(nak_text)
 
     # Arudha Lagna (public image) — for identity/status/wealth/marriage topics and life readings.
-    # Arudha (public image) is central to reputation/status/fame/politics and the public face of
-    # marriage & business — but tangential to a plain "how is my career / income" question, so it
-    # no longer fires for those (it would just add whole-chart image context as noise).
-    _AL_TOPICS = {"business", "marriage", "fame", "reputation", "status", "politics",
+    # Arudha (public image) is a DISTINCT signal from house strength — the perceived professional
+    # standing, perceived affluence, and public face of partnership. So it fires for career/
+    # wealth/status/reputation/marriage/self, but NOT where public image is genuinely irrelevant
+    # (health, children, education, spirituality) — there it would just be noise.
+    _AL_TOPICS = {"career", "profession", "job", "business", "wealth", "finance", "money",
+                  "income", "marriage", "fame", "reputation", "status", "politics",
                   "government", "self"}
     if chart and (life_overview or any(getattr(b, "topic", "") in _AL_TOPICS for b in bundles)):
         from services.arudha_analysis import build_arudha_reading, format_arudha_for_prompt

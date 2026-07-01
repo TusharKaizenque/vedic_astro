@@ -161,14 +161,17 @@ def compute_planet_states(chart: NormalizedChart) -> dict[str, PlanetState]:
     return states
 
 
-def format_planet_states_for_prompt(states: dict[str, PlanetState]) -> str:
-    """Only emit the NOTEWORTHY states (combust / at war / extreme avastha / strong dignity) so
-    the block stays signal-dense and chart-specific."""
+def format_planet_states_for_prompt(
+    states: dict[str, PlanetState], focus_planets: set[str] | None = None
+) -> str:
+    """Emit the NOTEWORTHY states. A planet lists for a PRIMARY condition (strong dignity /
+    combust / war / retrograde). Baladi avastha is a secondary modifier — it never lists a
+    planet on its own (else nearly every planet appears, since the 5 avasthas tile all degrees)
+    — EXCEPT for a topic significator, whose extreme avastha IS decision-relevant to the answer
+    and so is always surfaced. This keeps the block dense yet loses no relevant signal."""
+    focus = focus_planets or set()
     notable: list[str] = []
     for name, st in states.items():
-        # A planet is listed only for a PRIMARY condition (strong dignity / combust / war /
-        # retrograde). Avastha is a secondary modifier — it never lists a planet on its own
-        # (otherwise nearly every planet appears, since the 5 avasthas tile all degrees).
         bits: list[str] = []
         if st.dignity in ("exalted", "debilitated", "moolatrikona"):
             bits.append(st.dignity)
@@ -178,10 +181,12 @@ def format_planet_states_for_prompt(states: dict[str, PlanetState]) -> str:
             bits.append("won planetary war" if st.war_won else f"lost planetary war to {st.war_with}")
         if st.retrograde and name not in ("Rahu", "Ketu"):
             bits.append("retrograde (intensified, inward results)")
-        if not bits:
+        extreme_avastha = st.avastha in ("Young", "Dead")
+        # List the planet if it has a primary condition, OR it's a topic significator whose
+        # extreme avastha materially changes how much result it can give.
+        if not bits and not (name in focus and extreme_avastha):
             continue
-        # Append only the extreme avasthas (peak or dormant), as a modifier on an already-notable planet.
-        if st.avastha in ("Young", "Dead"):
+        if extreme_avastha:
             bits.append(f"{st.avastha} avastha — {st.avastha_effect}")
         notable.append(f"  {name}: " + "; ".join(bits))
     if not notable:

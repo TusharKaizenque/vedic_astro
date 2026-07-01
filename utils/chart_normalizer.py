@@ -316,10 +316,9 @@ def build_chart_summary(chart: NormalizedChart) -> str:
         nak = f" | {pos.nakshatra}" if pos.nakshatra else ""
         # State the rasi dignity so the narrator never asserts a strength that contradicts it
         # (e.g. a debilitated planet must be flagged as such, even if a yoga later redeems it).
-        dignity = (
-            f" | {get_planet_strength(name, pos.sign, pos.degree_in_sign)}"
-            if name not in ("Rahu", "Ketu") else ""
-        )
+        # Rahu/Ketu get their sign-friendship dignity too (via the sign lord) — a minor but real
+        # signal that would otherwise appear nowhere.
+        dignity = f" | {get_planet_strength(name, pos.sign, pos.degree_in_sign)}"
         lines.append(f"  {name}: {pos.sign}{dignity} | house {pos.house}{nak}{retro}")
     if d.maha_dasha_lord:
         lines.append("Vimshottari dasha (FIXED dates — do NOT recompute or guess):")

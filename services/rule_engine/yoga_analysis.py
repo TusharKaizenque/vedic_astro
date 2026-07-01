@@ -253,16 +253,28 @@ def format_yoga_timing_for_prompt(
             "these are the upcoming windows]\n" + "\n".join(lines))
 
 
-def format_yoga_analysis_for_prompt(readings: list[YogaReading], limit: int = 8) -> str:
-    """Render the DECISION-RELEVANT yogas only. A chart can throw 12+ yogas; dumping them all
-    (including weak/incidental ones) buries the few that actually shape the life and dilutes the
-    reading. We keep the strongest beneficial ones (already sorted strongest-first) up to `limit`,
-    drop the weakest 'weakened' tier, and ALWAYS keep the adverse ones (they are real warnings)."""
+def format_yoga_analysis_for_prompt(
+    readings: list[YogaReading], limit: int = 8, focus_planets: set[str] | None = None
+) -> str:
+    """Render the DECISION-RELEVANT yogas. A chart can throw 12+ yogas; dumping them all buries
+    the few that shape the life and dilutes the reading. We keep the strongest beneficial ones
+    (sorted strongest-first) up to `limit`, ALWAYS keep the adverse ones (real warnings), and
+    ALWAYS keep any yoga formed by the TOPIC's significators (topic-relevant, never dropped) —
+    so the cap trims only incidental yogas, never a relevant one."""
     if not readings:
         return ""
-    benefic = [y for y in readings if not y.adverse and y.strength != "weakened"][:limit]
+    focus = focus_planets or set()
+    top = [y for y in readings if not y.adverse and y.strength != "weakened"][:limit]
+    relevant = [y for y in readings if not y.adverse and focus and set(y.participants) & focus]
     adverse = [y for y in readings if y.adverse]
-    chosen = benefic + adverse
+    # Union, preserving the original (strength-sorted) order and de-duping.
+    seen = set()
+    chosen = []
+    for y in [*top, *relevant, *adverse]:
+        if y.name not in seen:
+            seen.add(y.name)
+            chosen.append(y)
+    chosen.sort(key=lambda y: readings.index(y))   # restore strength/adverse ordering
     if not chosen:
         return ""
     lines = ["[YOGA ANALYSIS — the yogas that most shape this chart; cite the source when named]"]

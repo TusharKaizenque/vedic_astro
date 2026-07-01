@@ -115,14 +115,15 @@ def format_rule_result_for_prompt(
         if malefics:
             lines.append(f"Functional malefics: {', '.join(malefics)}")
     # Graded, chart-specific yoga readings replace the old bare name list. Fewer for a focused
-    # question (the strongest few are what matter), more for a whole-life reading.
-    yoga_block = format_yoga_analysis_for_prompt(result.yoga_readings, limit=10 if broad else 6)
+    # question (the strongest few + any topic-relevant ones), more for a whole-life reading.
+    yoga_block = format_yoga_analysis_for_prompt(
+        result.yoga_readings, limit=10 if broad else 6, focus_planets=focus_planets)
     if yoga_block:
         lines.append(yoga_block)
     elif not result.yogas_present:
         lines.append("Yogas present: None detected")
     # Per-planet states (combustion, planetary war, avastha, notable dignity).
-    states_block = format_planet_states_for_prompt(result.planet_states)
+    states_block = format_planet_states_for_prompt(result.planet_states, focus_planets=focus_planets)
     if states_block:
         lines.append(states_block)
     # Divisional strength meta (Vargottama, Vimshopaka) is DISTINCT from rasi dignity (D9 sameness
