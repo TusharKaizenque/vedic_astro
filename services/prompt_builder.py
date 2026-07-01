@@ -310,6 +310,22 @@ def build(
         if nak_text:
             sections.append(nak_text)
 
+    # Arudha Lagna (public image) — for identity/status/wealth/marriage topics and life readings.
+    _AL_TOPICS = {"career", "profession", "job", "business", "wealth", "finance", "money",
+                  "income", "marriage", "fame", "reputation", "status", "self"}
+    if chart and (life_overview or any(getattr(b, "topic", "") in _AL_TOPICS for b in bundles)):
+        from services.arudha_analysis import build_arudha_reading, format_arudha_for_prompt
+        al_text = format_arudha_for_prompt(build_arudha_reading(chart))
+        if al_text:
+            sections.append(al_text)
+
+    # Bhrigu Bindu (destiny point) — for whole-life / broad-direction readings.
+    if chart and life_overview:
+        from services.special_points import bhrigu_bindu, format_bhrigu_bindu_for_prompt
+        bb_text = format_bhrigu_bindu_for_prompt(bhrigu_bindu(chart))
+        if bb_text:
+            sections.append(bb_text)
+
     # (Natal chart is already at the top as the authoritative block.)
 
     # Deterministic rule engine facts

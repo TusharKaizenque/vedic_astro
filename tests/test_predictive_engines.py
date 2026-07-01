@@ -102,3 +102,41 @@ def test_children_timing_window_scored():
     assert "Sun" in by_ad            # 5th-lord antardasha, upcoming → scored
     assert "Mercury" not in by_ad    # ended 2021 → excluded
     assert by_ad["Sun"].score >= 2
+
+
+# ---------- Arudha Lagna ----------
+def test_arudha_lagna_computation_and_tone():
+    from services.arudha_analysis import build_arudha_reading
+    from utils.arudha import arudha_pada
+    # Aries lagna (idx0), lord Mars in Leo (idx4) → arudha = (2*4-0)%12 = 8 = Sagittarius.
+    assert arudha_pada(0, 4) == 8
+    planets = {"Mars": _p("Mars", 130, "Leo", 5), "Jupiter": _p("Jupiter", 250, "Sagittarius", 9),
+               "Venus": _p("Venus", 250, "Sagittarius", 9), "Sun": _p("Sun", 130, "Leo", 5)}
+    r = build_arudha_reading(_chart(planets))
+    assert r.al_sign == "Sagittarius" and r.al_house_from_lagna == 9
+    assert "Jupiter" in r.occupants and "esteemed" in r.tone
+
+
+def test_arudha_pada_exception_rule():
+    from utils.arudha import arudha_pada
+    # If the pada lands in the house itself or the 7th, take the 10th from it.
+    # House idx 0, lord idx 6 → raw = (12-0)%12 = 0 = same house → +9 → 9.
+    assert arudha_pada(0, 6) == 9
+    # House idx 0, lord idx 3 → raw = 6 = 7th from house → +9 → 3.
+    assert arudha_pada(0, 3) == 3
+
+
+# ---------- Bhrigu Bindu ----------
+def test_bhrigu_bindu_midpoint():
+    from services.special_points import bhrigu_bindu
+    # Rahu 0° Aries, Moon 60° Gemini → midpoint 30° = 0° Taurus.
+    planets = {"Rahu": _p("Rahu", 0.0, "Aries", 1), "Moon": _p("Moon", 60.0, "Gemini", 3)}
+    bb = bhrigu_bindu(_chart(planets))
+    assert bb is not None and abs(bb.longitude - 30.0) < 0.01
+    assert bb.sign == "Taurus" and bb.house_from_lagna == 2
+    assert bb.sign_lord == "Venus"
+
+
+def test_bhrigu_bindu_none_without_nodes():
+    from services.special_points import bhrigu_bindu
+    assert bhrigu_bindu(_chart({"Moon": _p("Moon", 60.0, "Gemini", 3)})) is None
