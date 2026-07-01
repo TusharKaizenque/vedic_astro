@@ -18,8 +18,12 @@ from datetime import datetime
 
 from models.chart import NormalizedChart
 from services.rule_engine.engine import RuleEngineResult
+from services.rule_engine.varga_engine import varga_dignity
 from utils.astro_constants import SIGN_RULERS, ZODIAC_SIGNS
 from utils.jaimini import putrakaraka
+
+_STRONG_VARGA = {"exalted", "moolatrikona", "own sign", "friendly sign"}
+_WEAK_VARGA = {"debilitated", "enemy sign"}
 
 
 @dataclass
@@ -124,7 +128,32 @@ def build_children_timing(
     return out
 
 
-def format_children_timing_for_prompt(windows: list[ChildWindow], now: datetime) -> str:
+def saptamsa_confirmation(chart: NormalizedChart) -> str:
+    """Confirm the progeny promise in the D7 Saptamsa (the varga of children): a promise strong
+    in D1 but weak in D7 does not deliver cleanly. Weigh the 5th lord, Jupiter and Putrakaraka."""
+    lagna_idx = ZODIAC_SIGNS.index(chart.lagna_sign) if chart.lagna_sign in ZODIAC_SIGNS else 0
+    l5 = SIGN_RULERS.get(ZODIAC_SIGNS[(lagna_idx + 4) % 12], "")
+    key = [p for p in (l5, "Jupiter", putrakaraka(chart)) if p]
+    strong = weak = 0
+    for p in set(key):
+        pos = chart.planets.get(p)
+        if not pos:
+            continue
+        dig = varga_dignity(p, pos.longitude, "D7")
+        strong += dig in _STRONG_VARGA
+        weak += dig in _WEAK_VARGA
+    if strong > weak and strong:
+        return ("D7 Saptamsa CONFIRMS the promise of children (its key significators hold "
+                "dignity in the progeny varga).")
+    if weak > strong and weak:
+        return ("D7 Saptamsa is WEAK (key progeny significators lose dignity there) — children "
+                "may come with delay or difficulty despite the dasha window.")
+    return "D7 Saptamsa is mixed on progeny — neither a clear confirmation nor a denial."
+
+
+def format_children_timing_for_prompt(
+    windows: list[ChildWindow], now: datetime, chart: NormalizedChart | None = None
+) -> str:
     if not windows:
         return ""
     strong = [w for w in windows if w.score >= 2.0]
@@ -144,4 +173,6 @@ def format_children_timing_for_prompt(windows: list[ChildWindow], now: datetime)
             f"- {sd} – {ed} ({w.maha_lord} MD / {w.antar_lord} AD) [{tag}]: "
             + "; ".join(w.activators) + (f". {w.flavor}." if w.flavor else ".")
         )
+    if chart is not None:
+        lines.append(f"  {saptamsa_confirmation(chart)}")
     return "\n".join(lines)

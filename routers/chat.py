@@ -218,7 +218,7 @@ async def chat(user_id: str, request: ChatRequest):
                 if _is_children and _wants_timing:
                     children_timing_text = format_children_timing_for_prompt(
                         build_children_timing(chart, rules, datetime.now(timezone.utc)),
-                        datetime.now(timezone.utc),
+                        datetime.now(timezone.utc), chart,
                     )
                 # For timing / future-dated questions: gochara transits + forward dasha.
                 if intent.requires_transits or intent.entities.time_references:
