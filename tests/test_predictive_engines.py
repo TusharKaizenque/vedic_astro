@@ -140,3 +140,39 @@ def test_bhrigu_bindu_midpoint():
 def test_bhrigu_bindu_none_without_nodes():
     from services.special_points import bhrigu_bindu
     assert bhrigu_bindu(_chart({"Moon": _p("Moon", 60.0, "Gemini", 3)})) is None
+
+
+# ---------- Sudarshana Chakra ----------
+def test_sudarshana_tri_lagna_confirmation():
+    from services.sudarshana import sudarshana_reading
+    # Benefic Jupiter occupying the target house from multiple references → supported.
+    planets = {"Jupiter": _p("Jupiter", 190, "Libra", 7), "Venus": _p("Venus", 40, "Taurus", 2),
+               "Moon": _p("Moon", 100, "Cancer", 4), "Sun": _p("Sun", 130, "Leo", 5)}
+    r = sudarshana_reading(_chart(planets), 7)
+    assert set(r.per_reference) == {"Lagna", "Moon", "Sun"}
+    assert r.confirmations == sum(v == "supported" for v in r.per_reference.values())
+
+
+def test_sudarshana_afflicted_when_malefics():
+    from services.sudarshana import sudarshana_reading
+    planets = {"Saturn": _p("Saturn", 190, "Libra", 7), "Mars": _p("Mars", 190, "Libra", 7),
+               "Moon": _p("Moon", 0, "Aries", 1), "Sun": _p("Sun", 0, "Aries", 1)}
+    r = sudarshana_reading(_chart(planets), 7)
+    # From the Aries lagna the 7th (Libra) is packed with malefics → afflicted there.
+    assert r.per_reference["Lagna"] == "afflicted"
+
+
+# ---------- Karakamsha ----------
+def test_karakamsha_uses_atmakaraka_navamsa():
+    from services.karakamsha import build_karakamsha
+    # Highest degree = Atmakaraka. Give the Sun the top degree.
+    planets = {
+        "Sun": _p("Sun", 10, "Aries", 1, 29), "Moon": _p("Moon", 40, "Taurus", 2, 5),
+        "Mars": _p("Mars", 70, "Gemini", 3, 3), "Mercury": _p("Mercury", 100, "Cancer", 4, 2),
+        "Jupiter": _p("Jupiter", 130, "Leo", 5, 1), "Venus": _p("Venus", 160, "Virgo", 6, 4),
+        "Saturn": _p("Saturn", 190, "Libra", 7, 6),
+    }
+    r = build_karakamsha(_chart(planets))
+    assert r.atmakaraka == "Sun"
+    assert r.karakamsha_sign in ZODIAC_SIGNS
+    assert "authority" in r.purpose

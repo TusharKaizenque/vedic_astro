@@ -284,6 +284,17 @@ def build(
         if bhava_text:
             sections.append(bhava_text)
 
+    # Sudarshana Chakra — confirm the topic's primary house from Lagna, Moon AND Sun together.
+    if chart and bundles:
+        from services.sudarshana import sudarshana_reading, format_sudarshana_for_prompt
+        b0 = bundles[0]
+        houses0 = getattr(b0.significators, "primary_houses", []) or []
+        if houses0:
+            sud = format_sudarshana_for_prompt(
+                sudarshana_reading(chart, houses0[0]), getattr(b0, "topic", "this"))
+            if sud:
+                sections.append(sud)
+
     # WHEN the chart's strongest yogas fructify — their forming planets' upcoming dasha windows.
     if chart and rule_results and getattr(rule_results, "yoga_readings", None):
         from datetime import datetime, timezone
@@ -325,6 +336,14 @@ def build(
         bb_text = format_bhrigu_bindu_for_prompt(bhrigu_bindu(chart))
         if bb_text:
             sections.append(bb_text)
+
+    # Karakamsha (soul purpose) — for purpose/spirituality topics and whole-life readings.
+    _PURPOSE_TOPICS = {"spirituality", "moksha", "purpose", "dharma", "general", "self"}
+    if chart and (life_overview or any(getattr(b, "topic", "") in _PURPOSE_TOPICS for b in bundles)):
+        from services.karakamsha import build_karakamsha, format_karakamsha_for_prompt
+        ks_text = format_karakamsha_for_prompt(build_karakamsha(chart))
+        if ks_text:
+            sections.append(ks_text)
 
     # (Natal chart is already at the top as the authoritative block.)
 
