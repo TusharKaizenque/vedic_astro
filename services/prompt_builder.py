@@ -352,7 +352,17 @@ def build(
 
     # Deterministic rule engine facts
     if rule_results:
-        sections.append(format_rule_result_for_prompt(rule_results, broad=bool(life_overview)))
+        # The topic's significators (karakas + factor planets) — so divisional-strength meta can
+        # be shown for THEM on a focused question instead of for the whole chart (noise) or not
+        # at all (lost signal).
+        focus_planets: set[str] = set()
+        for b in bundles:
+            sig = getattr(b, "significators", None)
+            if sig:
+                focus_planets.update(getattr(sig, "karaka_planets", []) or [])
+                focus_planets.update(f.planet for f in (getattr(sig, "factors", []) or []))
+        sections.append(format_rule_result_for_prompt(
+            rule_results, broad=bool(life_overview), focus_planets=focus_planets))
 
     # Fallback: no topic bundles (e.g. no chart) — show raw KB chunks
     if not bundles and chunks:

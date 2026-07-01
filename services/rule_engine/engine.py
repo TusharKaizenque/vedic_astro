@@ -91,7 +91,9 @@ def run_rule_engine(chart: NormalizedChart) -> RuleEngineResult:
     return result
 
 
-def format_rule_result_for_prompt(result: RuleEngineResult, broad: bool = False) -> str:
+def format_rule_result_for_prompt(
+    result: RuleEngineResult, broad: bool = False, focus_planets: set[str] | None = None
+) -> str:
     # NOTE ON REDUNDANCY: each planet's dignity, its retrograde flag, and the active-dasha
     # lords/dates are ALREADY printed authoritatively in the [NATAL CHART] block. Repeating them
     # here just made the narrator restate the chart, so this block now carries ONLY facts that
@@ -123,20 +125,28 @@ def format_rule_result_for_prompt(result: RuleEngineResult, broad: bool = False)
     states_block = format_planet_states_for_prompt(result.planet_states)
     if states_block:
         lines.append(states_block)
-    # Whole-chart strength meta (Vargottama, Vimshopaka) — chart-WIDE context that restates
-    # strength, so it's reserved for BROAD (life-overview) readings; on a focused topic question
-    # the per-topic bundle and planetary states already carry the relevant strength.
-    if broad and result.vargottama:
-        lines.append("Vargottama (same sign in D1 & Navamsa — very strong): "
-                     + ", ".join(result.vargottama))
-    if broad and result.vimshopaka:
+    # Divisional strength meta (Vargottama, Vimshopaka) is DISTINCT from rasi dignity (D9 sameness
+    # / Shadvarga composite), so it must not vanish — but showing it for ALL planets on a focused
+    # question is chart-wide noise. So: broad reading → all standouts; focused reading → only the
+    # TOPIC's significators (relevant strength, no noise).
+    focus = focus_planets or set()
+    vargottama = result.vargottama if broad else [p for p in result.vargottama if p in focus]
+    if vargottama:
+        lines.append("Vargottama (same sign in D1 & Navamsa — very strong): " + ", ".join(vargottama))
+    if result.vimshopaka:
         ranked = sorted(result.vimshopaka.items(), key=lambda kv: kv[1], reverse=True)
-        strong = [f"{p} ({v}, {vimshopaka_band(v)})" for p, v in ranked if v >= 10]
-        weak = [f"{p} ({v}, {vimshopaka_band(v)})" for p, v in ranked if v < 5]
-        if strong:
-            lines.append("Vimshopaka Bala — divisionally strongest: " + ", ".join(strong))
-        if weak:
-            lines.append("Vimshopaka Bala — divisionally weakest: " + ", ".join(weak))
+        if broad:
+            strong = [f"{p} ({v}, {vimshopaka_band(v)})" for p, v in ranked if v >= 10]
+            weak = [f"{p} ({v}, {vimshopaka_band(v)})" for p, v in ranked if v < 5]
+            if strong:
+                lines.append("Vimshopaka Bala — divisionally strongest: " + ", ".join(strong))
+            if weak:
+                lines.append("Vimshopaka Bala — divisionally weakest: " + ", ".join(weak))
+        elif focus:
+            rel = [f"{p} ({v}, {vimshopaka_band(v)})" for p, v in ranked if p in focus]
+            if rel:
+                lines.append("Vimshopaka Bala (divisional strength of the key planets): "
+                             + ", ".join(rel))
     # NB: the bhava-lord placements are emitted as their OWN section in prompt_builder (focused
     # on the topic's houses and given higher priority), so they survive token-budget trimming.
     return "\n".join(lines)

@@ -11,6 +11,9 @@ from __future__ import annotations
 from utils.nakshatras import nakshatra_lord, nakshatra_of, pada_of, profile_of, traits_of
 
 
+_VOCATION_TOPICS = {"career", "profession", "job", "business", "vocation", "work"}
+
+
 def format_nakshatra_section(chart, topic_bundles=None, broad: bool = False) -> str:
     moon = chart.planets.get("Moon")
     if moon is None:
@@ -18,12 +21,17 @@ def format_nakshatra_section(chart, topic_bundles=None, broad: bool = False) -> 
     jn = nakshatra_of(moon.longitude)
     prof = profile_of(jn)
     lines = ["[NAKSHATRA — lunar-mansion layer]"]
-    # The full deity/symbol/vocation profile is whole-chart identity — reserve it for broad
-    # (life-overview) readings; a focused question gets the temperament line + the topic linkage.
+    # Full deity/symbol/vocation profile is whole-chart identity → reserve for broad readings.
+    # BUT the vocational leanings are directly relevant to a CAREER question, so surface those
+    # (only) when the topic is career-related, even on a focused reading.
+    vocation_topic = any(
+        getattr(b, "topic", "") in _VOCATION_TOPICS for b in (topic_bundles or []))
     detail = ""
     if prof and broad:
         detail = (f" Deity {prof.get('deity', '')}, symbol the {prof.get('symbol', '')}; "
                   f"natural vocational leanings: {prof.get('careers', '')}.")
+    elif prof and vocation_topic and prof.get("careers"):
+        detail = f" Natural vocational leanings (janma nakshatra): {prof['careers']}."
     lines.append(
         f"Janma (Moon) nakshatra: {jn} pada {pada_of(moon.longitude)}, ruled by "
         f"{nakshatra_lord(moon.longitude)} — core temperament: {traits_of(jn)}.{detail}"
