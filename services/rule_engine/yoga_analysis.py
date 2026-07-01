@@ -14,6 +14,7 @@ reading specific instead of "you have Gajakesari, which is good." Deterministic 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from datetime import datetime
 
 from models.chart import NormalizedChart
 from services.rule_engine.planetary_states import PlanetState
@@ -203,6 +204,53 @@ def analyze_yogas(
     rank = {"strong": 0, "moderate": 1, "modest": 2, "present": 3, "weakened": 4, "notable": 5}
     out.sort(key=lambda y: (y.adverse, rank.get(y.strength, 9)))
     return out
+
+
+def _parse_dt(value: str) -> datetime | None:
+    try:
+        return datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (ValueError, TypeError):
+        return None
+
+
+def _dasha_windows(chart: NormalizedChart):
+    """Yield (maha_lord, antar_lord, start, end) from the Prokerala dasha tree."""
+    data = getattr(chart, "raw_prokerala_response", None) or {}
+    for md in data.get("dasha_periods", []) or []:
+        md_lord = str(md.get("name", ""))
+        for ad in md.get("antardasha", []) or []:
+            yield (md_lord, str(ad.get("name", "")),
+                   _parse_dt(ad.get("start", "")), _parse_dt(ad.get("end", "")))
+
+
+def format_yoga_timing_for_prompt(
+    chart: NormalizedChart, readings: list[YogaReading], now: datetime, limit: int = 4
+) -> str:
+    """A yoga only FRUCTIFIES in the dasha/antardasha of the planets that form it (BPHS). For
+    the strongest beneficial yogas, find the next upcoming window ruled by a participant so the
+    reading can say WHEN each blessing activates — not just that it exists."""
+    strong = [y for y in readings
+              if not y.adverse and y.participants and y.strength in ("strong", "moderate")]
+    if not strong:
+        return ""
+    windows = list(_dasha_windows(chart))
+    if not windows:
+        return ""
+    lines: list[str] = []
+    for y in strong[:limit]:
+        parts = set(y.participants)
+        upcoming = [w for w in windows if w[3] and w[3] >= now and (w[0] in parts or w[1] in parts)]
+        if not upcoming:
+            continue
+        md, ad, start, end = min(upcoming, key=lambda w: w[2] or now)
+        sd = start.strftime("%b %Y") if start else "—"
+        ed = end.strftime("%b %Y") if end else "—"
+        lines.append(f"  • {y.name} (formed by {', '.join(y.participants)}) next activates in the "
+                     f"{md} mahadasha / {ad} antardasha — {sd} to {ed}.")
+    if not lines:
+        return ""
+    return ("[YOGA ACTIVATION TIMING — a yoga fructifies in the dasha of its forming planets; "
+            "these are the upcoming windows]\n" + "\n".join(lines))
 
 
 def format_yoga_analysis_for_prompt(readings: list[YogaReading]) -> str:

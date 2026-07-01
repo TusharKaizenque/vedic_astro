@@ -279,6 +279,15 @@ def build(
         if bhava_text:
             sections.append(bhava_text)
 
+    # WHEN the chart's strongest yogas fructify — their forming planets' upcoming dasha windows.
+    if chart and rule_results and getattr(rule_results, "yoga_readings", None):
+        from datetime import datetime, timezone
+        from services.rule_engine.yoga_analysis import format_yoga_timing_for_prompt
+        yoga_timing = format_yoga_timing_for_prompt(
+            chart, rule_results.yoga_readings, datetime.now(timezone.utc))
+        if yoga_timing:
+            sections.append(yoga_timing)
+
     # Forward-looking dasha projection — for future-dated questions ("...in 2027?").
     if future_dasha:
         sections.append(future_dasha)
